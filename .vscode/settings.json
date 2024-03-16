@@ -1,0 +1,12 @@
+{
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/home/pierre/git/sci/obj/test",
+            "binaryPath": "/home/pierre/git/sci/obj/test/main.e",
+            "binaryArgs": []
+        }
+    ],
+    "cSpell.words": [
+        "subformulas"
+    ]
+}
