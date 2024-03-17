@@ -1,19 +1,46 @@
 #include "structs.h"
 
 Formula::Formula(int var) : is_var(true), var(var) {}
-Formula::Formula(Operator op, const vector<Formula> &subformulas)
+Formula::Formula(Operator op, const vector<Formula> subformulas)
     : is_var(false), op(op), subformulas(subformulas) {}
 
+bool Formula::IsVar() const { return is_var; }
+
+bool Formula::IsVar(int var) const { return is_var && this->var == var; }
+
+int Formula::Var() const {
+  assert(IsVar());
+  return var;
+}
+
+bool Formula::IsOp(Operator op) const { return !is_var && this->op == op; }
+
+Operator Formula::Op() const {
+  assert(!is_var);
+  return op;
+}
+
+vector<Formula> Formula::Subformulas() const {
+  assert(!is_var);
+  return subformulas;
+}
+
+Formula Formula::Subformula(int i) const {
+  assert(!is_var);
+  assert(subformulas.size() > i);
+  return subformulas[i];
+}
+
 ostream &operator<<(ostream &os, const Formula &f) {
-  if (f.is_var) {
-    os << "v" << f.var;
+  if (f.IsVar()) {
+    os << "v" << f.Var();
   } else {
-    assert(!f.subformulas.empty());
+    assert(!f.Subformulas().empty());
     os << "(";
-    if (f.op == op_not)
+    if (f.IsOp(op_not))
       os << "-";
-    os << f.subformulas[0];
-    switch (f.op) {
+    os << f.Subformula(0);
+    switch (f.Op()) {
     case op_not:
       break;
     case op_impl:
@@ -25,10 +52,12 @@ ostream &operator<<(ostream &os, const Formula &f) {
     default:
       assert(false);
     }
-    if (f.subformulas.size() > 1)
-      os << f.subformulas[1];
+    if (f.Subformulas().size() > 1)
+      os << f.Subformula(1);
     os << ")";
-    assert(f.subformulas.size() < 3);
+    assert(f.Subformulas().size() < 3);
   }
   return os;
 }
+
+Set::Set(vector<Formula> formulas) : formulas(formulas) {}
