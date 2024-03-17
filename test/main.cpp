@@ -6,9 +6,11 @@ int main() {
   cout << "General Kenobi!" << endl;
 
   Formula f(5);
-  cout<<f<<endl;
+  cout << f << endl;
 
   Formula g(op_impl, {f, f});
-  cout<<g<<endl;
-  cout<<Formula(op_equiv, {g, Formula(op_not, {g})});
+  cout << g << endl;
+  cout << Formula(op_equiv, {g, Formula(op_not, {g})}) << endl;
+
+  cout << Formula(op_impl, {4, {op_not, {5}}}) << endl;
 }

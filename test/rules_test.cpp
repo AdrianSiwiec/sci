@@ -2,9 +2,20 @@
 #include "rules.h"
 #include "structs.h"
 
+Formula f_not(op_not, {{op_not, {3}}});
+
 void testRNot() {
-  assert(RNot(Set({Formula(5)})).empty());
-  assert(RNot(Set({Formula(op_not, {Formula(5)})})).empty());
+  assert(RNot(Formula(5)).empty());
+  assert(RNot(Formula(op_not, {5})).empty());
+
+  assert(RNot(f_not) == vector<Set>{Set({Formula(3)})});
 }
 
-int main() { testRNot(); }
+void testRImpl() {
+  assert(RImpl({f_not}).empty());
+}
+
+int main() {
+  testRNot();
+  testRImpl();
+}

@@ -33,8 +33,14 @@ bool operator>(const Formula &a, const Formula &b);
 
 struct Set {
   Set(vector<Formula> formulas);
+  void ReplaceFormula(int index, Formula f);
+  vector<Formula> Formulas() const;
+
+private:
   vector<Formula> formulas;
 };
+
+bool operator==(const Set &a, const Set &b);
 
 struct ProofNode {
   Set root;

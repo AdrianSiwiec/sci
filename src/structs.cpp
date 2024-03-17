@@ -93,4 +93,18 @@ bool operator<(const Formula &a, const Formula &b) {
 }
 bool operator>(const Formula &a, const Formula &b) { return b < a; }
 
-Set::Set(vector<Formula> formulas) : formulas(formulas) {}
+Set::Set(vector<Formula> formulas) : formulas(formulas) {
+  sort(this->formulas.begin(), this->formulas.end());
+}
+
+vector<Formula> Set::Formulas() const {
+  return formulas;
+}
+
+void Set::ReplaceFormula(int index, Formula f) {
+  assert(formulas.size() > index);
+  formulas[index] = f;
+  sort(formulas.begin(), formulas.end());
+}
+
+bool operator==(const Set &a, const Set &b) { return a.Formulas() == b.Formulas(); }
