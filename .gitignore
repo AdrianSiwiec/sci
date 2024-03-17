@@ -1,11 +1,4 @@
-lectures/*
-code/obj/*
-code/test/netTest/downloaded/*
-code/Java2
-
-code/perfResults/*
-code/cuPerfResults/*
-code/colorPerfResults/*
+obj/*
 
 # Created by https://www.gitignore.io
 

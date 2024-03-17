@@ -5,7 +5,10 @@ int main() {
   cout << "Hello There!" << endl;
   cout << "General Kenobi!" << endl;
 
-  Formula f;
-  f.var = 5;
-  cout<<f.var<<endl;
+  Formula f(5);
+  cout<<f<<endl;
+
+  Formula g(op_impl, {f, f});
+  cout<<g<<endl;
+  cout<<Formula(op_equiv, {g, Formula(op_not, {g})});
 }
