@@ -60,4 +60,37 @@ ostream &operator<<(ostream &os, const Formula &f) {
   return os;
 }
 
+bool operator==(const Formula &a, const Formula &b) {
+  if (a.IsVar() != b.IsVar())
+    return false;
+  if (a.IsVar())
+    return a.Var() == b.Var();
+  if (a.Op() != b.Op())
+    return false;
+  assert(a.Subformulas().size() == b.Subformulas().size());
+  for (int i = 0; i < a.Subformulas().size(); i++) {
+    if (!(a.Subformula(i) == b.Subformula(i)))
+      return false;
+  }
+  return true;
+}
+
+bool operator!=(const Formula &a, const Formula &b) { return !(a == b); }
+
+bool operator<(const Formula &a, const Formula &b) {
+  if (a.IsVar() != b.IsVar())
+    return a.IsVar() > b.IsVar();
+  if (a.IsVar())
+    return a.Var() < b.Var();
+  if (a.Op() != b.Op())
+    return a.Op() < b.Op();
+  assert(a.Subformulas().size() == b.Subformulas().size());
+  for (int i = 0; i < a.Subformulas().size(); i++) {
+    if (!(a.Subformula(i) == b.Subformula(i)))
+      return a.Subformula(i) < b.Subformula(i);
+  }
+  return 0 < 0;
+}
+bool operator>(const Formula &a, const Formula &b) { return b < a; }
+
 Set::Set(vector<Formula> formulas) : formulas(formulas) {}

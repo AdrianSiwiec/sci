@@ -26,6 +26,10 @@ private:
 };
 
 ostream &operator<<(ostream &os, const Formula &f);
+bool operator==(const Formula &a, const Formula &b);
+bool operator!=(const Formula &a, const Formula &b);
+bool operator<(const Formula &a, const Formula &b);
+bool operator>(const Formula &a, const Formula &b);
 
 struct Set {
   Set(vector<Formula> formulas);
