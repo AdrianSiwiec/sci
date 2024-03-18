@@ -34,15 +34,22 @@ bool operator>(const Formula &a, const Formula &b);
 struct Set {
   Set(vector<Formula> formulas);
   void ReplaceFormula(int index, Formula f);
+  void RemoveFormula(int index);
+  void AddFormula(Formula f);
   vector<Formula> Formulas() const;
 
 private:
+  void Normalize();
   vector<Formula> formulas;
 };
 
+ostream &operator<<(ostream &os, const Set &s);
 bool operator==(const Set &a, const Set &b);
+bool operator!=(const Set &a, const Set &b);
 
 struct ProofNode {
+  ProofNode(Set root) : root(root) {}
+
   Set root;
   vector<ProofNode> subnodes;
 };

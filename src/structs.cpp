@@ -93,18 +93,46 @@ bool operator<(const Formula &a, const Formula &b) {
 }
 bool operator>(const Formula &a, const Formula &b) { return b < a; }
 
-Set::Set(vector<Formula> formulas) : formulas(formulas) {
-  sort(this->formulas.begin(), this->formulas.end());
-}
+Set::Set(vector<Formula> formulas) : formulas(formulas) { this->Normalize(); }
 
-vector<Formula> Set::Formulas() const {
-  return formulas;
+vector<Formula> Set::Formulas() const { return formulas; }
+
+void Set::Normalize() {
+  sort(formulas.begin(), formulas.end());
+  auto last = unique(formulas.begin(), formulas.end());
+  formulas.erase(last, formulas.end());
 }
 
 void Set::ReplaceFormula(int index, Formula f) {
   assert(formulas.size() > index);
   formulas[index] = f;
-  sort(formulas.begin(), formulas.end());
+  Normalize();
 }
 
-bool operator==(const Set &a, const Set &b) { return a.Formulas() == b.Formulas(); }
+void Set::RemoveFormula(int index) {
+  assert(formulas.size() > index);
+  swap(formulas[index], formulas[formulas.size() - 1]);
+  formulas.pop_back();
+  Normalize();
+}
+
+void Set::AddFormula(Formula f) {
+  formulas.push_back(f);
+  Normalize();
+}
+
+bool operator==(const Set &a, const Set &b) {
+  return a.Formulas() == b.Formulas();
+}
+bool operator!=(const Set &a, const Set &b) { return !(a == b); }
+
+ostream &operator<<(ostream &os, const Set &s) {
+  os << "{";
+  for (int i = 0; i < s.Formulas().size(); i++) {
+    os << s.Formulas()[i];
+    if (i + 1 < s.Formulas().size())
+      os << ", ";
+  }
+  os << "}";
+  return os;
+}
