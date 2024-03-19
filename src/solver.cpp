@@ -2,6 +2,10 @@
 
 vector<ProofNode> BuildChildNodes(const ProofNode &node, int formula_to_remove,
                                   vector<Set> formulas_to_add) {
+
+  // Would still work but return empty. I think it's not needed.
+  assert(!formulas_to_add.empty());
+
   vector<ProofNode> to_return;
   for (const Set &formulas : formulas_to_add) {
     Set s = node.root;
@@ -13,7 +17,7 @@ vector<ProofNode> BuildChildNodes(const ProofNode &node, int formula_to_remove,
   }
   return to_return;
 }
-vector<ProofNode> ApplyRule(const ProofNode &node, Rule rule) {
+vector<ProofNode> ApplyRule(const ProofNode node, Rule rule) {
   // TODO: fun will be when rule == nullptr
   for (int i = 0; i < node.root.Formulas().size(); i++) {
     vector<Set> result = rule(node.root.Formulas()[i]);
@@ -24,5 +28,3 @@ vector<ProofNode> ApplyRule(const ProofNode &node, Rule rule) {
   }
   return {};
 }
-
-void PopulateSubnodes(ProofNode &node) { assert(node.subnodes.empty()); }

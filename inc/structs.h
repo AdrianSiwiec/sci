@@ -2,7 +2,7 @@
 
 #include "commons.h"
 
-enum Operator { op_not, op_impl, op_equiv };
+enum Operator : char { op_not, op_impl, op_equiv };
 
 struct Formula {
   Formula(int var);
