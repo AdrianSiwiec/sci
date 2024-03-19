@@ -14,19 +14,22 @@ void TestBuildChildNodes() {
 void TestApplyRule() {
   assert(ApplyRule(ProofNode(Set({Formula(1)})), RNot).empty());
 
-  vector<ProofNode> ns =
-      ApplyRule(ProofNode(Set({Formula(op_not, {{op_not, {3}}})})), RNot);
+  Formula nn3(op_not, {{op_not, {3}}});
+
+  vector<ProofNode> ns = ApplyRule(ProofNode(Set({nn3})), RNot);
   assert(ns.size() == 1);
   assert(ns[0].root == Set({Formula(3)}));
 
-  ns = ApplyRule(
-      ProofNode(Set({Formula(1), Formula(op_impl, {1, {op_equiv, {{1}, {2}}}}),
-                     Formula(op_not, {{1}})})),
-      RImpl);
+  Formula eq12(op_equiv, {{1}, {2}});
+  Formula n1(op_not, {{1}});
+  ns = ApplyRule(ProofNode(Set({Formula(1), Formula(op_impl, {1, eq12}), n1})),
+                 RImpl);
   assert(ns.size() == 2);
-  assert(ns[0].root == Set({Formula(1), Formula(op_not, {{1}})}));
-  assert(ns[1].root == Set({Formula(1), Formula(op_not, {{1}}),
-                            Formula(op_equiv, {{1}, {2}})}));
+  assert(ns[0].root == Set({Formula(1), n1}));
+  assert(ns[1].root == Set({Formula(1), n1, eq12}));
+
+  // TODO: test if we don't return anything if nothing changed, when there is a
+  // rule that can produce no change.
 }
 
 void TestSimple() {

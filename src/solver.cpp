@@ -22,8 +22,13 @@ vector<ProofNode> ApplyRule(const ProofNode node, Rule rule) {
   for (int i = 0; i < node.root.Formulas().size(); i++) {
     vector<Set> result = rule(node.root.Formulas()[i]);
     if (!result.empty()) {
-      // TODO: check if what we got is not the same as what we received
-      return BuildChildNodes(node, i, result);
+      auto to_return = BuildChildNodes(node, i, result);
+
+      // If what we produced is what we already have, don't apply the rule
+      if (to_return.size() == 1 && to_return[0].root == node.root) {
+        continue;
+      }
+      return to_return;
     }
   }
   return {};
