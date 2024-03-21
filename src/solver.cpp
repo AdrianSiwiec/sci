@@ -33,3 +33,50 @@ vector<ProofNode> ApplyRule(const ProofNode node, Rule rule) {
   }
   return {};
 }
+
+bool IsAx1(const Formula &f) {
+  if (!f.IsOp(op_not))
+    return false;
+
+  const auto &f1 = f.Subformula(0);
+  if (!f1.IsOp(op_equiv))
+    return false;
+
+  return f1.Subformula(0) == f1.Subformula(1);
+}
+
+bool IsAx2(const Formula &f, const Formula &g) {
+  return (f == Formula(op_not, {g})) || (g == Formula(op_not, {f}));
+}
+
+bool IsClosed(const Set &set) {
+  for (const auto &f : set.Formulas()) {
+    if (IsAx1(f))
+      return true;
+    for (const auto &g : set.Formulas()) {
+      if (IsAx2(f, g))
+        return true;
+    }
+  }
+  return false;
+}
+
+bool IsClosed(ProofNode &n) {
+  if (IsClosed(n.root))
+    return true;
+
+  assert(n.subnodes.empty());
+  for (auto rule : AllRules) {
+    n.subnodes = ApplyRule(n, rule);
+    if (!n.subnodes.empty())
+      break;
+  }
+
+  if (n.subnodes.empty())
+    return false;
+  for (auto &subnode : n.subnodes) {
+    if (!IsClosed(subnode))
+      return false;
+  }
+  return true;
+}

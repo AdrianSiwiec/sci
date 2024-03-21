@@ -32,13 +32,39 @@ void TestApplyRule() {
   // rule that can produce no change.
 }
 
+void TestAx() {
+  assert(!IsAx1(Formula(op_not, {{op_equiv, {{1}, {2}}}})));
+  assert(IsAx1(Formula(op_not, {{op_equiv, {{1}, {1}}}})));
+
+  assert(!IsAx2(Formula(4), Formula(4)));
+  assert(!IsAx2(Formula(4), Formula(op_not, {{5}})));
+  assert(IsAx2(Formula(4), Formula(op_not, {{4}})));
+  assert(!IsAx2(Formula(op_not, {{4}}), Formula(op_not, {{4}})));
+  assert(IsAx2(Formula(op_not, {{4}}), Formula(4)));
+}
+
 void TestSimple() {
-  ProofNode node(Set({}));
-  assert(node.subnodes.empty());
+  ProofNode n(Set({3}));
+  assert(!IsClosed(n));
+  assert(n.subnodes.empty());
+
+  n.root.AddFormula(Formula(op_not, {{op_equiv, {{2}, {2}}}}));
+  assert(IsClosed(n));
+  assert(n.subnodes.empty());
+
+  n.root.ReplaceFormula(
+      1, Formula(op_not, {{op_not, {{op_not, {{op_equiv, {{3}, {3}}}}}}}}));
+  assert(IsClosed(n));
+  assert(n.subnodes.size() == 1);
+  assert(n.subnodes[0].root.Formulas().size() == 2);
+  assert(n.subnodes[0].root.Formulas()[0] == Formula(3));
+  assert(n.subnodes[0].root.Formulas()[1] ==
+         Formula(op_not, {{op_equiv, {{3}, {3}}}}));
 }
 
 int main() {
   TestBuildChildNodes();
   TestApplyRule();
+  TestAx();
   TestSimple();
 }

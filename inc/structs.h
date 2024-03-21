@@ -53,3 +53,5 @@ struct ProofNode {
   Set root;
   vector<ProofNode> subnodes;
 };
+
+void PrintProofNode(const ProofNode& n, string prefix = "W_1");

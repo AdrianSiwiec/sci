@@ -136,3 +136,10 @@ ostream &operator<<(ostream &os, const Set &s) {
   os << "}";
   return os;
 }
+
+void PrintProofNode(const ProofNode &n, string prefix) {
+  cout << prefix << ": " << n.root << endl;
+  for (int i = 0; i < n.subnodes.size(); i++) {
+    PrintProofNode(n.subnodes[i], prefix + "_" + to_string(i + 1));
+  }
+}

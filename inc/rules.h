@@ -5,8 +5,8 @@
 
 typedef vector<Set>(Rule)(const Formula &f);
 
-// All rules (but RuleFun) here are simplified: they take a formula and if it matches, they return
-// a vector of sets of resulting formulas. The meaning is:
+// All rules (but RuleFun) here are simplified: they take a formula and if it
+// matches, they return a vector of sets of resulting formulas. The meaning is:
 // f
 // ------------
 // {f, g} | {h}
@@ -25,3 +25,5 @@ Rule RNot;
 // ----------
 // {-f} | {g}
 Rule RImpl;
+
+const vector<Rule *> AllRules{RNot, RImpl};
