@@ -11,6 +11,7 @@
     ],
     "files.associations": {
         "*.cu": "cpp",
-        "optional": "cpp"
+        "optional": "cpp",
+        "string": "cpp"
     }
 }

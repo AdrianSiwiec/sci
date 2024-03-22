@@ -70,6 +70,8 @@ void TestParserNotAllParen() {
                                 {op_equiv, {{3}, {op_impl, {{4}, {1}}}}}}));
   TestParser("((1=0)->(1->0))",
              Formula(op_impl, {{op_equiv, {{1}, {0}}}, {op_impl, {{1}, {0}}}}));
+  TestParser("((((1=0)->(1->0))))",
+             Formula(op_impl, {{op_equiv, {{1}, {0}}}, {op_impl, {{1}, {0}}}}));
 }
 
 int main() {

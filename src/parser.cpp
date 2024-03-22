@@ -113,5 +113,15 @@ optional<Formula> Formula::Parse(const string &s, int &pos) {
     }
     pos = save_pos;
   }
+
+  // To handle more brackets than needed
+  if (got_bracket) {
+    auto f = Parse(s, pos);
+    if (f.has_value()) {
+      pos++;
+      return f;
+    }
+    pos--;
+  }
   return nullopt;
 }
