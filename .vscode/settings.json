@@ -8,5 +8,9 @@
     ],
     "cSpell.words": [
         "subformulas"
-    ]
+    ],
+    "files.associations": {
+        "*.cu": "cpp",
+        "optional": "cpp"
+    }
 }

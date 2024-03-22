@@ -16,6 +16,9 @@ struct Formula {
   vector<Formula> Subformulas() const;
   Formula Subformula(int i = 0) const;
 
+  // Implemented in parser.cpp
+  static optional<Formula> Parse(const string &s, int &pos);
+
 private:
   // A formula is a variable, XOR
   bool is_var;
@@ -30,6 +33,9 @@ bool operator==(const Formula &a, const Formula &b);
 bool operator!=(const Formula &a, const Formula &b);
 bool operator<(const Formula &a, const Formula &b);
 bool operator>(const Formula &a, const Formula &b);
+
+optional<int> ParseVar(const string &s, int &pos);
+optional<Operator> ParseOp(const string &s, int &pos);
 
 struct Set {
   Set(vector<Formula> formulas);
@@ -54,4 +60,4 @@ struct ProofNode {
   vector<ProofNode> subnodes;
 };
 
-void PrintProofNode(const ProofNode& n, string prefix = "W_1");
+void PrintProofNode(const ProofNode &n, string prefix = "W_1");
