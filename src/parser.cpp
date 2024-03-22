@@ -86,7 +86,7 @@ optional<Formula> Formula::Parse(const string &s, int &pos) {
 
   int save_pos = pos;
   optional<int> var;
-  if ((var = ParseVar(s, pos))) { // TODO: all vars are (num)
+  if ((var = ParseVar(s, pos))) {
     if (!(got_bracket && s.size() > pos && s[pos] != ')')) {
       f.is_var = true;
       f.var = var.value();

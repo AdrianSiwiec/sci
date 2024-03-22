@@ -45,3 +45,9 @@ string PreprocessInput(string s) {
 
   return "(" + s + ")";
 }
+
+optional<Formula> ParseInput(string s) {
+  string s1 = PreprocessInput(s);
+  int pos = 0;
+  return Formula::Parse(s1, pos);
+}
