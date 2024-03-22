@@ -26,6 +26,7 @@ private:
   // An operator with one or two subformulas.
   Operator op;
   vector<Formula> subformulas;
+  static optional<Formula> ParseOpFormula(const string &s, int &pos);
 };
 
 ostream &operator<<(ostream &os, const Formula &f);

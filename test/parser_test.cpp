@@ -25,16 +25,23 @@ void TestParseOp() {
 }
 
 void TestParser(string s, optional<Formula> f) {
+  // if (f.has_value()) {
+  //   cout << "Testing if: " << s << "\n  Parses as: " << f.value() << endl;
+  // } else {
+  //   cout << "Testing if: " << s << "\n Doesn't parse." << endl;
+  // }
   int pos = 0;
   assert(Formula::Parse(s, pos) == f);
   if (f.has_value()) {
     assert(pos == s.size());
+  } else {
+    assert(pos == 0);
   }
 }
 
-void TestParser() {
+void TestParserSimple() {
   TestParser("d", nullopt);
-  TestParser("1", nullopt);
+  TestParser("1", Formula(1));
 
   TestParser("(1)", Formula(1));
   TestParser("(-(5))", Formula(op_not, {{5}}));
@@ -44,9 +51,30 @@ void TestParser() {
              Formula(op_equiv, {{op_not, {{7}}},
                                 {op_equiv, {{3}, {op_impl, {{4}, {1}}}}}}));
 }
+void TestParserNotAllParen() {
+  TestParser("-3", Formula(op_not, {{3}}));
+  TestParser("((-7)=((3)=((4)->(1))))",
+             Formula(op_equiv, {{op_not, {{7}}},
+                                {op_equiv, {{3}, {op_impl, {{4}, {1}}}}}}));
+  TestParser("((-7)=(3=((4)->(1))))",
+             Formula(op_equiv, {{op_not, {{7}}},
+                                {op_equiv, {{3}, {op_impl, {{4}, {1}}}}}}));
+  TestParser("((-7)=(3=(4->(1))))",
+             Formula(op_equiv, {{op_not, {{7}}},
+                                {op_equiv, {{3}, {op_impl, {{4}, {1}}}}}}));
+  TestParser("((-7)=(3=(4->1)))",
+             Formula(op_equiv, {{op_not, {{7}}},
+                                {op_equiv, {{3}, {op_impl, {{4}, {1}}}}}}));
+  TestParser("(-7=(3=(4->1)))",
+             Formula(op_equiv, {{op_not, {{7}}},
+                                {op_equiv, {{3}, {op_impl, {{4}, {1}}}}}}));
+  TestParser("((1=0)->(1->0))",
+             Formula(op_impl, {{op_equiv, {{1}, {0}}}, {op_impl, {{1}, {0}}}}));
+}
 
 int main() {
   TestParseVar();
   TestParseOp();
-  TestParser();
+  TestParserSimple();
+  TestParserNotAllParen();
 }
