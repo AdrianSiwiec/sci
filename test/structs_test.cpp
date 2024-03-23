@@ -1,4 +1,5 @@
 #include "commons.h"
+#include "preprocessing.h"
 #include "structs.h"
 
 void FormulaTest() {
@@ -58,7 +59,7 @@ void SetTest() {
   s1.ReplaceFormula(0, Formula(5));
   assert(s1 == Set({Formula(5)}));
   s1.RemoveFormula(0);
-  assert(s1 == Set({}));
+  assert(s1 == Set(vector<Formula>()));
 
   s1.AddFormula(Formula(7));
   s.ReplaceFormula(0, Formula(9));
@@ -66,6 +67,10 @@ void SetTest() {
   assert(s != s1);
   s.ReplaceFormula(0, Formula(7));
   assert(s == s1);
+
+  s = Set("0,1,2");
+  assert(s == Set({Formula(1), Formula(2), Formula(0)}));
+  ClearVars();
 }
 
 int main() {

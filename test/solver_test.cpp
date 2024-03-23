@@ -2,13 +2,13 @@
 #include "solver.h"
 
 void TestBuildChildNodes() {
-  ProofNode n({{{1}, {2}, {3}}});
+  ProofNode n(Set(vector<Formula>({Formula(1), Formula(2), Formula(3)})));
 
-  vector<ProofNode> children =
-      BuildChildNodes(n, 0, {Set({{9}, {2}, {5}}), Set({Formula(3)})});
+  vector<ProofNode> children = BuildChildNodes(
+      n, 0, {Set(vector<Formula>({{9}, {2}, {5}})), Set({Formula(3)})});
 
-  assert(children[0].root == Set({{2}, {3}, {5}, {9}}));
-  assert(children[1].root == Set({{2}, {3}}));
+  assert(children[0].root == Set(vector<Formula>({{2}, {3}, {5}, {9}})));
+  assert(children[1].root == Set(vector<Formula>({{2}, {3}})));
 }
 
 void TestApplyRule() {
@@ -44,7 +44,7 @@ void TestAx() {
 }
 
 void TestSimple() {
-  ProofNode n(Set({3}));
+  ProofNode n(Set(vector<Formula>{3}));
   assert(!IsClosed(n));
   assert(n.subnodes.empty());
 

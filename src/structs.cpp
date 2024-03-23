@@ -1,8 +1,17 @@
 #include "structs.h"
+#include "preprocessing.h"
 
 Formula::Formula(int var) : is_var(true), var(var) {}
 Formula::Formula(Operator op, const vector<Formula> subformulas)
     : is_var(false), op(op), subformulas(subformulas) {}
+Formula::Formula(string input) {
+  optional<Formula> f = ParseInput(input);
+  if (!f.has_value()) {
+    cerr << "Could not parse \"" << input << "\" as formula!" << endl;
+    assert(false);
+  }
+  *this = f.value();
+}
 
 bool Formula::IsVar() const { return is_var; }
 
@@ -94,6 +103,13 @@ bool operator<(const Formula &a, const Formula &b) {
 bool operator>(const Formula &a, const Formula &b) { return b < a; }
 
 Set::Set(vector<Formula> formulas) : formulas(formulas) { this->Normalize(); }
+Set::Set(string input) {
+  vector<string> input_formulas = SplitString(input, ",");
+  for (auto s : input_formulas) {
+    formulas.push_back(Formula(s));
+  }
+  this->Normalize();
+}
 
 vector<Formula> Set::Formulas() const { return formulas; }
 
@@ -119,6 +135,15 @@ void Set::RemoveFormula(int index) {
 void Set::AddFormula(Formula f) {
   formulas.push_back(f);
   Normalize();
+}
+
+vector<Set> ParseSets(string input) {
+  vector<Set> result;
+  auto strings = SplitString(input, "|");
+  for (auto s : strings) {
+    result.push_back(Set(s));
+  }
+  return result;
 }
 
 bool operator==(const Set &a, const Set &b) {

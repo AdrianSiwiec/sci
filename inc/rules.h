@@ -26,4 +26,9 @@ Rule RNot;
 // {-f} | {g}
 Rule RImpl;
 
+// -(f -> g)
+// ---------
+// {f, -g}
+Rule RNotImpl;
+
 const vector<Rule *> AllRules{RNot, RImpl};

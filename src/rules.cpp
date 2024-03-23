@@ -24,3 +24,14 @@ vector<Set> RImpl(const Formula &in) {
   }
   return {};
 }
+
+bool matchesRNotImpl(const Formula &f) {
+  return f.IsOp(op_not) && f.Subformula(0).IsOp(op_impl);
+}
+vector<Set> RNotImpl(const Formula &f) {
+  if (matchesRNotImpl(f)) {
+    return {Set({f.Subformula(0).Subformula(0),
+                 Formula(op_not, {f.Subformula(0), f.Subformula(1)})})};
+  }
+  return {};
+}

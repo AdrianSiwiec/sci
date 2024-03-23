@@ -7,6 +7,7 @@ enum Operator : char { op_not, op_impl, op_equiv };
 struct Formula {
   Formula(int var);
   Formula(Operator op, const vector<Formula> subformulas);
+  Formula(string input);
 
   bool IsVar() const;
   bool IsVar(int var) const;
@@ -40,6 +41,7 @@ optional<Operator> ParseOp(const string &s, int &pos);
 
 struct Set {
   Set(vector<Formula> formulas);
+  Set(string input);
   void ReplaceFormula(int index, Formula f);
   void RemoveFormula(int index);
   void AddFormula(Formula f);
@@ -53,6 +55,8 @@ private:
 ostream &operator<<(ostream &os, const Set &s);
 bool operator==(const Set &a, const Set &b);
 bool operator!=(const Set &a, const Set &b);
+
+vector<Set> ParseSets(string input);
 
 struct ProofNode {
   ProofNode(Set root) : root(root) {}
