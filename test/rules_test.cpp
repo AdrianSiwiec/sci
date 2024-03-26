@@ -1,5 +1,6 @@
 #include "commons.h"
 #include "rules.h"
+#include "solver.h"
 #include "structs.h"
 
 Formula f_not("--phi");
@@ -18,9 +19,12 @@ void testRImpl() {
   assert(RImpl(f_impl) == ParseSets("-phi|psi"));
   assert(RImpl(f_not_impl).empty());
 }
-void testRNotImpl() { assert(RNotImpl(f_not_impl) == ParseSets("phi, -psi")); }
+void testRNotImpl() {
+  assert(RNotImpl(f_not_impl) == ParseSets("phi, -psi"));
+}
 
 int main() {
   testRNot();
   testRImpl();
+  testRNotImpl();
 }

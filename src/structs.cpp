@@ -42,7 +42,11 @@ Formula Formula::Subformula(int i) const {
 
 ostream &operator<<(ostream &os, const Formula &f) {
   if (f.IsVar()) {
-    os << "v" << f.Var();
+    if (int_to_variable.count(f.Var()) > 0) {
+      os << int_to_variable[f.Var()];
+    } else {
+      os << "v" << f.Var();
+    }
   } else {
     assert(!f.Subformulas().empty());
     os << "(";

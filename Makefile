@@ -7,7 +7,7 @@ TESTDIR=test
 #G++ compiler settings
 CXX=g++
 CXXINC=-I ./$(INCDIR)/
-CXXFLAGS=-O3 -std=c++17 $(CXXINC) -g -rdynamic -Werror=return-type -Werror -Wall -Wno-sign-compare
+CXXFLAGS=-std=c++17 $(CXXINC) -g -rdynamic -Werror=return-type -Werror -Wall -Wno-sign-compare
 
 INCFILES=$(wildcard $(INCDIR)/*.h)
 SRCFILES=$(wildcard $(SRCDIR)/*.cpp)

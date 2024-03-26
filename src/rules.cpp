@@ -31,7 +31,7 @@ bool matchesRNotImpl(const Formula &f) {
 vector<Set> RNotImpl(const Formula &f) {
   if (matchesRNotImpl(f)) {
     return {Set({f.Subformula(0).Subformula(0),
-                 Formula(op_not, {f.Subformula(0), f.Subformula(1)})})};
+                 Formula(op_not, {f.Subformula(0).Subformula(1)})})};
   }
   return {};
 }
