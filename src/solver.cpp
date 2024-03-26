@@ -18,9 +18,13 @@ vector<ProofNode> BuildChildNodes(const ProofNode &node, int formula_to_remove,
   return to_return;
 }
 vector<ProofNode> ApplyRule(const ProofNode node, Rule rule) {
-  // TODO: fun will be when rule == nullptr
   for (int i = 0; i < node.root.Formulas().size(); i++) {
-    vector<Set> result = rule(node.root.Formulas()[i]);
+    vector<Set> result;
+    if (rule != nullptr) {
+      result = rule(node.root.Formulas()[i]);
+    } else {
+      result = RFun(node.root.Formulas()[i], node.root.Formulas());
+    }
     if (!result.empty()) {
       auto to_return = BuildChildNodes(node, i, result);
 

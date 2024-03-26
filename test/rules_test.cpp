@@ -19,12 +19,28 @@ void testRImpl() {
   assert(RImpl(f_impl) == ParseSets("-phi|psi"));
   assert(RImpl(f_not_impl).empty());
 }
-void testRNotImpl() {
-  assert(RNotImpl(f_not_impl) == ParseSets("phi, -psi"));
+void testRNotImpl() { assert(RNotImpl(f_not_impl) == ParseSets("phi, -psi")); }
+
+void testReplaceAll() {
+  assert(ReplaceAll(Formula("phi->psi"), Formula("phi"), Formula("psi")) ==
+         Formula("psi->psi"));
+  assert(ReplaceAll(Formula("-phi->psi"), Formula("phi"), Formula("psi")) ==
+         Formula("-psi->psi"));
+  assert(ReplaceAll(Formula("phi->psi"), Formula("phi->psi"), Formula("psi")) ==
+         Formula("psi"));
+  assert(ReplaceAll(Formula("-(phi->psi)"), Formula("phi->psi"),
+                    Formula("psi")) == Formula("-psi"));
+}
+void testRFun() {
+  vector<Set> sets = RFun(Formula("phi=-psi"), Set("-psi,phi=-psi,psi"));
+  assert(RFun(Formula("phi=-psi"), Set("-psi,phi=-psi,psi")) ==
+         vector<Set>{Set("phi,psi,phi=-psi")});
 }
 
 int main() {
   testRNot();
   testRImpl();
   testRNotImpl();
+  testReplaceAll();
+  testRFun();
 }

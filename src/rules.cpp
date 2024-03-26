@@ -35,3 +35,37 @@ vector<Set> RNotImpl(const Formula &f) {
   }
   return {};
 }
+
+bool matchesRFun(const Formula &f) {
+  return f.IsOp(op_equiv) && f.Subformula(0).IsVar();
+}
+Formula ReplaceAll(const Formula &f, const Formula &to_replace,
+                   const Formula &replace_with) {
+  if (f == to_replace) {
+    return replace_with;
+  }
+  if (f.IsVar())
+    return f;
+  if (f.IsOp(op_not))
+    return Formula(op_not,
+                   {ReplaceAll(f.Subformula(), to_replace, replace_with)});
+  return Formula(f.Op(),
+                 {ReplaceAll(f.Subformula(0), to_replace, replace_with),
+                  ReplaceAll(f.Subformula(1), to_replace, replace_with)});
+}
+vector<Set> RFun(const Formula &f, Set s) {
+  if (matchesRFun(f)) {
+    Formula to_replace = f.Subformula(1);
+    Formula replace_with = f.Subformula(0);
+    vector<Formula> to_return;
+    auto formulas = s.Formulas();
+    for (const Formula &formula : formulas) {
+      if (f != formula)
+        to_return.push_back(ReplaceAll(formula, to_replace, replace_with));
+      else
+        to_return.push_back(f);
+    }
+    return {Set(to_return)};
+  }
+  return {};
+}
