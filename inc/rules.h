@@ -35,4 +35,4 @@ Formula ReplaceAll(const Formula &f, const Formula &to_replace,
                    const Formula &replace_with);
 vector<Set> RFun(const Formula &f, Set s);
 
-const vector<Rule *> AllRules{RNot, RImpl};
+const vector<Rule *> AllRules{RNot, RImpl, RNotImpl, nullptr};
