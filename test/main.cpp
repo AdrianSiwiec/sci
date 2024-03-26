@@ -1,16 +1,18 @@
 #include "commons.h"
+#include "solver.h"
 #include "structs.h"
 
 int main() {
-  cout << "Hello There!" << endl;
-  cout << "General Kenobi!" << endl;
+  Formula f("-(phi->psi)");
+  Formula g("phi->theta");
+  Formula h("--phi");
 
-  Formula f(5);
-  cout << f << endl;
+  ProofNode n(Set({f, g, h}));
+  PrintProofNode(n);
 
-  Formula g(op_impl, {f, f});
-  cout << g << endl;
-  cout << Formula(op_equiv, {g, Formula(op_not, {g})}) << endl;
+  cout << endl << endl;
 
-  cout << Formula(op_impl, {4, {op_not, {5}}}) << endl;
+  f = Formula("--ϕ -> (-ψ -> ϑ)");
+  n = ProofNode(vector<Formula>{f});
+  PrintProofNode(n);
 }

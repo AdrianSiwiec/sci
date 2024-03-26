@@ -1,5 +1,6 @@
 #include "structs.h"
 #include "preprocessing.h"
+#include "solver.h"
 
 Formula::Formula(int var) : is_var(true), var(var) {}
 Formula::Formula(Operator op, const vector<Formula> subformulas)
@@ -49,7 +50,8 @@ ostream &operator<<(ostream &os, const Formula &f) {
     }
   } else {
     assert(!f.Subformulas().empty());
-    os << "(";
+    if (!f.IsOp(op_not))
+      os << "(";
     if (f.IsOp(op_not))
       os << "-";
     os << f.Subformula(0);
@@ -67,7 +69,8 @@ ostream &operator<<(ostream &os, const Formula &f) {
     }
     if (f.Subformulas().size() > 1)
       os << f.Subformula(1);
-    os << ")";
+    if (!f.IsOp(op_not))
+      os << ")";
     assert(f.Subformulas().size() < 3);
   }
   return os;
@@ -166,9 +169,11 @@ ostream &operator<<(ostream &os, const Set &s) {
   return os;
 }
 
-void PrintProofNode(const ProofNode &n, string prefix) {
-  cout << prefix << ": " << n.root << endl;
+void PrintProofNode(ProofNode &n, string prefix) {
+  cout << prefix << "--: " << n.root << "\t(is "
+       << (IsClosed(n) ? "closed" : "open") << ")" << endl;
   for (int i = 0; i < n.subnodes.size(); i++) {
-    PrintProofNode(n.subnodes[i], prefix + "_" + to_string(i + 1));
+    string add_to_prefix = ((i + 1 < n.subnodes.size()) ? " |" : " |");
+    PrintProofNode(n.subnodes[i], prefix + add_to_prefix);
   }
 }

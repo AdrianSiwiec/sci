@@ -65,11 +65,13 @@ bool IsClosed(ProofNode &n) {
   if (IsClosed(n.root))
     return true;
 
-  assert(n.subnodes.empty());
-  for (auto rule : AllRules) {
-    n.subnodes = ApplyRule(n, rule);
-    if (!n.subnodes.empty())
-      break;
+  // If subnodes are not empty, it was already solved
+  if (n.subnodes.empty()) {
+    for (auto rule : AllRules) {
+      n.subnodes = ApplyRule(n, rule);
+      if (!n.subnodes.empty())
+        break;
+    }
   }
 
   if (n.subnodes.empty())

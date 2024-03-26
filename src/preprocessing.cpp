@@ -9,8 +9,11 @@ void ClearVars() {
 }
 
 bool IsVariableChar(char c) {
-  return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
-         (c >= '0' && c <= '9');
+  // return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
+  //  (c >= '0' && c <= '9');
+  if (c == '-' || c == '>' || c == '=' || c == '(' || c == ')')
+    return false;
+  return true;
 }
 
 void ProcessVarChar(string &s, int &pos) {

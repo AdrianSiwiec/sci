@@ -65,4 +65,4 @@ struct ProofNode {
   vector<ProofNode> subnodes;
 };
 
-void PrintProofNode(const ProofNode &n, string prefix = "W_1");
+void PrintProofNode(ProofNode &n, string prefix = "");
