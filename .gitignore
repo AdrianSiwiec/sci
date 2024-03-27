@@ -1,4 +1,5 @@
 obj/*
+site/main.wasm
 
 # Created by https://www.gitignore.io
 

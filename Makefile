@@ -16,8 +16,7 @@ OBJFILES=$(patsubst %.cpp, $(OBJDIR)/%.o, $(SRCFILES))
 UNITTESTFILES=$(patsubst %.cpp, $(OBJDIR)/%.e, $(wildcard $(TESTDIR)/*.cpp))
 RUNTIMEFILES=$(patsubst %.cpp, $(OBJDIR)/%.e, $(wildcard $(SRCDIR)/*.cpp))
 
-# $(info $(OBJFILES))
-# $(info $(TESTFILES))
+# $(info $(UNITTESTFILES))
 
 #Targets
 unitTest: $(UNITTESTFILES)
@@ -29,9 +28,13 @@ $(OBJDIR)/%.o: %.cpp
 
 $(OBJDIR)/%.e: %.cpp $(OBJFILES)
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) $(OBJFILES) $< -o $@ 
+	$(CXX) $(CXXFLAGS) $(OBJFILES) $< -o $@
 
-.PHONY: test clean run-tests unitTest retest netTest lint
+$(OBJDIR)/%.html: %.cpp $(OBJFILES)
+	@mkdir -p $(dir $@)
+	$(EMCC) $(CXXFLAGS) -c $< -o $@
+
+.PHONY: test clean run-tests unitTest retest netTest lint site
 
 # Do not delete OBJFILES by default (shortens make time)
 .OBJ: $(OBJFILES)
@@ -41,6 +44,10 @@ unitTest:
 
 clean:
 	rm -rf obj *.e
+	rm -rf site/out
 
 main:
 	./obj/test/main.e
+
+site:
+	./site/build_site.sh
