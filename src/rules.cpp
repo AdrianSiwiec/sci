@@ -107,3 +107,17 @@ vector<Set> RNEq2(const Formula &f) {
   }
   return {};
 }
+
+bool MatchesREqNot(const Formula &f) {
+  return f.IsOp(op_equiv) && f.Subformula(0).IsVar() &&
+         f.Subformula(1).IsOp(op_not);
+}
+vector<Set> REqNot(const Formula &f) {
+  if (MatchesREqNot(f)) {
+    Formula alpha(GetNewVar());
+    return {
+        Set({Formula(op_equiv, {{f.Subformula(0), Formula(op_not, {{alpha}})}}),
+             Formula(op_equiv, {{alpha, f.Subformula(1).Subformula()}})})};
+  }
+  return {};
+}

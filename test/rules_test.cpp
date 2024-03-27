@@ -62,6 +62,16 @@ void testNEq2() {
   // Then parse the answer, otherwise it creates v4
   assert(result == ParseSets("(phi=v2),v3=(phi->psi),-(v2=v3)"));
 }
+void testREqNot() {
+  ClearVars();
+  auto result = REqNot(Formula("phi=-psi"));
+  assert(result == ParseSets("phi=-v2, v2=psi"));
+
+  result = REqNot(Formula("phi=-(phi=psi)"));
+  assert(result == ParseSets("phi=-v3, v3=(phi=psi)"));
+
+  assert(REqNot(Formula("(phi=phi)=-(phi=psi)")).empty());
+}
 
 int main() {
   testRNot();
@@ -72,4 +82,5 @@ int main() {
   testGetNewVar();
   testNEq1();
   testNEq2();
+  testREqNot();
 }

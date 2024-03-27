@@ -46,9 +46,15 @@ Rule RNEq1;
 // {a=f, b=g, a!=b}
 Rule RNEq2;
 
+// p = -f
+// -------------
+// p = -a, a = f
+Rule REqNot;
+
 Formula ReplaceAll(const Formula &f, const Formula &to_replace,
                    const Formula &replace_with);
 
 int GetNewVar();
 
-const vector<Rule *> AllRules{RNot, RImpl, RNotImpl, nullptr, RNEq1, RNEq2};
+const vector<Rule *> AllRules{RNot,  RImpl, RNotImpl, nullptr,
+                              RNEq1, RNEq2, REqNot};
