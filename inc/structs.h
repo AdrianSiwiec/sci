@@ -28,6 +28,7 @@ private:
   Operator op;
   vector<Formula> subformulas;
   static optional<Formula> ParseOpFormula(const string &s, int &pos);
+  void Normalize();
 };
 
 ostream &operator<<(ostream &os, const Formula &f);

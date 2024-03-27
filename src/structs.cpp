@@ -4,7 +4,9 @@
 
 Formula::Formula(int var) : is_var(true), var(var) {}
 Formula::Formula(Operator op, const vector<Formula> subformulas)
-    : is_var(false), op(op), subformulas(subformulas) {}
+    : is_var(false), op(op), subformulas(subformulas) {
+  Normalize();
+}
 Formula::Formula(string input) {
   optional<Formula> f = ParseInput(input);
   if (!f.has_value()) {
@@ -12,6 +14,7 @@ Formula::Formula(string input) {
     assert(false);
   }
   *this = f.value();
+  Normalize();
 }
 
 bool Formula::IsVar() const { return is_var; }
@@ -39,6 +42,18 @@ Formula Formula::Subformula(int i) const {
   assert(!is_var);
   assert(subformulas.size() > i);
   return subformulas[i];
+}
+
+void Formula::Normalize() {
+  if (is_var == false) {
+    if (op == op_not)
+      assert(this->subformulas.size() == 1);
+    else
+      assert(this->subformulas.size() == 2);
+  }
+  if (IsOp(op_equiv)) {
+    sort(subformulas.begin(), subformulas.end());
+  }
 }
 
 ostream &operator<<(ostream &os, const Formula &f) {

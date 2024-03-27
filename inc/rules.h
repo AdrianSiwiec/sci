@@ -31,8 +31,24 @@ Rule RImpl;
 // {f, -g}
 Rule RNotImpl;
 
-Formula ReplaceAll(const Formula &f, const Formula &to_replace,
-                   const Formula &replace_with);
+// p = f
+// ----------------
+// F(f/p) u {p = f}
 vector<Set> RFun(const Formula &f, Set s);
 
-const vector<Rule *> AllRules{RNot, RImpl, RNotImpl, nullptr};
+// p != f
+// ---------------
+// {p != a, a = f}
+Rule RNEq1;
+
+// f != g
+// ----------------
+// {a=f, b=g, a!=b}
+Rule RNEq2;
+
+Formula ReplaceAll(const Formula &f, const Formula &to_replace,
+                   const Formula &replace_with);
+
+int GetNewVar();
+
+const vector<Rule *> AllRules{RNot, RImpl, RNotImpl, nullptr, RNEq1, RNEq2};

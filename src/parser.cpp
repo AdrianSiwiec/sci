@@ -60,6 +60,7 @@ optional<Formula> Formula::ParseOpFormula(const string &s, int &pos) {
     return nullopt;
   }
   f.subformulas.push_back(child.value());
+  f.Normalize();
   return f;
 }
 
@@ -79,6 +80,7 @@ optional<Formula> Formula::Parse(const string &s, int &pos) {
     if (f2op.has_value()) {
       if (s.size() >= pos && s[pos] == ')') {
         pos++;
+        f2op.value().Normalize();
         return f2op.value();
       }
     }
@@ -92,6 +94,7 @@ optional<Formula> Formula::Parse(const string &s, int &pos) {
       f.var = var.value();
       if (got_bracket)
         pos++;
+      f.Normalize();
       return f;
     }
     pos = save_pos;
@@ -108,6 +111,7 @@ optional<Formula> Formula::Parse(const string &s, int &pos) {
         f.subformulas.push_back(child.value());
         if (got_bracket)
           pos++;
+        f.Normalize();
         return f;
       }
     }
@@ -119,6 +123,7 @@ optional<Formula> Formula::Parse(const string &s, int &pos) {
     auto f = Parse(s, pos);
     if (f.has_value()) {
       pos++;
+      f.value().Normalize();
       return f;
     }
     pos--;

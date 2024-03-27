@@ -1,4 +1,5 @@
 #include "commons.h"
+#include "preprocessing.h"
 #include "rules.h"
 #include "solver.h"
 #include "structs.h"
@@ -35,6 +36,31 @@ void testRFun() {
   vector<Set> sets = RFun(Formula("phi=-psi"), Set("-psi,phi=-psi,psi"));
   assert(RFun(Formula("phi=-psi"), Set("-psi,phi=-psi,psi")) ==
          vector<Set>{Set("phi,psi,phi=-psi")});
+  assert(RFun(Formula("phi=psi"), Set("phi=psi, psi->psi, psi->phi")) ==
+         ParseSets("phi=psi, phi->phi"));
+}
+void testGetNewVar() {
+  int var = GetNewVar();
+  assert(var == 2);
+  assert(int_to_variable[var] == "v2");
+  assert(variable_to_int["v2"] = 2);
+}
+
+void testNEq1() {
+  // First calculate...
+  auto result = RNEq1(Formula("-(phi=(phi->psi))"));
+  // Then parse the answer, otherwise it creates v4
+  assert(result == ParseSets("-(phi=v3),v3=(phi->psi)"));
+
+  assert(RNEq1(Formula("-(-phi=-phi)")).empty());
+}
+
+void testNEq2() {
+  ClearVars();
+  // First calculate...
+  auto result = RNEq2(Formula("-(phi=(phi->psi))"));
+  // Then parse the answer, otherwise it creates v4
+  assert(result == ParseSets("(phi=v2),v3=(phi->psi),-(v2=v3)"));
 }
 
 int main() {
@@ -43,4 +69,7 @@ int main() {
   testRNotImpl();
   testReplaceAll();
   testRFun();
+  testGetNewVar();
+  testNEq1();
+  testNEq2();
 }

@@ -1,4 +1,5 @@
 #include "commons.h"
+#include "preprocessing.h"
 #include "structs.h"
 
 bool matchesRNot(const Formula &f) {
@@ -66,6 +67,43 @@ vector<Set> RFun(const Formula &f, Set s) {
         to_return.push_back(f);
     }
     return {Set(to_return)};
+  }
+  return {};
+}
+
+int GetNewVar() {
+  int var = variable_to_int.size();
+  string name = "v" + to_string(var);
+  variable_to_int[name] = var;
+  int_to_variable[var] = name;
+  return var;
+}
+
+bool MatchesRNEq1(const Formula &f) {
+  return f.IsOp(op_not) && f.Subformula().IsOp(op_equiv) &&
+         f.Subformula().Subformula(0).IsVar();
+}
+vector<Set> RNEq1(const Formula &f) {
+  if (MatchesRNEq1(f)) {
+    Formula new_var(GetNewVar());
+    return {
+        Set({Formula(op_not,
+                     {{op_equiv, {{f.Subformula().Subformula(0), new_var}}}}),
+             Formula(op_equiv, {{new_var, f.Subformula().Subformula(1)}})})};
+  }
+  return {};
+}
+
+bool MatchesRNEq2(const Formula &f) {
+  return f.IsOp(op_not) && f.Subformula().IsOp(op_equiv);
+}
+vector<Set> RNEq2(const Formula &f) {
+  if (MatchesRNEq2(f)) {
+    Formula alpha(GetNewVar());
+    Formula beta(GetNewVar());
+    return {Set({Formula(op_equiv, {{alpha, f.Subformula().Subformula(0)}}),
+                 Formula(op_equiv, {{beta, f.Subformula().Subformula(1)}}),
+                 Formula(op_not, {{Formula(op_equiv, {{alpha, beta}})}})})};
   }
   return {};
 }

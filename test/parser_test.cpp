@@ -27,6 +27,8 @@ void TestParseOp() {
 void TestParser(string s, optional<Formula> f) {
   // if (f.has_value()) {
   //   cout << "Testing if: " << s << "\n  Parses as: " << f.value() << endl;
+  //   int pos = 0;
+  //   cout << "\tIt parses as: " << Formula::Parse(s, pos).value() << endl;
   // } else {
   //   cout << "Testing if: " << s << "\n Doesn't parse." << endl;
   // }
@@ -69,7 +71,7 @@ void TestParserNotAllParen() {
              Formula(op_equiv, {{op_not, {{7}}},
                                 {op_equiv, {{3}, {op_impl, {{4}, {1}}}}}}));
   TestParser("((1=0)->(1->0))",
-             Formula(op_impl, {{op_equiv, {{1}, {0}}}, {op_impl, {{1}, {0}}}}));
+             Formula(op_impl, {{op_equiv, {{0}, {1}}}, {op_impl, {{1}, {0}}}}));
   TestParser("((((1=0)->(1->0))))",
              Formula(op_impl, {{op_equiv, {{1}, {0}}}, {op_impl, {{1}, {0}}}}));
 }
