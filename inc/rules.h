@@ -19,6 +19,7 @@ typedef vector<Set>(Rule)(const Formula &f);
 // p,q are variables.
 // a,b are new variables, introduced by the conclusion
 
+// ----------------------- Classical rules -----------------------
 // - -f
 // ----
 // {f}
@@ -39,6 +40,7 @@ Rule RNotImpl;
 // F(f/p) u {p = f}
 vector<Set> RFun(const Formula &f, Set s);
 
+// ----------------------- Equality Rules -----------------------
 bool IsSimple(const Formula &f);
 
 // p != f
@@ -91,12 +93,43 @@ Rule REqEq;
 // a = b, a = f, b = g
 Rule REq;
 
+// ----------------------- Termination Rules -----------------------
+
+// p = q
+// ---------------------------
+// p, q, p = q | -p, -q, p = q
+Rule RTerEq;
+
+// p = -q
+// -----------------------------
+// p, -q, p = -q | -p, q, p = -q
+Rule RTerEqNot;
+
+// p = (q -> r)
+// ---------------------------------
+// p, -q, f | p, r, f | -p, q, -r, f   // f is p = (q -> r)
+Rule RTerEqImpl;
+
+// p = (q = r)
+// ---------------------------
+// F1 | F2 | F3 | F4 | F5 | F6
+Rule RTerEqEq;
+
+// -(p = q)
+// -----------------
+// F1 | F2 | F3 | F4
+Rule RTerSpike;
+
 Formula ReplaceAll(const Formula &f, const Formula &to_replace,
                    const Formula &replace_with);
 
 int GetNewVar();
 
 // TODO: the order is not exactly as the order they were listed in.
-const vector<Rule *> AllRules{
-    RNot,        RNotImpl,     RImpl,   nullptr,   RNEq1,      RNEq2, REqNot,
-    REqImplLeft, REqImplRight, REqImpl, REqEqLeft, REqEqRight, REqEq, REq};
+const vector<Rule *> AllRules{RNot, RNotImpl, RImpl, nullptr,
+                              // Equality Rules
+                              RNEq1, RNEq2, REqNot, REqImplLeft, REqImplRight,
+                              REqImpl, REqEqLeft, REqEqRight, REqEq, REq,
+                              // Termination Rules
+                              RTerEq, RTerEqNot, RTerEqImpl, RTerEqEq,
+                              RTerSpike};

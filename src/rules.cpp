@@ -257,3 +257,92 @@ vector<Set> REq(const Formula &f) {
   }
   return {};
 }
+
+bool MatchesRTerEq(const Formula &f) {
+  return f.IsOp(op_equiv) && f.Subformula(0).IsVar() && f.Subformula(1).IsVar();
+}
+vector<Set> RTerEq(const Formula &f) {
+  if (MatchesRTerEq(f)) {
+    return {Set({f.Subformula(0), f.Subformula(1), f}),
+            Set({Formula(op_not, {{f.Subformula(0)}}),
+                 Formula(op_not, {{f.Subformula(1)}}), f})};
+  }
+  return {};
+}
+bool MatchesRTerEqNot(const Formula &f) {
+  return f.IsOp(op_equiv) && f.Subformula(0).IsVar() &&
+         f.Subformula(1).IsOp(op_not) && f.Subformula(1).Subformula().IsVar();
+}
+vector<Set> RTerEqNot(const Formula &f) {
+  if (MatchesRTerEqNot(f)) {
+    return {Set({f.Subformula(0), f.Subformula(1), f}),
+            Set({Formula(op_not, {{f.Subformula(0)}}),
+                 f.Subformula(1).Subformula(), f})};
+  }
+  return {};
+}
+bool MatchesRTerEqImpl(const Formula &f) {
+  return f.IsOp(op_equiv) && f.Subformula(0).IsVar() &&
+         f.Subformula(1).IsOp(op_impl) &&
+         f.Subformula(1).Subformula(0).IsVar() &&
+         f.Subformula(1).Subformula(1).IsVar();
+}
+vector<Set> RTerEqImpl(const Formula &f) {
+  if (MatchesRTerEqImpl(f)) {
+    Formula p = f.Subformula(0);
+    Formula q = f.Subformula(1).Subformula(0);
+    Formula r = f.Subformula(1).Subformula(1);
+    return {Set({p, Formula(op_not, {{q}}), f}), Set({p, r, f}),
+            Set({Formula(op_not, {{p}}), q, Formula(op_not, {{r}}), f})};
+  }
+  return {};
+}
+bool MatchesRTerEqEq(const Formula &f) {
+  return f.IsOp(op_equiv) && f.Subformula(0).IsVar() &&
+         f.Subformula(1).IsOp(op_equiv) &&
+         f.Subformula(1).Subformula(0).IsVar() &&
+         f.Subformula(1).Subformula(1).IsVar();
+}
+vector<Set> RTerEqEq(const Formula &f) {
+  if (MatchesRTerEqEq(f)) {
+    Formula p = f.Subformula(0);
+    Formula q = f.Subformula(1).Subformula(0);
+    Formula r = f.Subformula(1).Subformula(1);
+    return {
+        // F1
+        Set({p, q, r, Formula(op_equiv, {{q, r}}), f}),
+        // F2
+        Set({p, Formula(op_not, {{q}}), Formula(op_not, {{r}}),
+             Formula(op_equiv, {{q, r}}), f}),
+        // F3
+        Set({Formula(op_not, {{p}}), q, r,
+             Formula(op_not, {{Formula(op_equiv, {{q, r}})}}), f}),
+        // F4
+        Set({Formula(op_not, {{p}}), q, Formula(op_not, {{r}}),
+             Formula(op_not, {{Formula(op_equiv, {{q, r}})}}), f}),
+        // F5
+        Set({Formula(op_not, {{p}}), Formula(op_not, {{q}}), r,
+             Formula(op_not, {{Formula(op_equiv, {{q, r}})}}), f}),
+        // F6
+        Set({Formula(op_not, {{p}}), Formula(op_not, {{q}}),
+             Formula(op_not, {{r}}),
+             Formula(op_not, {{Formula(op_equiv, {{q, r}})}}), f}),
+    };
+  }
+  return {};
+}
+bool MatchesRTerSpike(const Formula &f) {
+  return f.IsOp(op_not) && f.Subformula().IsOp(op_equiv) &&
+         f.Subformula().Subformula(0).IsVar() &&
+         f.Subformula().Subformula(1).IsVar();
+}
+vector<Set> RTerSpike(const Formula &f) {
+  if (MatchesRTerSpike(f)) {
+    Formula p = f.Subformula().Subformula(0);
+    Formula q = f.Subformula().Subformula(1);
+    return {Set({p, q, f}), Set({p, Formula(op_not, {{q}}), f}),
+            Set({Formula(op_not, {{p}}), q, f}),
+            Set({Formula(op_not, {{p}}), Formula(op_not, {{q}}), f})};
+  }
+  return {};
+}

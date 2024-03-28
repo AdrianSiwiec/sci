@@ -16,12 +16,12 @@ int main() {
   n = ProofNode(vector<Formula>{f});
   PrintProofNode(n);
 
-  // while (true) {
-  //   cout << endl << "Enter your formula: " << endl;
-  //   string input;
-  //   cin >> input;
-  //   f = Formula(input);
-  //   n = ProofNode(vector<Formula>{f});
-  //   PrintProofNode(n);
-  // }
+  while (true) {
+    cout << endl << "Enter your formula: " << endl;
+    string input;
+    cin >> input;
+    f = Formula(input);
+    n = ProofNode(vector<Formula>{f});
+    PrintProofNode(n);
+  }
 }

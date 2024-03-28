@@ -142,6 +142,24 @@ void testREq() {
   assert(REq(Formula("phi=psi")).empty());
   assert(REq(Formula("phi=-psi")).empty());
 }
+void testRTerEq() {
+  assert(RTerEq(Formula("p=q")) == ParseSets("p,q,p=q | -p, -q, p=q"));
+  assert(RTerEqNot(Formula("p=-q")) == ParseSets("p,-q,p=-q | -p,q,p=-q"));
+  assert(RTerEqImpl(Formula("p=(q->r)")) ==
+         ParseSets("p,-q,p=(q->r) | p,r,p=(q->r) | -p,q,-r,p=(q->r)"));
+  assert(RTerEqEq(Formula("p=(q=r)")) == ParseSets("\
+                  p, q, r, q=r, p=(q=r) | \
+                  p, -q,-r, q=r, p=(q=r) | \
+                  -p, q, r, -(q=r), p=(q=r) | \
+                  -p, q, -r, -(q=r), p=(q=r) | \
+                  -p, -q, r, -(q=r), p=(q=r) | \
+                  -p, -q, -r, -(q=r), p=(q=r)"));
+  assert(RTerSpike(Formula("-(p=q)")) == ParseSets("\
+                 p, q, -(p=q) | \
+                 p, -q, -(p=q) | \
+                 -p, q, -(p=q) | \
+                 -p, -q, -(p=q)"));
+}
 
 int main() {
   testRNot();
@@ -157,4 +175,5 @@ int main() {
   testREqImpl();
   testREqEq();
   testREq();
+  testRTerEq();
 }
