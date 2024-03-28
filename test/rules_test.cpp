@@ -90,6 +90,29 @@ void testREqImpl() {
   assert(result == ParseSets("phi=(v5->psi), v5=-psi"));
   assert(REqImplLeft(Formula("phi=(-psi->psi)")).empty());
 }
+void testREqEq() {
+  ClearVars();
+  auto result = REqEq(Formula("phi=(-phi=-psi)"));
+  assert(result == ParseSets("phi=(v2=v3), v2=-phi, v3=-psi"));
+  assert(REqEqLeft(Formula("phi=(-phi=-psi)")).empty());
+  assert(REqEqRight(Formula("phi=(-phi=-psi)")).empty());
+
+  result = REqEqLeft(Formula("phi=(psi=-psi)"));
+  assert(result == ParseSets("phi=(psi=v4), v4=-psi"));
+  assert(REqEqRight(Formula("phi=(psi=-psi)")).empty());
+
+  // In my normalized formulas, only simple formula can match REqEqRight
+  // (because the variable is always on the left)
+  // result = REqEqRight(Formula("phi=(-psi=psi)"));
+  // assert(result == ParseSets("phi=(v5=psi), v5=-psi"));
+  // assert(REqEqLeft(Formula("phi=(-psi=psi)")).empty());
+}
+
+void testREq() {
+  ClearVars();
+  auto result = REq(Formula("-phi=-psi"));
+  assert(result == ParseSets("v2=v3, v2=-phi, v3=-psi"));
+}
 
 int main() {
   testRNot();
@@ -102,4 +125,6 @@ int main() {
   testNEq2();
   testREqNot();
   testREqImpl();
+  testREqEq();
+  testREq();
 }

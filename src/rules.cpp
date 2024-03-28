@@ -165,3 +165,59 @@ vector<Set> REqImplRight(const Formula &f) {
   }
   return {};
 }
+
+bool MatchesREqEq(const Formula &f) {
+  return f.IsOp(op_equiv) && f.Subformula(0).IsVar() &&
+         f.Subformula(1).IsOp(op_equiv);
+}
+bool MatchesREqEqLeft(const Formula &f) {
+  return MatchesREqEq(f) && f.Subformula(1).Subformula(0).IsVar();
+}
+bool MatchesREqEqRight(const Formula &f) {
+  return MatchesREqEq(f) && f.Subformula(1).Subformula(1).IsVar();
+}
+vector<Set> REqEq(const Formula &f) {
+  if (MatchesREqEq(f)) {
+    Formula alpha(GetNewVar());
+    Formula beta(GetNewVar());
+    return {Set({Formula(op_equiv, {{f.Subformula(0),
+                                     Formula(op_equiv, {{alpha, beta}})}}),
+                 Formula(op_equiv, {{alpha, f.Subformula(1).Subformula(0)}}),
+                 Formula(op_equiv, {{beta, f.Subformula(1).Subformula(1)}})})};
+  }
+  return {};
+}
+vector<Set> REqEqLeft(const Formula &f) {
+  if (MatchesREqEqLeft(f)) {
+    Formula alpha(GetNewVar());
+    return {Set({Formula(op_equiv,
+                         {{f.Subformula(0),
+                           Formula(op_equiv,
+                                   {{f.Subformula(1).Subformula(0), alpha}})}}),
+                 Formula(op_equiv, {{alpha, f.Subformula(1).Subformula(1)}})})};
+  }
+  return {};
+}
+vector<Set> REqEqRight(const Formula &f) {
+  if (MatchesREqEqRight(f)) {
+    Formula alpha(GetNewVar());
+    return {Set({Formula(op_equiv,
+                         {{f.Subformula(0),
+                           Formula(op_equiv,
+                                   {{alpha, f.Subformula(1).Subformula(1)}})}}),
+                 Formula(op_equiv, {{alpha, f.Subformula(1).Subformula(0)}})})};
+  }
+  return {};
+}
+
+bool MatchesREq(const Formula &f) { return f.IsOp(op_equiv); }
+vector<Set> REq(const Formula &f) {
+  if (MatchesREq(f)) {
+    Formula alpha(GetNewVar());
+    Formula beta(GetNewVar());
+    return {Set({Formula(op_equiv, {{alpha, beta}}),
+                 Formula(op_equiv, {{alpha, f.Subformula(0)}}),
+                 Formula(op_equiv, {{beta, f.Subformula(1)}})})};
+  }
+  return {};
+}

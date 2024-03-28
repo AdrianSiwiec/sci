@@ -71,6 +71,26 @@ Rule REqImplRight;
 // p = (a->b), a=f, b=g
 Rule REqImpl;
 
+// p = (q = f)
+// ------------------
+// p = (q = a), a = f
+Rule REqEqLeft;
+
+// p = (f = q)
+// ------------------
+// p = (a = q), a = f
+Rule REqEqRight;
+
+// p = (f = g)
+// -------------------------
+// p = (a = b), a = f, b = g
+Rule REqEq;
+
+// f = g
+// -------------------
+// a = b, a = f, b = g
+Rule REq;
+
 Formula ReplaceAll(const Formula &f, const Formula &to_replace,
                    const Formula &replace_with);
 
