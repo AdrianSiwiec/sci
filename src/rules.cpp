@@ -79,7 +79,31 @@ int GetNewVar() {
   return var;
 }
 
+bool IsSimple(const Formula &f) {
+  if (f.IsVar())
+    return true;
+  if (f.IsOp(op_not) && f.Subformula().IsVar())
+    return true;
+  if (f.IsOp(op_equiv) && f.Subformula(0).IsVar() && f.Subformula(1).IsVar())
+    return true;
+  if (f.IsOp(op_not) && f.Subformula().IsOp(op_equiv) &&
+      f.Subformula().Subformula(0).IsVar() &&
+      f.Subformula().Subformula(1).IsVar())
+    return true;
+  if (f.IsOp(op_equiv) && f.Subformula(0).IsVar() &&
+      f.Subformula(1).IsOp(op_not) && f.Subformula(1).Subformula().IsVar())
+    return true;
+  if (f.IsOp(op_equiv) && f.Subformula(0).IsVar() &&
+      (f.Subformula(1).IsOp(op_equiv) || f.Subformula(1).IsOp(op_impl)) &&
+      f.Subformula(1).Subformula(0).IsVar() &&
+      f.Subformula(1).Subformula(1).IsVar())
+    return true;
+  return false;
+}
+
 bool MatchesRNEq1(const Formula &f) {
+  if (IsSimple(f))
+    return false;
   return f.IsOp(op_not) && f.Subformula().IsOp(op_equiv) &&
          f.Subformula().Subformula(0).IsVar();
 }
@@ -95,6 +119,8 @@ vector<Set> RNEq1(const Formula &f) {
 }
 
 bool MatchesRNEq2(const Formula &f) {
+  if (IsSimple(f))
+    return false;
   return f.IsOp(op_not) && f.Subformula().IsOp(op_equiv);
 }
 vector<Set> RNEq2(const Formula &f) {
@@ -109,6 +135,8 @@ vector<Set> RNEq2(const Formula &f) {
 }
 
 bool MatchesREqNot(const Formula &f) {
+  if (IsSimple(f))
+    return false;
   return f.IsOp(op_equiv) && f.Subformula(0).IsVar() &&
          f.Subformula(1).IsOp(op_not);
 }
@@ -123,6 +151,8 @@ vector<Set> REqNot(const Formula &f) {
 }
 
 bool MatchesREqImpl(const Formula &f) {
+  if (IsSimple(f))
+    return false;
   return f.IsOp(op_equiv) && f.Subformula(0).IsVar() &&
          f.Subformula(1).IsOp(op_impl);
 }
@@ -167,6 +197,8 @@ vector<Set> REqImplRight(const Formula &f) {
 }
 
 bool MatchesREqEq(const Formula &f) {
+  if (IsSimple(f))
+    return false;
   return f.IsOp(op_equiv) && f.Subformula(0).IsVar() &&
          f.Subformula(1).IsOp(op_equiv);
 }
@@ -210,7 +242,11 @@ vector<Set> REqEqRight(const Formula &f) {
   return {};
 }
 
-bool MatchesREq(const Formula &f) { return f.IsOp(op_equiv); }
+bool MatchesREq(const Formula &f) {
+  if (IsSimple(f))
+    return false;
+  return f.IsOp(op_equiv);
+}
 vector<Set> REq(const Formula &f) {
   if (MatchesREq(f)) {
     Formula alpha(GetNewVar());

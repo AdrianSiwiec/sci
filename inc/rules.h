@@ -39,7 +39,7 @@ Rule RNotImpl;
 // F(f/p) u {p = f}
 vector<Set> RFun(const Formula &f, Set s);
 
-// TODO: "Wyróżniona formuła nie jest prosta"???
+bool IsSimple(const Formula &f);
 
 // p != f
 // ---------------
@@ -97,5 +97,6 @@ Formula ReplaceAll(const Formula &f, const Formula &to_replace,
 int GetNewVar();
 
 // TODO: the order is not exactly as the order they were listed in.
-const vector<Rule *> AllRules{RNot,  RImpl, RNotImpl, nullptr,
-                              RNEq1, RNEq2, REqNot};
+const vector<Rule *> AllRules{
+    RNot,        RNotImpl,     RImpl,   nullptr,   RNEq1,      RNEq2, REqNot,
+    REqImplLeft, REqImplRight, REqImpl, REqEqLeft, REqEqRight, REqEq, REq};

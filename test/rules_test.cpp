@@ -46,13 +46,33 @@ void testGetNewVar() {
   assert(variable_to_int["v2"] = 2);
 }
 
+void testIsSimple() {
+  assert(IsSimple(Formula("p")));
+  assert(IsSimple(Formula("-p")));
+  assert(IsSimple(Formula("p=q")));
+  assert(IsSimple(Formula("-(p=q)")));
+  assert(IsSimple(Formula("-p=q")));
+  assert(IsSimple(Formula("p=(p=p)")));
+  assert(IsSimple(Formula("p=(p->p)")));
+
+  assert(!IsSimple(Formula("--p")));
+  assert(!IsSimple(Formula("-p=-q")));
+  assert(!IsSimple(Formula("-(-p=q)")));
+  assert(!IsSimple(Formula("p=(-p=p)")));
+  assert(!IsSimple(Formula("p=(p=-p)")));
+  assert(!IsSimple(Formula("p=(p->-p)")));
+  assert(!IsSimple(Formula("p=(-p->p)")));
+}
+
 void testNEq1() {
+  ClearVars();
   // First calculate...
   auto result = RNEq1(Formula("-(phi=(phi->psi))"));
   // Then parse the answer, otherwise it creates v4
-  assert(result == ParseSets("-(phi=v3),v3=(phi->psi)"));
+  assert(result == ParseSets("-(phi=v2),v2=(phi->psi)"));
 
   assert(RNEq1(Formula("-(-phi=-phi)")).empty());
+  assert(RNEq1(Formula("-(phi=psi)")).empty());
 }
 
 void testNEq2() {
@@ -61,16 +81,18 @@ void testNEq2() {
   auto result = RNEq2(Formula("-(phi=(phi->psi))"));
   // Then parse the answer, otherwise it creates v4
   assert(result == ParseSets("(phi=v2),v3=(phi->psi),-(v2=v3)"));
+  assert(RNEq1(Formula("-(phi=psi)")).empty());
 }
 void testREqNot() {
   ClearVars();
-  auto result = REqNot(Formula("phi=-psi"));
-  assert(result == ParseSets("phi=-v2, v2=psi"));
+  auto result = REqNot(Formula("phi=--psi"));
+  assert(result == ParseSets("phi=-v2, v2=-psi"));
 
   result = REqNot(Formula("phi=-(phi=psi)"));
   assert(result == ParseSets("phi=-v3, v3=(phi=psi)"));
 
   assert(REqNot(Formula("(phi=phi)=-(phi=psi)")).empty());
+  assert(REqNot(Formula("phi=-psi")).empty());
 }
 
 void testREqImpl() {
@@ -79,6 +101,8 @@ void testREqImpl() {
   assert(result == ParseSets("phi=(v2->v3), v2=-phi, v3=-psi"));
   assert(REqImplLeft(Formula("phi=(-phi->-psi)")).empty());
   assert(REqImplRight(Formula("phi=(-phi->-psi)")).empty());
+
+  assert(REqImpl(Formula("phi=(phi->psi)")).empty());
 
   assert(REqImpl(Formula("-phi=(-phi->-psi)")).empty());
 
@@ -97,6 +121,8 @@ void testREqEq() {
   assert(REqEqLeft(Formula("phi=(-phi=-psi)")).empty());
   assert(REqEqRight(Formula("phi=(-phi=-psi)")).empty());
 
+  assert(REqEq(Formula("phi=(phi=psi)")).empty());
+
   result = REqEqLeft(Formula("phi=(psi=-psi)"));
   assert(result == ParseSets("phi=(psi=v4), v4=-psi"));
   assert(REqEqRight(Formula("phi=(psi=-psi)")).empty());
@@ -112,6 +138,9 @@ void testREq() {
   ClearVars();
   auto result = REq(Formula("-phi=-psi"));
   assert(result == ParseSets("v2=v3, v2=-phi, v3=-psi"));
+
+  assert(REq(Formula("phi=psi")).empty());
+  assert(REq(Formula("phi=-psi")).empty());
 }
 
 int main() {
@@ -121,6 +150,7 @@ int main() {
   testReplaceAll();
   testRFun();
   testGetNewVar();
+  testIsSimple();
   testNEq1();
   testNEq2();
   testREqNot();
