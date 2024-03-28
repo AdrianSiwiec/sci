@@ -121,3 +121,47 @@ vector<Set> REqNot(const Formula &f) {
   }
   return {};
 }
+
+bool MatchesREqImpl(const Formula &f) {
+  return f.IsOp(op_equiv) && f.Subformula(0).IsVar() &&
+         f.Subformula(1).IsOp(op_impl);
+}
+bool MatchesREqImplLeft(const Formula &f) {
+  return MatchesREqImpl(f) && f.Subformula(1).Subformula(0).IsVar();
+}
+bool MatchesREqImplRight(const Formula &f) {
+  return MatchesREqImpl(f) && f.Subformula(1).Subformula(1).IsVar();
+}
+vector<Set> REqImpl(const Formula &f) {
+  if (MatchesREqImpl(f)) {
+    Formula alpha(GetNewVar());
+    Formula beta(GetNewVar());
+    return {Set({Formula(op_equiv, {{f.Subformula(0),
+                                     Formula(op_impl, {{alpha, beta}})}}),
+                 Formula(op_equiv, {{alpha, f.Subformula(1).Subformula(0)}}),
+                 Formula(op_equiv, {{beta, f.Subformula(1).Subformula(1)}})})};
+  }
+  return {};
+}
+vector<Set> REqImplLeft(const Formula &f) {
+  if (MatchesREqImplLeft(f)) {
+    Formula alpha(GetNewVar());
+    return {Set({Formula(op_equiv,
+                         {{f.Subformula(0),
+                           Formula(op_impl,
+                                   {{f.Subformula(1).Subformula(0), alpha}})}}),
+                 Formula(op_equiv, {{alpha, f.Subformula(1).Subformula(1)}})})};
+  }
+  return {};
+}
+vector<Set> REqImplRight(const Formula &f) {
+  if (MatchesREqImplRight(f)) {
+    Formula alpha(GetNewVar());
+    return {Set({Formula(op_equiv,
+                         {{f.Subformula(0),
+                           Formula(op_impl,
+                                   {{alpha, f.Subformula(1).Subformula(1)}})}}),
+                 Formula(op_equiv, {{alpha, f.Subformula(1).Subformula(0)}})})};
+  }
+  return {};
+}

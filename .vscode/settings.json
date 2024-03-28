@@ -13,5 +13,7 @@
         "*.cu": "cpp",
         "optional": "cpp",
         "string": "cpp"
-    }
+    },
+    "cSpell.showAutocompleteSuggestions": true,
+    "C_Cpp.autocompleteAddParentheses": true
 }

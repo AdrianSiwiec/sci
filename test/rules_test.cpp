@@ -73,6 +73,24 @@ void testREqNot() {
   assert(REqNot(Formula("(phi=phi)=-(phi=psi)")).empty());
 }
 
+void testREqImpl() {
+  ClearVars();
+  auto result = REqImpl(Formula("phi=(-phi->-psi)"));
+  assert(result == ParseSets("phi=(v2->v3), v2=-phi, v3=-psi"));
+  assert(REqImplLeft(Formula("phi=(-phi->-psi)")).empty());
+  assert(REqImplRight(Formula("phi=(-phi->-psi)")).empty());
+
+  assert(REqImpl(Formula("-phi=(-phi->-psi)")).empty());
+
+  result = REqImplLeft(Formula("phi=(psi->-psi)"));
+  assert(result == ParseSets("phi=(psi->v4), v4=-psi"));
+  assert(REqImplRight(Formula("phi=(psi->-psi)")).empty());
+
+  result = REqImplRight(Formula("phi=(-psi->psi)"));
+  assert(result == ParseSets("phi=(v5->psi), v5=-psi"));
+  assert(REqImplLeft(Formula("phi=(-psi->psi)")).empty());
+}
+
 int main() {
   testRNot();
   testRImpl();
@@ -83,4 +101,5 @@ int main() {
   testNEq1();
   testNEq2();
   testREqNot();
+  testREqImpl();
 }
