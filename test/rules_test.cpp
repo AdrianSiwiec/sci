@@ -161,6 +161,16 @@ void testRTerEq() {
                  -p, -q, -(p=q)"));
 }
 
+void testApplyRule() {
+  ClearAppliedRules();
+  Formula f("p");
+  assert(!WasRuleApplied(RTerSpike, f));
+  MarkRuleAsApplied(RTerSpike, f);
+  assert(WasRuleApplied(RTerSpike, f));
+  assert(!WasRuleApplied(RTerSpike, Formula("q")));
+  assert(!WasRuleApplied(RTerEqEq, f));
+}
+
 int main() {
   testRNot();
   testRImpl();
@@ -176,4 +186,5 @@ int main() {
   testREqEq();
   testREq();
   testRTerEq();
+  testApplyRule();
 }

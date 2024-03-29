@@ -3,8 +3,8 @@
 #include "structs.h"
 
 void Example(string s) {
-  Formula f(s);
-  ProofNode n(vector<Formula>{f});
+  Set input_set(s);
+  ProofNode n(input_set);
   IsClosed(n);
   PrintProofNode(n);
   cout << endl;
@@ -24,13 +24,16 @@ int main() {
   Example("-((p=q)->(q=p))");
   Example("--(p=q)");
   Example("-((p=-q)->((q=-r)->(p=--r)))");
+  Example("p,-p");
+  Example("p,p=-r,q=-s,p=(q=p),p=(s=r)");
 
   while (true) {
-    cout << endl << "Enter your formula: " << endl;
+    cout << endl << "Enter your set of formulas (divided by ','): " << endl;
     string input;
     cin >> input;
-    f = Formula(input);
-    n = ProofNode(vector<Formula>{f});
+    Set s(input);
+    n = ProofNode(s);
+    Solve(n);
     PrintProofNode(n);
   }
 }

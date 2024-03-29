@@ -65,17 +65,20 @@ bool NothingChanged(const ProofNode &previous,
         }
       }
     }
-    if(!changed) return true;
+    if (!changed)
+      return true;
   }
   return false;
 }
 
 vector<ProofNode> ApplyRule(const ProofNode node, Rule rule,
                             const ProofNode &previous) {
-  // if (rule == RTerEq) {
-  //   cout << "Start RTerEq" << endl;
-  // }
+
   for (int i = 0; i < node.root.Formulas().size(); i++) {
+    if (IsSingleUseRule(rule) &&
+        WasRuleApplied(rule, node.root.Formulas()[i])) {
+      continue;
+    }
     vector<Set> result;
     if (rule != nullptr) {
       result = rule(node.root.Formulas()[i]);
@@ -107,6 +110,8 @@ vector<ProofNode> ApplyRule(const ProofNode node, Rule rule,
       if (to_return.size() == 1 && to_return[0].root == node.root) {
         continue;
       }
+      if (IsSingleUseRule(rule))
+        MarkRuleAsApplied(rule, node.root.Formulas()[i]);
       return to_return;
     }
   }
@@ -119,6 +124,9 @@ bool IsClosed(ProofNode &n) {
 }
 
 void Solve(ProofNode &n, ProofNode previous) {
+  if (previous.subnodes.empty())
+    ClearAppliedRules();
+
   // cout << "Solving: ";
   // PrintProofNode(n);
   // cout << "\tPrevious: " << endl;

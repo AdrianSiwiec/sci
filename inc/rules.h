@@ -125,6 +125,11 @@ Formula ReplaceAll(const Formula &f, const Formula &to_replace,
 
 int GetNewVar();
 
+bool IsSingleUseRule(Rule r);
+bool WasRuleApplied(Rule r, const Formula &f);
+void MarkRuleAsApplied(Rule r, const Formula &f);
+void ClearAppliedRules();
+
 const vector<Rule *> AllRules{RNot, RNotImpl, RImpl, nullptr,
                               // Equality Rules
                               RNEq1, RNEq2, REqNot, REqImplLeft, REqImplRight,

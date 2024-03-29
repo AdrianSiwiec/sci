@@ -1,6 +1,9 @@
+#include "rules.h"
 #include "commons.h"
 #include "preprocessing.h"
 #include "structs.h"
+
+#include <set>
 
 bool matchesRNot(const Formula &f) {
   if (!f.IsOp(op_not) || f.Subformulas().empty())
@@ -346,3 +349,31 @@ vector<Set> RTerSpike(const Formula &f) {
   }
   return {};
 }
+
+bool IsSingleUseRule(Rule r) {
+  return r == RTerEq || r == RTerEqNot || r == RTerEqImpl || r == RTerEqEq ||
+         r == RTerSpike;
+}
+
+int GetRuleCode(Rule r) {
+  if (r == RTerEq)
+    return 1;
+  else if (r == RTerEqNot)
+    return 2;
+  else if (r == RTerEqImpl)
+    return 3;
+  else if (r == RTerEqEq)
+    return 4;
+  else if (r == RTerSpike)
+    return 5;
+  else
+    assert("Get Rule Code used on incompatible rule" == 0);
+}
+set<pair<int, Formula>> applied_rules;
+bool WasRuleApplied(Rule r, const Formula &f) {
+  return applied_rules.count(make_pair(GetRuleCode(r), f)) > 0;
+}
+void MarkRuleAsApplied(Rule r, const Formula &f) {
+  applied_rules.insert(make_pair(GetRuleCode(r), f));
+}
+void ClearAppliedRules() { applied_rules.clear(); }
