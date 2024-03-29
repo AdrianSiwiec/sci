@@ -13,18 +13,20 @@ void TestBuildChildNodes() {
 }
 
 void TestApplyRule() {
-  assert(ApplyRule(ProofNode(Set({Formula(1)})), RNot).empty());
+  ProofNode pn(Set({Formula(1)}));
+  assert(ApplyRule(pn, RNot).empty());
 
   Formula nn3(op_not, {{op_not, {3}}});
 
-  vector<ProofNode> ns = ApplyRule(ProofNode(Set({nn3})), RNot);
+  pn = ProofNode(Set({nn3}));
+  vector<ProofNode> ns = ApplyRule(pn, RNot);
   assert(ns.size() == 1);
   assert(ns[0].root == Set({Formula(3)}));
 
   Formula eq12(op_equiv, {{1}, {2}});
   Formula n1(op_not, {{1}});
-  ns = ApplyRule(ProofNode(Set({Formula(1), Formula(op_impl, {1, eq12}), n1})),
-                 RImpl);
+  pn = ProofNode(Set({Formula(1), Formula(op_impl, {1, eq12}), n1}));
+  ns = ApplyRule(pn, RImpl);
   assert(ns.size() == 2);
   assert(ns[0].root == Set({Formula(1), n1}));
   assert(ns[1].root == Set({Formula(1), n1, eq12}));

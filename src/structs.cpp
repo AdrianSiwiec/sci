@@ -68,16 +68,16 @@ ostream &operator<<(ostream &os, const Formula &f) {
     if (!f.IsOp(op_not))
       os << "(";
     if (f.IsOp(op_not))
-      os << "-";
+      os << "¬";
     os << f.Subformula(0);
     switch (f.Op()) {
     case op_not:
       break;
     case op_impl:
-      os << "->";
+      os << "→";
       break;
     case op_equiv:
-      os << "=";
+      os << "≡";
       break;
     default:
       assert(false);
@@ -186,7 +186,11 @@ ostream &operator<<(ostream &os, const Set &s) {
 
 void PrintProofNode(const ProofNode &n, string prefix) {
   cout << prefix << "--: " << n.root << "\t(is "
-       << (n.is_closed ? "closed" : "open") << ")" << endl;
+       << (n.is_closed ? "closed" : "open") << ")";
+  if(n.formula_used.has_value()) {
+    cout<<" applied rule "<<n.rule_used.value()<<" to "<<n.formula_used.value();
+  }
+  cout << endl;
   for (int i = 0; i < n.subnodes.size(); i++) {
     string add_to_prefix = ((i + 1 < n.subnodes.size()) ? " |" : " |");
     PrintProofNode(n.subnodes[i], prefix + add_to_prefix);

@@ -130,6 +130,8 @@ bool WasRuleApplied(Rule r, const Formula &f);
 void MarkRuleAsApplied(Rule r, const Formula &f);
 void ClearAppliedRules();
 
+string GetRuleName(Rule r);
+
 const vector<Rule *> AllRules{RNot, RNotImpl, RImpl, nullptr,
                               // Equality Rules
                               RNEq1, RNEq2, REqNot, REqImplLeft, REqImplRight,

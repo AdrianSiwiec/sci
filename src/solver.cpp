@@ -71,7 +71,7 @@ bool NothingChanged(const ProofNode &previous,
   return false;
 }
 
-vector<ProofNode> ApplyRule(const ProofNode node, Rule rule,
+vector<ProofNode> ApplyRule(ProofNode &node, Rule rule,
                             const ProofNode &previous) {
 
   for (int i = 0; i < node.root.Formulas().size(); i++) {
@@ -112,6 +112,8 @@ vector<ProofNode> ApplyRule(const ProofNode node, Rule rule,
       }
       if (IsSingleUseRule(rule))
         MarkRuleAsApplied(rule, node.root.Formulas()[i]);
+      node.formula_used = node.root.Formulas()[i];
+      node.rule_used = GetRuleName(rule);
       return to_return;
     }
   }

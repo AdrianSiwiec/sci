@@ -377,3 +377,48 @@ void MarkRuleAsApplied(Rule r, const Formula &f) {
   applied_rules.insert(make_pair(GetRuleCode(r), f));
 }
 void ClearAppliedRules() { applied_rules.clear(); }
+
+string GetRuleName(Rule r) {
+  if (r == RNot)
+    return "¬";
+  else if (r == RImpl)
+    return "→";
+  else if (r == RNotImpl)
+    return "¬→";
+  else if (r == nullptr)
+    return "fun";
+  else if (r == RNEq1)
+    return "≢1";
+  else if (r == RNEq2)
+    return "≢2";
+  else if (r == REqNot)
+    return "≡¬";
+  else if (r == REqImpl)
+    return "≡¬";
+  else if (r == REqImplLeft)
+    return "≡l¬";
+  else if (r == REqImplRight)
+    return "≡r¬";
+  else if (r == REqEqLeft)
+    return "≡l≡";
+  else if (r == REqEqRight)
+    return "≡r≡";
+  else if (r == REqEq)
+    return "≡≡";
+  else if (r == REq)
+    return "≡";
+  else if (r == RTerEq)
+    return "≡⊤";
+  else if (r == RTerEqNot)
+    return "≡⊤¬";
+  else if (r == RTerEqImpl)
+    return "≡⊤→";
+  else if (r == RTerEqEq)
+    return "≡⊤≡";
+  else if (r == RTerSpike)
+    return "≡⊥";
+  else {
+    assert("GetRuleName with incorrect rule" == 0);
+    return "NOT A RULE";
+  }
+}

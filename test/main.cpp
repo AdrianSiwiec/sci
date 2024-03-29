@@ -27,6 +27,7 @@ int main() {
   Example("p,-p");
   Example("p,p=-r,q=-s,p=(q=p),p=(s=r)");
 
+
   while (true) {
     cout << endl << "Enter your set of formulas (divided by ','): " << endl;
     string input;

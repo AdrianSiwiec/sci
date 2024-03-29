@@ -65,6 +65,9 @@ struct ProofNode {
   Set root;
   vector<ProofNode> subnodes;
   bool is_closed = false;
+
+  optional<string> rule_used;
+  optional<Formula> formula_used;
 };
 
 void PrintProofNode(const ProofNode &n, string prefix = "");
