@@ -125,7 +125,6 @@ Formula ReplaceAll(const Formula &f, const Formula &to_replace,
 
 int GetNewVar();
 
-// TODO: the order is not exactly as the order they were listed in.
 const vector<Rule *> AllRules{RNot, RNotImpl, RImpl, nullptr,
                               // Equality Rules
                               RNEq1, RNEq2, REqNot, REqImplLeft, REqImplRight,

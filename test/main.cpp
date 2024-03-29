@@ -2,6 +2,14 @@
 #include "solver.h"
 #include "structs.h"
 
+void Example(string s) {
+  Formula f(s);
+  ProofNode n(vector<Formula>{f});
+  IsClosed(n);
+  PrintProofNode(n);
+  cout << endl;
+}
+
 int main() {
   Formula f("-(phi->psi)");
   Formula g("phi->theta");
@@ -11,10 +19,10 @@ int main() {
   PrintProofNode(n);
 
   cout << endl << endl;
+  Example("--ϕ -> (-ψ -> ϑ)");
 
-  f = Formula("--ϕ -> (-ψ -> ϑ)");
-  n = ProofNode(vector<Formula>{f});
-  PrintProofNode(n);
+  Example("-((p=q)->(q=p))");
+  Example("--(p=q)");
 
   while (true) {
     cout << endl << "Enter your formula: " << endl;

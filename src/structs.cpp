@@ -184,9 +184,9 @@ ostream &operator<<(ostream &os, const Set &s) {
   return os;
 }
 
-void PrintProofNode(ProofNode &n, string prefix) {
+void PrintProofNode(const ProofNode &n, string prefix) {
   cout << prefix << "--: " << n.root << "\t(is "
-       << (IsClosed(n) ? "closed" : "open") << ")" << endl;
+       << (n.is_closed ? "closed" : "open") << ")" << endl;
   for (int i = 0; i < n.subnodes.size(); i++) {
     string add_to_prefix = ((i + 1 < n.subnodes.size()) ? " |" : " |");
     PrintProofNode(n.subnodes[i], prefix + add_to_prefix);

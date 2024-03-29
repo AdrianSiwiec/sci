@@ -7,6 +7,7 @@ void TestBuildChildNodes() {
   vector<ProofNode> children = BuildChildNodes(
       n, 0, {Set(vector<Formula>({{9}, {2}, {5}})), Set({Formula(3)})});
 
+  assert(children.size() == 2);
   assert(children[0].root == Set(vector<Formula>({{2}, {3}, {5}, {9}})));
   assert(children[1].root == Set(vector<Formula>({{2}, {3}})));
 }
@@ -41,6 +42,8 @@ void TestAx() {
   assert(IsAx2(Formula(4), Formula(op_not, {{4}})));
   assert(!IsAx2(Formula(op_not, {{4}}), Formula(op_not, {{4}})));
   assert(IsAx2(Formula(op_not, {{4}}), Formula(4)));
+
+  assert(IsClosed(Set("p,q,-p,-q,(p=q)")));
 }
 
 void TestSimple() {
