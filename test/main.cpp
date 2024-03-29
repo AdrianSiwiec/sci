@@ -23,6 +23,7 @@ int main() {
 
   Example("-((p=q)->(q=p))");
   Example("--(p=q)");
+  Example("-((p=-q)->((q=-r)->(p=--r)))");
 
   while (true) {
     cout << endl << "Enter your formula: " << endl;

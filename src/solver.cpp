@@ -46,33 +46,32 @@ vector<ProofNode> BuildChildNodes(const ProofNode &node, int formula_to_remove,
   return to_return;
 }
 
-bool NothingChanged(const vector<Formula> previous_formulas,
+bool NothingChanged(const ProofNode &previous,
                     const vector<ProofNode> &conclusions) {
-  set<Formula> previous_formulas_set;
-  for (const auto &f : previous_formulas) {
-    previous_formulas_set.insert(f);
-  }
+  if (previous.subnodes.empty())
+    return false;
+  for (const auto &previous_node : previous.subnodes) {
+    set<Formula> previous_formulas_set;
+    for (const auto &f : previous_node.root.Formulas()) {
+      previous_formulas_set.insert(f);
+    }
 
-  // cout << "Running nothing changed: ";
-  // for (const auto &f : previous_formulas) {
-  //   cout << f << ", ";
-  // }
-  // cout << endl;
-
-  for (const auto &pf : conclusions) {
-    for (const auto &formula : pf.root.Formulas()) {
-      if (previous_formulas_set.count(formula) == 0) {
-        // cout << "\t" << formula << " is new!" << endl;
-        // We found new formula
-        return false;
+    bool changed = false;
+    for (const auto &pf : conclusions) {
+      for (const auto &formula : pf.root.Formulas()) {
+        if (previous_formulas_set.count(formula) == 0) {
+          // We found new formula
+          changed = true;
+        }
       }
     }
+    if(!changed) return true;
   }
-  return true;
+  return false;
 }
 
 vector<ProofNode> ApplyRule(const ProofNode node, Rule rule,
-                            vector<Formula> previous_formulas) {
+                            const ProofNode &previous) {
   // if (rule == RTerEq) {
   //   cout << "Start RTerEq" << endl;
   // }
@@ -86,7 +85,7 @@ vector<ProofNode> ApplyRule(const ProofNode node, Rule rule,
     if (!result.empty()) {
       auto to_return = BuildChildNodes(node, i, result);
 
-      if (NothingChanged(previous_formulas, to_return)) {
+      if (NothingChanged(previous, to_return)) {
         continue;
       }
 
@@ -119,7 +118,12 @@ bool IsClosed(ProofNode &n) {
   return n.is_closed;
 }
 
-void Solve(ProofNode &n, vector<Formula> previous_formulas) {
+void Solve(ProofNode &n, ProofNode previous) {
+  // cout << "Solving: ";
+  // PrintProofNode(n);
+  // cout << "\tPrevious: " << endl;
+  // PrintProofNode(previous, "\t\t");
+
   if (IsClosed(n.root)) {
     n.is_closed = true;
     return;
@@ -128,7 +132,7 @@ void Solve(ProofNode &n, vector<Formula> previous_formulas) {
   // If subnodes are not empty, it was already solved
   if (n.subnodes.empty()) {
     for (auto rule : AllRules) {
-      n.subnodes = ApplyRule(n, rule, previous_formulas);
+      n.subnodes = ApplyRule(n, rule, previous);
       if (!n.subnodes.empty())
         break;
     }
@@ -139,14 +143,8 @@ void Solve(ProofNode &n, vector<Formula> previous_formulas) {
     return;
   }
 
-  vector<Formula> child_formulas;
-  for (const auto &subnode : n.subnodes) {
-    for (const auto &formula : subnode.root.Formulas())
-      child_formulas.push_back(formula);
-  }
-
   for (auto &subnode : n.subnodes) {
-    Solve(subnode, child_formulas);
+    Solve(subnode, n);
     if (!subnode.is_closed) {
       n.is_closed = false;
       return;
