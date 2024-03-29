@@ -104,6 +104,11 @@
   <textarea class="emscripten" id="output"></textarea>
   <hr>
 
+  <script>
+    document.write();
+    document.write("<div><pre id=\"asdf\"></pre></div>");
+  </script>
+
   <script type='text/javascript'>
     var statusElement = document.getElementById('status');
     var progressElement = document.getElementById('progress');
@@ -125,11 +130,8 @@
             element.value += text + "\n";
             element.scrollTop = element.scrollHeight; // focus on bottom
           }
-          document.write(
-            "<pre>" +
-            text +
-            "</pre>"
-          );
+          var v1 = document.getElementById("asdf");
+          v1.append(text + "\n");
         };
       })(),
       canvas: (() => {
