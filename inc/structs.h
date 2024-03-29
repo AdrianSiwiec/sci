@@ -56,6 +56,7 @@ private:
 ostream &operator<<(ostream &os, const Set &s);
 bool operator==(const Set &a, const Set &b);
 bool operator!=(const Set &a, const Set &b);
+bool operator<(const Set &a, const Set &b);
 
 vector<Set> ParseSets(string input);
 
@@ -69,5 +70,8 @@ struct ProofNode {
   optional<string> rule_used;
   optional<Formula> formula_used;
 };
+
+bool operator<(const ProofNode &a, const ProofNode&b);
+bool operator==(const ProofNode &a, const ProofNode &b);
 
 void PrintProofNode(const ProofNode &n, string prefix = "");

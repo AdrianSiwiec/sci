@@ -184,6 +184,18 @@ ostream &operator<<(ostream &os, const Set &s) {
   return os;
 }
 
+bool operator<(const Set &a, const Set &b) {
+  if(a.Formulas().size() != b.Formulas().size()) {
+    return a.Formulas().size() < b.Formulas().size();
+  }
+  for(int i=0; i< a.Formulas().size(); i++) {
+    if(a.Formulas()[i] != b.Formulas()[i]) {
+      return a.Formulas()[i] < b.Formulas()[i];
+    }
+  }
+  return 0 < 0;
+}
+
 void PrintProofNode(const ProofNode &n, string prefix) {
   cout << prefix << "--: " << n.root << "\t(is "
        << (n.is_closed ? "closed" : "open") << ")";
@@ -195,4 +207,12 @@ void PrintProofNode(const ProofNode &n, string prefix) {
     string add_to_prefix = ((i + 1 < n.subnodes.size()) ? " |" : " |");
     PrintProofNode(n.subnodes[i], prefix + add_to_prefix);
   }
+}
+
+bool operator<(const ProofNode &a, const ProofNode&b) {
+  return a.root < b.root;
+}
+
+bool operator==(const ProofNode &a, const ProofNode &b) {
+  return a.root == b.root;
 }

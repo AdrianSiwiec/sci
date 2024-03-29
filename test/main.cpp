@@ -28,13 +28,13 @@ int main() {
   Example("p,p=-r,q=-s,p=(q=p),p=(s=r)");
 
 
-  // while (true) {
-  //   cout << endl << "Enter your set of formulas (divided by ','): " << endl;
-  //   string input;
-  //   cin >> input;
-  //   Set s(input);
-  //   n = ProofNode(s);
-  //   Solve(n);
-  //   PrintProofNode(n);
-  // }
+  while (true) {
+    cout << endl << "Enter your set of formulas (divided by ','): " << endl;
+    string input;
+    cin >> input;
+    Set s(input);
+    n = ProofNode(s);
+    Solve(n);
+    PrintProofNode(n);
+  }
 }

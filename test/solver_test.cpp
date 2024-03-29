@@ -8,8 +8,8 @@ void TestBuildChildNodes() {
       n, 0, {Set(vector<Formula>({{9}, {2}, {5}})), Set({Formula(3)})});
 
   assert(children.size() == 2);
-  assert(children[0].root == Set(vector<Formula>({{2}, {3}, {5}, {9}})));
-  assert(children[1].root == Set(vector<Formula>({{2}, {3}})));
+  assert(children[0].root == Set(vector<Formula>({{2}, {3}})));
+  assert(children[1].root == Set(vector<Formula>({{2}, {3}, {5}, {9}})));
 }
 
 void TestApplyRule() {

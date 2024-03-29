@@ -43,6 +43,9 @@ vector<ProofNode> BuildChildNodes(const ProofNode &node, int formula_to_remove,
     }
     to_return.push_back(ProofNode(s));
   }
+  sort(to_return.begin(), to_return.end());
+  auto last = unique(to_return.begin(), to_return.end());
+  to_return.erase(last, to_return.end());
   return to_return;
 }
 
