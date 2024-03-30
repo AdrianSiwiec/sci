@@ -166,7 +166,12 @@
         this.totalDependencies = Math.max(this.totalDependencies, left);
         Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies - left) + '/' + this.totalDependencies + ')' :
           'All downloads complete.');
-      }
+      },
+      onRuntimeInitialized: function() {
+            console.log("Hello from ON INITIALIZED");
+            sayHi5 = Module.cwrap('sayHi', null, ['string']);
+            sayHi5('Kenobi');
+          }
     };
     Module.setStatus('Downloading...');
     window.onerror = () => {
