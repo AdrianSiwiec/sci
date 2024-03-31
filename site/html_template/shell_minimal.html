@@ -169,8 +169,9 @@
       },
       onRuntimeInitialized: function() {
             console.log("Hello from ON INITIALIZED");
-            sayHi5 = Module.cwrap('sayHi', null, ['string']);
-            sayHi5('Kenobi');
+            query = window.location.search.replace("?query=","");
+            SolveFormulas = Module.cwrap('SolveFormulas', null, ['string']);
+            SolveFormulas(atob(query));
           }
     };
     Module.setStatus('Downloading...');
