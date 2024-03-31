@@ -108,6 +108,14 @@
     document.write();
     document.write("<div><pre id=\"asdf\"></pre></div>");
   </script>
+  <script>
+    function DoSubmit(){
+      var url = window.location.href.split('?')[0];
+      window.location.assign(url + "?query=" + btoa(document.getElementById("textArea").value));
+    }
+  </script>
+  <textarea id="textArea"></textarea>
+  <input type="button" value="Submit" onclick="DoSubmit();" />
 
   <script type='text/javascript'>
     var statusElement = document.getElementById('status');
