@@ -28,12 +28,17 @@
 
     div.emscripten {
       text-align: center;
+      visibility: hidden;
     }
 
-    div.emscripten_border {}
+    div.emscripten_border {
+      visibility: hidden;
+    }
 
     /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
-    canvas.emscripten {}
+    canvas.emscripten {
+      visibility: hidden;
+    }
 
     .spinner {
       height: 50px;
@@ -49,6 +54,7 @@
       border-top: 10px solid rgb(100, 0, 200);
       border-radius: 100%;
       background-color: rgb(200, 100, 250);
+      visibility: hidden;
     }
 
     @-webkit-keyframes rotation {
@@ -94,6 +100,47 @@
 </head>
 
 <body>
+  <textarea class="emscripten" id="output" hidden=1></textarea>
+  <div id="welcome_page">
+    <h1>T* algorithm implementation</h1>
+    This is implementation of the T* SCI algorithm by Joanna Golińska-Pilarek, implemented by Adrian Siwiec.
+    <br>
+    <br>
+    You can input your formula using the following convention:
+    <ul>
+      <li>
+        <pre style="display:inline">=</pre> for identity
+      </li>
+      <li>
+        <pre style="display:inline">-></pre> for implication
+      </li>
+      <li>
+        <pre style="display:inline">-</pre> for negation
+      </li>
+      <li>
+        <pre style="display:inline">&</pre> for conjunction
+      </li>
+      <li>
+        <pre style="display:inline">|</pre> for alternative
+      </li>
+      <li>
+        <pre style="display:inline">&lt;&gt;</pre> for equivalence
+      </li>
+      <li>
+        and a string of alpha-numeric characters for the variables (e.g.
+        <pre style="display:inline">p</pre>,
+        <pre style="display:inline">phi</pre>,
+        <pre style="display:inline">v1</pre>,
+        <pre style="display:inline">ϕ</pre>)
+      </li>
+    </ul>
+  </div>
+  <script>
+    document.write("<div><pre id=\"asdf\"></pre></div>");
+  </script>
+  <textarea id="textArea" cols="100"></textarea>
+  <input type="button" value="Submit" onclick="DoSubmit();" />
+
   <div class="emscripten" id="status">Downloading...</div>
   <div class="emscripten">
     <progress value="0" max="100" id="progress" hidden=1></progress>
@@ -101,21 +148,13 @@
   <div class="emscripten_border">
     <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1 hidden=1></canvas>
   </div>
-  <textarea class="emscripten" id="output"></textarea>
-  <hr>
 
   <script>
-    document.write();
-    document.write("<div><pre id=\"asdf\"></pre></div>");
-  </script>
-  <script>
-    function DoSubmit(){
+    function DoSubmit() {
       var url = window.location.href.split('?')[0];
       window.location.assign(url + "?query=" + btoa(document.getElementById("textArea").value));
     }
   </script>
-  <textarea id="textArea"></textarea>
-  <input type="button" value="Submit" onclick="DoSubmit();" />
 
   <script type='text/javascript'>
     var statusElement = document.getElementById('status');
@@ -175,12 +214,12 @@
         Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies - left) + '/' + this.totalDependencies + ')' :
           'All downloads complete.');
       },
-      onRuntimeInitialized: function() {
-            console.log("Hello from ON INITIALIZED");
-            query = window.location.search.replace("?query=","");
-            SolveFormulas = Module.cwrap('SolveFormulas', null, ['string']);
-            SolveFormulas(atob(query));
-          }
+      onRuntimeInitialized: function () {
+        console.log("Hello from ON INITIALIZED");
+        query = window.location.search.replace("?query=", "");
+        SolveFormulas = Module.cwrap('SolveFormulas', null, ['string']);
+        SolveFormulas(atob(query));
+      }
     };
     Module.setStatus('Downloading...');
     window.onerror = () => {
