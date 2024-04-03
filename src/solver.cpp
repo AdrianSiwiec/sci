@@ -6,7 +6,7 @@ bool IsAx1(const Formula &f) {
     return false;
 
   const auto &f1 = f.Subformula(0);
-  if (!f1.IsOp(op_equiv))
+  if (!f1.IsOp(op_id))
     return false;
 
   return f1.Subformula(0) == f1.Subformula(1);

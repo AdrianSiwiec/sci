@@ -12,3 +12,5 @@ void ProcessVarChar(string &s, int &pos);
 string PreprocessInput(string s);
 
 optional<Formula> ParseInput(string s);
+
+Formula PostprocessFormula(const Formula &f);

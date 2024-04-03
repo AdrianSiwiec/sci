@@ -23,11 +23,23 @@ optional<Operator> ParseOp(const string &s, int &pos) {
   CHECK_POS;
   if (s[pos] == '=') {
     pos++;
-    return op_equiv;
+    return op_id;
   }
   if (s[pos] == '-' && (pos + 1 < s.size()) && s[pos + 1] == '>') {
     pos += 2;
     return op_impl;
+  }
+  if(s[pos] == '&') {
+    pos++;
+    return op_and;
+  }
+  if(s[pos] == '|') {
+    pos++;
+    return op_or;
+  }
+  if(s[pos] == '<' && (pos+1 < s.size()) && s[pos+1] == '>') {
+    pos +=2;
+    return op_equiv;
   }
   return nullopt;
 }

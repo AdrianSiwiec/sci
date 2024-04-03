@@ -2,7 +2,12 @@
 
 #include "commons.h"
 
-enum Operator : char { op_not, op_impl, op_equiv };
+enum Operator : char {
+  // Canonical operators
+  op_not, op_impl, op_id, 
+  // Additional operators that will be replaced by the canonical ones after parsing
+  op_and, op_or, op_equiv
+};
 
 struct Formula {
   Formula(int var);

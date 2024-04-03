@@ -51,7 +51,7 @@ void Formula::Normalize() {
     else
       assert(this->subformulas.size() == 2);
   }
-  if (IsOp(op_equiv)) {
+  if (IsOp(op_id)) {
     sort(subformulas.begin(), subformulas.end());
   }
 }
@@ -76,8 +76,17 @@ ostream &operator<<(ostream &os, const Formula &f) {
     case op_impl:
       os << "→";
       break;
-    case op_equiv:
+    case op_id:
       os << "≡";
+      break;
+    case op_and:
+      os << "∧";
+      break;
+    case op_or:
+      os << "∨";
+      break;
+    case op_equiv:
+      os<<"↔";
       break;
     default:
       assert(false);
@@ -161,7 +170,7 @@ void Set::AddFormula(Formula f) {
 
 vector<Set> ParseSets(string input) {
   vector<Set> result;
-  auto strings = SplitString(input, "|");
+  auto strings = SplitString(input, "}");
   for (auto s : strings) {
     result.push_back(Set(s));
   }

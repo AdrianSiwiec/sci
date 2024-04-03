@@ -17,7 +17,7 @@ void testRNot() {
 
 void testRImpl() {
   assert(RImpl(f_not).empty());
-  assert(RImpl(f_impl) == ParseSets("-phi|psi"));
+  assert(RImpl(f_impl) == ParseSets("-phi}psi"));
   assert(RImpl(f_not_impl).empty());
 }
 void testRNotImpl() { assert(RNotImpl(f_not_impl) == ParseSets("phi, -psi")); }
@@ -143,21 +143,21 @@ void testREq() {
   assert(REq(Formula("phi=-psi")).empty());
 }
 void testRTerEq() {
-  assert(RTerEq(Formula("(p=q)")) == ParseSets("p,q,p=q | -p, -q, p=q"));
-  assert(RTerEqNot(Formula("p=-q")) == ParseSets("p,-q,p=-q | -p,q,p=-q"));
+  assert(RTerEq(Formula("(p=q)")) == ParseSets("p,q,p=q } -p, -q, p=q"));
+  assert(RTerEqNot(Formula("p=-q")) == ParseSets("p,-q,p=-q } -p,q,p=-q"));
   assert(RTerEqImpl(Formula("p=(q->r)")) ==
-         ParseSets("p,-q,p=(q->r) | p,r,p=(q->r) | -p,q,-r,p=(q->r)"));
+         ParseSets("p,-q,p=(q->r) } p,r,p=(q->r) } -p,q,-r,p=(q->r)"));
   assert(RTerEqEq(Formula("p=(q=r)")) == ParseSets("\
-                  p, q, r, q=r, p=(q=r) | \
-                  p, -q,-r, q=r, p=(q=r) | \
-                  -p, q, r, -(q=r), p=(q=r) | \
-                  -p, q, -r, -(q=r), p=(q=r) | \
-                  -p, -q, r, -(q=r), p=(q=r) | \
+                  p, q, r, q=r, p=(q=r) } \
+                  p, -q,-r, q=r, p=(q=r) } \
+                  -p, q, r, -(q=r), p=(q=r) } \
+                  -p, q, -r, -(q=r), p=(q=r) } \
+                  -p, -q, r, -(q=r), p=(q=r) } \
                   -p, -q, -r, -(q=r), p=(q=r)"));
   assert(RTerSpike(Formula("-(p=q)")) == ParseSets("\
-                 p, q, -(p=q) | \
-                 p, -q, -(p=q) | \
-                 -p, q, -(p=q) | \
+                 p, q, -(p=q) } \
+                 p, -q, -(p=q) } \
+                 -p, q, -(p=q) } \
                  -p, -q, -(p=q)"));
 }
 

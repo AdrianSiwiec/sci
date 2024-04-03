@@ -11,7 +11,7 @@ void ClearVars() {
 bool IsVariableChar(char c) {
   // return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
   //  (c >= '0' && c <= '9');
-  if (c == '-' || c == '>' || c == '=' || c == '(' || c == ')' || c == '!')
+  if (c == '-' || c=='<' || c == '>' || c == '=' || c == '(' || c == ')' || c == '!' || c=='|' || c == '&')
     return false;
   return true;
 }
@@ -53,4 +53,19 @@ optional<Formula> ParseInput(string s) {
   string s1 = PreprocessInput(s);
   int pos = 0;
   return Formula::Parse(s1, pos);
+}
+
+Formula PostprocessFormula(const Formula &f) {
+  if(f.IsVal()) return f;
+  if(f.IsOp(op_not)) {
+    return Formula(op_not, PostprocessFormula(f.Subformula()));
+  }
+  Formula a = PostprocessFormula(f.Subformula(0));
+  Formula b = PostprocessFormula(f.Subformula(1));
+  if(f.IsOp(op_impl) || f.IsOp(op_id)) {
+    return Formula(f.Op(), {a, b});
+  }
+  if(f.IsOp(op_and)) {
+    
+  }
 }

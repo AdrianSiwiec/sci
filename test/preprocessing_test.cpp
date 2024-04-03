@@ -50,18 +50,18 @@ void TestInput(string s, optional<Formula> f) {
 }
 
 void TestInputsFromPaper() {
-  TestInput("f=f", Formula(op_equiv, {{0}, {0}}));
+  TestInput("f=f", Formula(op_id, {{0}, {0}}));
   TestInput("(phi=psi)->(phi=psi)",
-            Formula(op_impl, {{op_equiv, {{0}, {1}}}, {op_equiv, {{0}, {1}}}}));
+            Formula(op_impl, {{op_id, {{0}, {1}}}, {op_id, {{0}, {1}}}}));
   TestInput("(phi=psi)->(-phi=-psi)",
-            Formula(op_impl, {{op_equiv, {{0}, {1}}},
-                              {op_equiv, {{op_not, {{0}}}, {op_not, {{1}}}}}}));
+            Formula(op_impl, {{op_id, {{0}, {1}}},
+                              {op_id, {{op_not, {{0}}}, {op_not, {{1}}}}}}));
   TestInput(
       "(phi=psi)->((chi=theta)->((phi->chi)=(psi->theta)))",
-      Formula(op_impl, {{op_equiv, {{0}, {1}}},
+      Formula(op_impl, {{op_id, {{0}, {1}}},
                         {op_impl,
-                         {{op_equiv, {{2}, {3}}},
-                          {op_equiv,
+                         {{op_id, {{2}, {3}}},
+                          {op_id,
                            {{op_impl, {{0}, {2}}}, {op_impl, {{1}, {3}}}}}}}}));
   TestInput("--f", Formula(op_not, {{op_not, {{0}}}}));
 }
