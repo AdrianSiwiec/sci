@@ -4,9 +4,14 @@
 
 enum Operator : char {
   // Canonical operators
-  op_not, op_impl, op_id, 
-  // Additional operators that will be replaced by the canonical ones after parsing
-  op_and, op_or, op_equiv
+  op_not,
+  op_impl,
+  op_id,
+  // Additional operators that will be replaced by the canonical ones after
+  // parsing
+  op_and,
+  op_or,
+  op_equiv
 };
 
 struct Formula {
@@ -74,13 +79,13 @@ struct ProofNode {
 
   Set root;
   vector<ProofNode> subnodes;
-  bool is_closed = false;
+  optional<bool> is_closed = nullopt;
 
   optional<string> rule_used;
   optional<Formula> formula_used;
 };
 
-bool operator<(const ProofNode &a, const ProofNode&b);
+bool operator<(const ProofNode &a, const ProofNode &b);
 bool operator==(const ProofNode &a, const ProofNode &b);
 
 void PrintProofNode(const ProofNode &n, string prefix = "");

@@ -126,7 +126,8 @@ vector<ProofNode> ApplyRule(ProofNode &node, Rule rule,
 
 bool IsClosed(ProofNode &n) {
   Solve(n);
-  return n.is_closed;
+  assert(n.is_closed.has_value());
+  return n.is_closed.value();
 }
 
 void Solve(ProofNode &n, ProofNode previous) {
@@ -159,7 +160,8 @@ void Solve(ProofNode &n, ProofNode previous) {
 
   for (auto &subnode : n.subnodes) {
     Solve(subnode, n);
-    if (!subnode.is_closed) {
+    assert(subnode.is_closed.has_value());
+    if (!subnode.is_closed.value()) {
       n.is_closed = false;
       return;
     }
@@ -167,32 +169,40 @@ void Solve(ProofNode &n, ProofNode previous) {
   n.is_closed = true;
 }
 
-void DoSolve(string input_string) {
+ProofNode DoSolve(string input_string, bool print) {
   vector<string> input_formulas = SplitString(input_string, ",");
-  cout << "Your input: " << input_string << " parsed as formulas:" << endl;
+  if (print)
+    cout << "Your input: \"" << input_string << "\" parsed as formulas:" << endl;
   vector<Formula> formulas;
   for (const auto &s : input_formulas) {
     auto f = ParseInputFormula(s);
     if (f.has_value()) {
-      cout << "\t" << f.value();
+      if (print)
+        cout << "\t" << f.value();
       Formula post = PostprocessFormula(f.value());
-      if (f.value() != post)
+      if (print && f.value() != post)
         cout << "\twhich is translated as: " << post;
-      cout << endl;
+      if (print)
+        cout << endl;
       formulas.push_back(post);
     } else {
-      cout << "\tThis formula didn't parse: " << s << endl;
+      if (print)
+        cout << "\tThis formula didn't parse: " << s << endl;
     }
   }
   if (formulas.empty()) {
-    return;
+    return ProofNode(Set(vector<Formula>()));
   }
 
-  cout << "Which produces the following proof tree:" << endl;
+  if (print)
+    cout << "\nWhich produces the following proof tree:" << endl;
 
   Set s(formulas);
   ProofNode n(s);
-  IsClosed(n);
-  PrintProofNode(n);
-  cout << endl;
+  Solve(n);
+  if (print)
+    PrintProofNode(n);
+  if (print)
+    cout << endl;
+  return n;
 }

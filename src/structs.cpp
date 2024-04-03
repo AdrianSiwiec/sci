@@ -214,8 +214,13 @@ bool operator<(const Set &a, const Set &b) {
 }
 
 void PrintProofNode(const ProofNode &n, string prefix) {
-  cout << prefix << "--: " << n.root << "\t(is "
-       << (n.is_closed ? "closed" : "open") << ")";
+  cout << prefix << "--: " << n.root << "\t(is ";
+  if (n.is_closed.has_value()) {
+    cout << (n.is_closed.value() ? "closed" : "open");
+  } else {
+    cout << "?";
+  }
+  cout << ")";
   if (n.formula_used.has_value()) {
     cout << " applied rule " << n.rule_used.value() << " to "
          << n.formula_used.value();

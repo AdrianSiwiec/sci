@@ -6,7 +6,7 @@
 
 // If worked, returns non-empty.
 vector<ProofNode>
-ApplyRule(ProofNode& node, Rule rule,
+ApplyRule(ProofNode &node, Rule rule,
           const ProofNode &previous = ProofNode(Set(vector<Formula>())));
 
 vector<ProofNode> BuildChildNodes(const ProofNode &node, int formula_to_remove,
@@ -22,4 +22,4 @@ void Solve(ProofNode &n,
            ProofNode previous = ProofNode(Set(vector<Formula>())));
 
 // Solve with printing etc.
-void DoSolve(string s);
+ProofNode DoSolve(string s, bool print = true);

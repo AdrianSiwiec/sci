@@ -37,13 +37,13 @@ void TestParseOp() {
 }
 
 void TestParser(string s, optional<Formula> f) {
-  if (f.has_value()) {
-    cout << "Testing if: " << s << "\n  Parses as: " << f.value() << endl;
-    int pos = 0;
-    cout << "\tIt parses as: " << Formula::Parse(s, pos).value() << endl;
-  } else {
-    cout << "Testing if: " << s << "\n Doesn't parse." << endl;
-  }
+  // if (f.has_value()) {
+  //   cout << "Testing if: " << s << "\n  Parses as: " << f.value() << endl;
+  //   int pos = 0;
+  //   cout << "\tIt parses as: " << Formula::Parse(s, pos).value() << endl;
+  // } else {
+  //   cout << "Testing if: " << s << "\n Doesn't parse." << endl;
+  // }
   int pos = 0;
   assert(Formula::Parse(s, pos) == f);
   if (f.has_value()) {

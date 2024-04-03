@@ -67,9 +67,17 @@ void TestSimple() {
          Formula(op_not, {{op_id, {{3}, {3}}}}));
 }
 
+void TestExamples() {
+  ProofNode pn = DoSolve("p,q, -(p=q)", false);
+  assert(pn.subnodes[1] == Set("p,q,-p,-(p=q)"));
+  assert(pn.subnodes[1].is_closed == nullopt);
+  assert(pn.subnodes[0].is_closed == true);
+}
+
 int main() {
   TestBuildChildNodes();
   TestApplyRule();
   TestAx();
   TestSimple();
+  TestExamples();
 }
