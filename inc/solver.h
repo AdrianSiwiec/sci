@@ -20,3 +20,6 @@ bool IsClosed(ProofNode &n);
 // Will build a tree.
 void Solve(ProofNode &n,
            ProofNode previous = ProofNode(Set(vector<Formula>())));
+
+// Solve with printing etc.
+void DoSolve(string s);

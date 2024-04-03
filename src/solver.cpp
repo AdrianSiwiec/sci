@@ -1,4 +1,5 @@
 #include "solver.h"
+#include "preprocessing.h"
 #include <set>
 
 bool IsAx1(const Formula &f) {
@@ -164,4 +165,34 @@ void Solve(ProofNode &n, ProofNode previous) {
     }
   }
   n.is_closed = true;
+}
+
+void DoSolve(string input_string) {
+  vector<string> input_formulas = SplitString(input_string, ",");
+  cout << "Your input: " << input_string << " parsed as formulas:" << endl;
+  vector<Formula> formulas;
+  for (const auto &s : input_formulas) {
+    auto f = ParseInputFormula(s);
+    if (f.has_value()) {
+      cout << "\t" << f.value();
+      Formula post = PostprocessFormula(f.value());
+      if (f.value() != post)
+        cout << "\twhich is translated as: " << post;
+      cout << endl;
+      formulas.push_back(post);
+    } else {
+      cout << "\tThis formula didn't parse: " << s << endl;
+    }
+  }
+  if (formulas.empty()) {
+    return;
+  }
+
+  cout << "Which produces the following proof tree:" << endl;
+
+  Set s(formulas);
+  ProofNode n(s);
+  IsClosed(n);
+  PrintProofNode(n);
+  cout << endl;
 }

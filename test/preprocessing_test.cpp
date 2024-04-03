@@ -32,7 +32,9 @@ void TestPreprocessing() {
 }
 
 void TestInput(string s, optional<Formula> f) {
-  auto result = ParseInput(s);
+  auto result = ParseInputFormula(s);
+  if (result.has_value())
+    result = PostprocessFormula(result.value());
   if (f != result) {
     cout << "Testing: " << s << endl;
     if (result.has_value())
@@ -58,16 +60,25 @@ void TestInputsFromPaper() {
                               {op_id, {{op_not, {{0}}}, {op_not, {{1}}}}}}));
   TestInput(
       "(phi=psi)->((chi=theta)->((phi->chi)=(psi->theta)))",
-      Formula(op_impl, {{op_id, {{0}, {1}}},
-                        {op_impl,
-                         {{op_id, {{2}, {3}}},
-                          {op_id,
-                           {{op_impl, {{0}, {2}}}, {op_impl, {{1}, {3}}}}}}}}));
+      Formula(op_impl,
+              {{op_id, {{0}, {1}}},
+               {op_impl,
+                {{op_id, {{2}, {3}}},
+                 {op_id, {{op_impl, {{0}, {2}}}, {op_impl, {{1}, {3}}}}}}}}));
   TestInput("--f", Formula(op_not, {{op_not, {{0}}}}));
+}
+
+void TestInputsExtendedOp() {
+  ClearVars();
+  TestInput("a&b", FNot(FImpl(Formula(0), FNot(Formula(1)))));
+  TestInput("a|b", FImpl(FNot(Formula(0)), Formula(1)));
+  TestInput("a<>b", FNot(FImpl(FImpl(Formula(0), Formula(1)),
+                               FNot(FImpl(Formula(1), Formula(0))))));
 }
 
 int main() {
   TestProcessVarChar();
   TestPreprocessing();
   TestInputsFromPaper();
+  TestInputsExtendedOp();
 }

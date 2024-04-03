@@ -42,6 +42,10 @@ bool operator!=(const Formula &a, const Formula &b);
 bool operator<(const Formula &a, const Formula &b);
 bool operator>(const Formula &a, const Formula &b);
 
+Formula FNot(const Formula &f);
+Formula FImpl(const Formula &a, const Formula &b);
+Formula FId(const Formula &a, const Formula &b);
+
 optional<int> ParseVar(const string &s, int &pos);
 optional<Operator> ParseOp(const string &s, int &pos);
 

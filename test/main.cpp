@@ -2,14 +2,6 @@
 #include "solver.h"
 #include "structs.h"
 
-void Example(string s) {
-  Set input_set(s);
-  ProofNode n(input_set);
-  IsClosed(n);
-  PrintProofNode(n);
-  cout << endl;
-}
-
 int main() {
   Formula f("-(phi->psi)");
   Formula g("phi->theta");
@@ -19,22 +11,17 @@ int main() {
   PrintProofNode(n);
 
   cout << endl << endl;
-  Example("--ϕ -> (-ψ -> ϑ)");
+  DoSolve("--ϕ -> (-ψ -> ϑ)");
 
-  Example("-((p=q)->(q=p))");
-  Example("--(p=q)");
-  Example("-((p=-q)->((q=-r)->(p=--r)))");
-  Example("p,-p");
-  Example("p,p=-r,q=-s,p=(q=p),p=(s=r)");
+  DoSolve("-((p=q)->(q=p))");
+  DoSolve("--(p=q)");
+  DoSolve("-((p=-q)->((q=-r)->(p=--r)))");
+  DoSolve("p,-p");
+  DoSolve("p,p=-r,q=-s,p=(q=p),p=(s=r)");
 
-
-  while (true) {
+  cout << endl << "Enter your set of formulas (divided by ','): " << endl;
+  for (string line; getline(cin, line);) {
+    DoSolve(line);
     cout << endl << "Enter your set of formulas (divided by ','): " << endl;
-    string input;
-    cin >> input;
-    Set s(input);
-    n = ProofNode(s);
-    Solve(n);
-    PrintProofNode(n);
   }
 }

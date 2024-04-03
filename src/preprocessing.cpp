@@ -11,7 +11,8 @@ void ClearVars() {
 bool IsVariableChar(char c) {
   // return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
   //  (c >= '0' && c <= '9');
-  if (c == '-' || c=='<' || c == '>' || c == '=' || c == '(' || c == ')' || c == '!' || c=='|' || c == '&')
+  if (c == '-' || c == '<' || c == '>' || c == '=' || c == '(' || c == ')' ||
+      c == '!' || c == '|' || c == '&' || c == '^' || c == '*')
     return false;
   return true;
 }
@@ -49,23 +50,34 @@ string PreprocessInput(string s) {
   return "(" + s + ")";
 }
 
-optional<Formula> ParseInput(string s) {
+optional<Formula> ParseInputFormula(string s) {
   string s1 = PreprocessInput(s);
   int pos = 0;
   return Formula::Parse(s1, pos);
 }
 
 Formula PostprocessFormula(const Formula &f) {
-  if(f.IsVal()) return f;
-  if(f.IsOp(op_not)) {
-    return Formula(op_not, PostprocessFormula(f.Subformula()));
+  if (f.IsVar())
+    return f;
+  if (f.IsOp(op_not)) {
+    return Formula(op_not, {PostprocessFormula(f.Subformula())});
   }
   Formula a = PostprocessFormula(f.Subformula(0));
   Formula b = PostprocessFormula(f.Subformula(1));
-  if(f.IsOp(op_impl) || f.IsOp(op_id)) {
+  if (f.IsOp(op_impl) || f.IsOp(op_id)) {
     return Formula(f.Op(), {a, b});
   }
-  if(f.IsOp(op_and)) {
-    
+  if (f.IsOp(op_and)) {
+    return Formula(op_not, {Formula(op_impl, {a, Formula(op_not, {{b}})})});
   }
+  if (f.IsOp(op_or)) {
+    return Formula(op_impl, {Formula(op_not, {a}), b});
+  }
+  if (f.IsOp(op_equiv)) {
+    return Formula(
+        op_not,
+        {Formula(op_impl, {Formula(op_impl, {a, b}),
+                           Formula(op_not, {Formula(op_impl, {b, a})})})});
+  }
+  return Formula(0);
 }

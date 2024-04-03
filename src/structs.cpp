@@ -8,7 +8,7 @@ Formula::Formula(Operator op, const vector<Formula> subformulas)
   Normalize();
 }
 Formula::Formula(string input) {
-  optional<Formula> f = ParseInput(input);
+  optional<Formula> f = ParseInputFormula(input);
   if (!f.has_value()) {
     cerr << "Could not parse \"" << input << "\" as formula!" << endl;
     assert(false);
@@ -86,7 +86,7 @@ ostream &operator<<(ostream &os, const Formula &f) {
       os << "∨";
       break;
     case op_equiv:
-      os<<"↔";
+      os << "↔";
       break;
     default:
       assert(false);
@@ -132,6 +132,14 @@ bool operator<(const Formula &a, const Formula &b) {
   return 0 < 0;
 }
 bool operator>(const Formula &a, const Formula &b) { return b < a; }
+
+Formula FNot(const Formula &f) { return Formula(op_not, {f}); }
+Formula FImpl(const Formula &a, const Formula &b) {
+  return Formula(op_impl, {a, b});
+}
+Formula FId(const Formula &a, const Formula &b) {
+  return Formula(op_id, {a, b});
+}
 
 Set::Set(vector<Formula> formulas) : formulas(formulas) { this->Normalize(); }
 Set::Set(string input) {
@@ -194,11 +202,11 @@ ostream &operator<<(ostream &os, const Set &s) {
 }
 
 bool operator<(const Set &a, const Set &b) {
-  if(a.Formulas().size() != b.Formulas().size()) {
+  if (a.Formulas().size() != b.Formulas().size()) {
     return a.Formulas().size() < b.Formulas().size();
   }
-  for(int i=0; i< a.Formulas().size(); i++) {
-    if(a.Formulas()[i] != b.Formulas()[i]) {
+  for (int i = 0; i < a.Formulas().size(); i++) {
+    if (a.Formulas()[i] != b.Formulas()[i]) {
       return a.Formulas()[i] < b.Formulas()[i];
     }
   }
@@ -208,8 +216,9 @@ bool operator<(const Set &a, const Set &b) {
 void PrintProofNode(const ProofNode &n, string prefix) {
   cout << prefix << "--: " << n.root << "\t(is "
        << (n.is_closed ? "closed" : "open") << ")";
-  if(n.formula_used.has_value()) {
-    cout<<" applied rule "<<n.rule_used.value()<<" to "<<n.formula_used.value();
+  if (n.formula_used.has_value()) {
+    cout << " applied rule " << n.rule_used.value() << " to "
+         << n.formula_used.value();
   }
   cout << endl;
   for (int i = 0; i < n.subnodes.size(); i++) {
@@ -218,7 +227,7 @@ void PrintProofNode(const ProofNode &n, string prefix) {
   }
 }
 
-bool operator<(const ProofNode &a, const ProofNode&b) {
+bool operator<(const ProofNode &a, const ProofNode &b) {
   return a.root < b.root;
 }
 
