@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>Emscripten-Generated Code</title>
+  <title>T* SCI</title>
   <style>
     .emscripten {
       padding-right: 0;
@@ -101,10 +101,10 @@
 
 <body>
   <textarea class="emscripten" id="output" hidden=1></textarea>
+  <h1>T* algorithm implementation</h1>
+  This is implementation of the T* SCI algorithm by Joanna Golińska-Pilarek, implemented by Adrian Siwiec.
   <div id="welcome_page">
-    <h1>T* algorithm implementation</h1>
-    This is implementation of the T* SCI algorithm by Joanna Golińska-Pilarek, implemented by Adrian Siwiec.
-    <br>
+
     <br>
     You can input your formula using the following convention:
     <ul>
@@ -134,11 +134,126 @@
         <pre style="display:inline">ϕ</pre>)
       </li>
     </ul>
+    You can input multiple formulas, separated by "<pre style="display:inline">,</pre>".
+
+    <br>
+    You will get a proof tree. The proof tree is an attempt at proving that the provided formulas, as a conjunction, are
+    necessarily false. For example a proof tree:
+    <pre>--: {¬¬(p≡q)}	(is open) applied rule ¬ to ¬¬(p≡q)
+  |--: {(p≡q)}	(is open) applied rule ≡⊤ to (p≡q)
+  | |--: {p, q, (p≡q)}	(is open)
+  | |--: {¬p, ¬q, (p≡q)}	(is ?)</pre>
+    Means that:
+    <ul>
+      <li>
+        your formula is
+        <pre style="display:inline">¬¬(p≡q)</pre>,
+      </li>
+      <li>
+        rule
+        <pre style="display:inline">¬</pre> applies to it and it produces formula
+        <pre style="display:inline">(p≡q)</pre>,
+      </li>
+      <li>
+        to which rule
+        <pre style="display:inline">≡⊤</pre> applies. It produces two sub-branches:
+        <pre style="display:inline">p, q, (p≡q)</pre> and
+        <pre style="display:inline">¬p, ¬q, (p≡q)</pre>.
+      </li>
+      <li>
+        To the branch
+        <pre style="display:inline">p, q, (p≡q)</pre> no further rules apply and it is not an axiom-branch (i.e. it is
+        not trivially false) which means that this branch can be true. It is marked by stating that this branch is open.
+      </li>
+      <li>
+        If any of the sub-branches is open, the further branches (if any) are not calculated and no rules are applied to
+        them. They are marked as "?".
+      </li>
+      <li>
+        If the branch is trivially false or all its sub-branches are closed, the branch is marked as closed.
+      </li>
+    </ul>
+    <br>
+    A couple of notes:
+    <ul>
+      <li>
+        This implementation doesn't use the rule
+        <pre style="display:inline">sym</pre>. Instead, every formula, after its parsing or creation is "normalized",
+        which means that the left side of "=" is "smaller" than the right side.
+      </li>
+      <li>
+        Sets of rules are similarly ordered and normalized (e.g. if a rule would produce
+        <pre style="display:inline">&#123;p, -p, p, p&#125;</pre>, it will produce
+        <pre style="display:inline">&#123;p, -p&#125;</pre> instead). In a similar way, the same sub-branches are
+        eliminated.
+      </li>
+      <li>
+        The current implementation is <b>very</b> unoptimized. If you input a difficult formula, the result page
+        can show no output for a prohibitively long time.
+      </li>
+    </ul>
+    <br>
+    You can click on the following examples to see their proof trees, or input your own formulas below.
+    <script>
+      function GetLink(formula) {
+        console.log("Hello from getlink!");
+        var url = window.location.href.split('?')[0];
+        return "<a href=\"" + url + "?query=" + btoa(formula) + "\"><pre style=\"display:inline\">" + formula + "</pre></a>";
+      }
+    </script>
+    <ul>
+      <li>
+        <script> document.write(GetLink("--(p=q)")); </script>
+      </li>
+      <li>
+        <script> document.write(GetLink("p=q, p, -q")); </script>
+      </li>
+      <li>
+        <script> document.write(GetLink("p<>q, p, -q")); </script>
+      </li>
+      <li>
+        <script> document.write(GetLink("-((p=-q)->((q=-r)->(p=--r)))")); </script>
+      </li>
+      <li>
+        <script> document.write(GetLink("p,p=-r,q=-s,p=(q=p),p=(s=r)")); </script>
+        (Example from Table 7 from the T* paper.)
+      </li>
+      <!-- <li>
+        <script> document.write(GetLink("-((((q = p) -> (p -> r)) = ((p -> (p <> p)) = p)) -> (((r & p) <> (p = p)) | ((p & p) | -q)))")); </script>
+        (Formula -ϕ from, "Tableau-based Decision Procedure for
+        Non-Fregean Logic of Sentential Identity", 
+        a formula "somewhat challenging" to the T SCI algorithm.)
+      </li> -->
+    </ul>
   </div>
+  <div id="query_page">
+    <br>
+    <script>
+      function GetMainUrl() {
+        url = window.location.href.split('?')[0];
+        return "<a href=\"" + url + "\">Go to the main page.</a>";
+      }
+      document.write(GetMainUrl());
+    </script>
+    <br>
+  </div>
+  <script>
+    query = window.location.search.replace("?query=", "");
+    if (query.length != 0) {
+      var main_elem = document.getElementById("welcome_page");
+      main_elem.style.visibility = 'hidden';
+      main_elem.style.display = 'none';
+    } else {
+      var q_elem = document.getElementById("query_page");
+      q_elem.style.visibility = 'hidden';
+      q_elem.style.display = 'none';
+    }
+  </script>
   <script>
     document.write("<div><pre id=\"asdf\"></pre></div>");
   </script>
   <textarea id="textArea" cols="100"></textarea>
+  <br>
   <input type="button" value="Submit" onclick="DoSubmit();" />
 
   <div class="emscripten" id="status">Downloading...</div>
@@ -218,7 +333,9 @@
         console.log("Hello from ON INITIALIZED");
         query = window.location.search.replace("?query=", "");
         SolveFormulas = Module.cwrap('SolveFormulas', null, ['string']);
-        SolveFormulas(atob(query));
+        if (query.length > 0) {
+          SolveFormulas(atob(query));
+        }
       }
     };
     Module.setStatus('Downloading...');
