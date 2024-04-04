@@ -134,7 +134,8 @@
         <pre style="display:inline">ϕ</pre>)
       </li>
     </ul>
-    You can input multiple formulas, separated by "<pre style="display:inline">,</pre>".
+    You can input multiple formulas, separated by "
+    <pre style="display:inline">,</pre>".
 
     <br>
     You will get a proof tree. The proof tree is an attempt at proving that the provided formulas, as a conjunction, are
@@ -184,8 +185,8 @@
       <li>
         Sets of rules are similarly ordered and normalized (e.g. if a rule would produce
         <pre style="display:inline">&#123;p, -p, p, p&#125;</pre>, it will produce
-        <pre style="display:inline">&#123;p, -p&#125;</pre> instead). In a similar way, the same sub-branches are
-        eliminated.
+        <pre style="display:inline">&#123;p, -p&#125;</pre> instead). In a similar way, the sub-branches are sorted
+        and repeating ones are eliminated.
       </li>
       <li>
         The current implementation is <b>very</b> unoptimized. If you input a difficult formula, the result page
