@@ -38,7 +38,7 @@ Rule RNotImpl;
 // p = f
 // ----------------
 // F(f/p) u {p = f}
-vector<Set> RFun(const Formula &f, Set s);
+vector<Set> RFun(const Formula &f, const Set &s);
 
 // ----------------------- Equality Rules -----------------------
 bool IsSimple(const Formula &f);

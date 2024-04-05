@@ -10,7 +10,7 @@ ApplyRule(ProofNode &node, Rule rule,
           const ProofNode &previous = ProofNode(Set(vector<Formula>())));
 
 vector<ProofNode> BuildChildNodes(const ProofNode &node, int formula_to_remove,
-                                  vector<Set> formulas_to_add);
+                                  const vector<Set> &formulas_to_add);
 
 bool IsAx1(const Formula &f);
 bool IsAx2(const Formula &f, const Formula &g);

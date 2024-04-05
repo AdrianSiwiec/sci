@@ -14,9 +14,11 @@ enum Operator : char {
   op_equiv
 };
 
+ull GetHash(ull root, vector<ull> subhashes);
+
 struct Formula {
   Formula(int var);
-  Formula(Operator op, const vector<Formula> subformulas);
+  Formula(Operator op, const vector<Formula> &subformulas);
   Formula(string input);
 
   bool IsVar() const;
@@ -24,8 +26,8 @@ struct Formula {
   int Var() const;
   bool IsOp(Operator op) const;
   Operator Op() const;
-  vector<Formula> Subformulas() const;
-  Formula Subformula(int i = 0) const;
+  const vector<Formula> &Subformulas() const;
+  const Formula &Subformula(int i = 0) const;
 
   // Implemented in parser.cpp
   static optional<Formula> Parse(const string &s, int &pos);
@@ -37,8 +39,12 @@ private:
   // An operator with one or two subformulas.
   Operator op;
   vector<Formula> subformulas;
+  ull hash;
   static optional<Formula> ParseOpFormula(const string &s, int &pos);
   void Normalize();
+
+  friend bool operator==(const Formula &a, const Formula &b);
+  friend bool operator<(const Formula &a, const Formula &b);
 };
 
 ostream &operator<<(ostream &os, const Formula &f);
@@ -59,8 +65,8 @@ struct Set {
   Set(string input);
   void ReplaceFormula(int index, Formula f);
   void RemoveFormula(int index);
-  void AddFormula(Formula f);
-  vector<Formula> Formulas() const;
+  void AddFormula(const Formula &f);
+  const vector<Formula> &Formulas() const;
 
 private:
   void Normalize();

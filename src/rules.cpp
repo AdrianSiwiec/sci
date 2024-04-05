@@ -57,7 +57,7 @@ Formula ReplaceAll(const Formula &f, const Formula &to_replace,
                  {ReplaceAll(f.Subformula(0), to_replace, replace_with),
                   ReplaceAll(f.Subformula(1), to_replace, replace_with)});
 }
-vector<Set> RFun(const Formula &f, Set s) {
+vector<Set> RFun(const Formula &f, const Set &s) {
   if (matchesRFun(f)) {
     Formula to_replace = f.Subformula(1);
     Formula replace_with = f.Subformula(0);

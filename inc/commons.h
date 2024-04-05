@@ -10,4 +10,6 @@
 
 using namespace std;
 
+#define ull unsigned long long
+
 vector<string> SplitString(string input, string delimeter);

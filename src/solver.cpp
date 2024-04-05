@@ -14,6 +14,11 @@ bool IsAx1(const Formula &f) {
 }
 
 bool IsAx2(const Formula &f, const Formula &g) {
+  if (f.IsOp(op_not) && f.Subformula() == g)
+    return true;
+  if (g.IsOp(op_not) && g.Subformula() == f)
+    return true;
+  return false;
   return (f == Formula(op_not, {g})) || (g == Formula(op_not, {f}));
 }
 
@@ -30,7 +35,7 @@ bool IsClosed(const Set &set) {
 }
 
 vector<ProofNode> BuildChildNodes(const ProofNode &node, int formula_to_remove,
-                                  vector<Set> formulas_to_add) {
+                                  const vector<Set> &formulas_to_add) {
 
   // Would still work but return empty. I think it's not needed.
   assert(!formulas_to_add.empty());
@@ -96,19 +101,6 @@ vector<ProofNode> ApplyRule(ProofNode &node, Rule rule,
         continue;
       }
 
-      // if (true || rule == RTerEq) {
-      //   cout << "We got result" << endl;
-      //   cout << "start: " << node.root << endl;
-      //   cout << "previous: ";
-      //   for (const auto &i : previous_formulas)
-      //     cout << i << ", ";
-      //   cout << endl;
-      //   cout << "got: " << endl;
-      //   for (const auto &n : to_return) {
-      //     cout << "\t" << n.root << endl;
-      //   }
-      // }
-
       // If what we produced is what we already have, don't apply the rule
       // TODO: this is wrong. Need to compare sets
       if (to_return.size() == 1 && to_return[0].root == node.root) {
@@ -170,9 +162,13 @@ void Solve(ProofNode &n, ProofNode previous) {
 }
 
 ProofNode DoSolve(string input_string, bool print) {
+  ClearAppliedRules();
+  ClearVars();
+  
   vector<string> input_formulas = SplitString(input_string, ",");
   if (print)
-    cout << "Your input: \"" << input_string << "\" parsed as formulas:" << endl;
+    cout << "Your input: \"" << input_string
+         << "\" parsed as formulas:" << endl;
   vector<Formula> formulas;
   for (const auto &s : input_formulas) {
     auto f = ParseInputFormula(s);

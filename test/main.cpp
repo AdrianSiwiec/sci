@@ -19,10 +19,12 @@ int main() {
   DoSolve("p,-p");
   DoSolve("p,p=-r,q=-s,p=(q=p),p=(s=r)");
   DoSolve("p<>q, -(p=q)");
+  DoSolve("((((q = p) -> (p -> r)) = ((p -> (p <> p)) = p)) -> (((r & p) <> "
+          "(p = p)) | ((p & p) | -q)))");
 
-  cout << endl << "Enter your set of formulas (divided by ','): " << endl;
-  for (string line; getline(cin, line);) {
-    DoSolve(line);
-    cout << endl << "Enter your set of formulas (divided by ','): " << endl;
-  }
+  // cout << endl << "Enter your set of formulas (divided by ','): " << endl;
+  // for (string line; getline(cin, line);) {
+  //   DoSolve(line);
+  //   cout << endl << "Enter your set of formulas (divided by ','): " << endl;
+  // }
 }
