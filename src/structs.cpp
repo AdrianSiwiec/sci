@@ -2,15 +2,6 @@
 #include "preprocessing.h"
 #include "solver.h"
 
-ull GetHash(ull root, vector<ull> subhashes) {
-  ull result = (root + 17) * 43;
-  for (const ull subhash : subhashes) {
-    result += subhash;
-    result *= 13;
-  }
-  return result;
-}
-
 Formula::Formula(int var) : is_var(true), var(var) { Normalize(); }
 Formula::Formula(Operator op, const vector<Formula> &subformulas)
     : is_var(false), op(op), subformulas(subformulas) {
@@ -53,6 +44,8 @@ const Formula &Formula::Subformula(int i) const {
   return subformulas[i];
 }
 
+ull Formula::Hash() const { return hash; }
+
 void Formula::Normalize() {
   if (is_var == false) {
     if (op == op_not)
@@ -60,19 +53,40 @@ void Formula::Normalize() {
     else
       assert(this->subformulas.size() == 2);
   }
-  if (IsOp(op_id)) {
-    sort(subformulas.begin(), subformulas.end());
+  if (IsOp(op_id) && subformulas[0] > subformulas[1]) {
+    swap(subformulas[0], subformulas[1]);
+    // sort(subformulas.begin(), subformulas.end());
   }
 
+  // if (is_var) {
+  //   hash = GetHash(var + 10, {});
+  // } else {
+  //   vector<ull> subhashes;
+  //   for (const auto &sf : subformulas) {
+  //     subhashes.push_back(sf.hash);
+  //   }
+  //   hash = GetHash(op, subhashes);
+  // }
+
+  //   ull GetHash(ull root, const vector<ull> &subhashes) {
+  //   ull result = (root + 17) * 43;
+  //   for (const ull subhash : subhashes) {
+  //     result += subhash;
+  //     result *= 13;
+  //   }
+  //   return result;
+  // }
+
   if (is_var) {
-    hash = GetHash(var + 10, {});
+    hash = (var + 10) * 43;
   } else {
-    vector<ull> subhashes;
+    hash = (op + 17000000) * 47;
     for (const auto &sf : subformulas) {
-      subhashes.push_back(sf.hash);
+      hash += sf.hash;
+      hash *= 239;
     }
-    hash = GetHash(op, subhashes);
   }
+
   // cout << "Hash of " << *this << " : " << hash << endl;
 }
 
@@ -139,11 +153,11 @@ bool operator==(const Formula &a, const Formula &b) {
 bool operator!=(const Formula &a, const Formula &b) { return !(a == b); }
 
 bool operator<(const Formula &a, const Formula &b) {
+  if (a.IsVar() != b.IsVar())
+    return a.IsVar() > b.IsVar();
+  if (a.IsVar())
+    return a.Var() < b.Var();
   return a.hash < b.hash;
-  // if (a.IsVar() != b.IsVar())
-  //   return a.IsVar() > b.IsVar();
-  // if (a.IsVar())
-  //   return a.Var() < b.Var();
   // if (a.Op() != b.Op())
   //   return a.Op() < b.Op();
   // assert(a.Subformulas().size() == b.Subformulas().size());
@@ -163,7 +177,9 @@ Formula FId(const Formula &a, const Formula &b) {
   return Formula(op_id, {a, b});
 }
 
-Set::Set(vector<Formula> formulas) : formulas(formulas) { this->Normalize(); }
+Set::Set(const vector<Formula> &formulas) : formulas(formulas) {
+  this->Normalize();
+}
 Set::Set(string input) {
   vector<string> input_formulas = SplitString(input, ",");
   for (auto s : input_formulas) {
@@ -175,11 +191,17 @@ Set::Set(string input) {
 const vector<Formula> &Set::Formulas() const { return formulas; }
 
 void Set::Normalize() {
-  if (formulas.size() < 2)
-    return;
-  sort(formulas.begin(), formulas.end());
-  auto last = unique(formulas.begin(), formulas.end());
-  formulas.erase(last, formulas.end());
+  if (formulas.size() > 1) {
+    sort(formulas.begin(), formulas.end());
+    auto last = unique(formulas.begin(), formulas.end());
+    formulas.erase(last, formulas.end());
+  }
+
+  hash = 167;
+  for (const auto &f : formulas) {
+    hash += f.Hash();
+    hash *= 13;
+  }
 }
 
 void Set::ReplaceFormula(int index, Formula f) {
@@ -188,16 +210,18 @@ void Set::ReplaceFormula(int index, Formula f) {
   Normalize();
 }
 
-void Set::RemoveFormula(int index) {
+void Set::RemoveFormula(int index, bool normalize) {
   assert(formulas.size() > index);
   swap(formulas[index], formulas[formulas.size() - 1]);
   formulas.pop_back();
-  Normalize();
+  if (normalize)
+    Normalize();
 }
 
-void Set::AddFormula(const Formula &f) {
+void Set::AddFormula(const Formula &f, bool normalize) {
   formulas.push_back(f);
-  Normalize();
+  if (normalize)
+    Normalize();
 }
 
 vector<Set> ParseSets(string input) {
@@ -210,6 +234,7 @@ vector<Set> ParseSets(string input) {
 }
 
 bool operator==(const Set &a, const Set &b) {
+  return a.hash == b.hash;
   return a.Formulas() == b.Formulas();
 }
 bool operator!=(const Set &a, const Set &b) { return !(a == b); }
@@ -229,6 +254,7 @@ bool operator<(const Set &a, const Set &b) {
   if (a.Formulas().size() != b.Formulas().size()) {
     return a.Formulas().size() < b.Formulas().size();
   }
+  return a.hash < b.hash;
   for (int i = 0; i < a.Formulas().size(); i++) {
     if (a.Formulas()[i] != b.Formulas()[i]) {
       return a.Formulas()[i] < b.Formulas()[i];

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <set>
+
 #include "commons.h"
 #include "structs.h"
 
@@ -120,15 +122,16 @@ Rule RTerEqEq;
 // F1 | F2 | F3 | F4
 Rule RTerSpike;
 
-Formula ReplaceAll(const Formula &f, const Formula &to_replace,
-                   const Formula &replace_with);
+bool ReplaceAll(Formula &f, const Formula &to_replace,
+                const Formula &replace_with);
 
 int GetNewVar();
 
 bool IsSingleUseRule(Rule r);
-bool WasRuleApplied(Rule r, const Formula &f);
-void MarkRuleAsApplied(Rule r, const Formula &f);
-void ClearAppliedRules();
+bool WasRuleApplied(Rule r, const Formula &f,
+                    const set<pair<int, Formula>> &applied_rules);
+void MarkRuleAsApplied(Rule r, const Formula &f,
+                       set<pair<int, Formula>> &applied_rules);
 
 string GetRuleName(Rule r);
 

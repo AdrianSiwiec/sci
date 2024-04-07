@@ -14,19 +14,20 @@ void TestBuildChildNodes() {
 
 void TestApplyRule() {
   ProofNode pn(Set({Formula(1)}));
-  assert(ApplyRule(pn, RNot).empty());
+  set<pair<int, Formula>> ar;
+  assert(ApplyRule(pn, RNot, ar).empty());
 
   Formula nn3(op_not, {{op_not, {3}}});
 
   pn = ProofNode(Set({nn3}));
-  vector<ProofNode> ns = ApplyRule(pn, RNot);
+  vector<ProofNode> ns = ApplyRule(pn, RNot, ar);
   assert(ns.size() == 1);
   assert(ns[0].root == Set({Formula(3)}));
 
   Formula eq12(op_id, {{1}, {2}});
   Formula n1(op_not, {{1}});
   pn = ProofNode(Set({Formula(1), Formula(op_impl, {1, eq12}), n1}));
-  ns = ApplyRule(pn, RImpl);
+  ns = ApplyRule(pn, RImpl, ar);
   assert(ns.size() == 2);
   assert(ns[0].root == Set({Formula(1), n1}));
   assert(ns[1].root == Set({Formula(1), n1, eq12}));
@@ -72,6 +73,50 @@ void TestExamples() {
   assert(pn.subnodes[1] == Set("p,q,-p,-(p=q)"));
   assert(pn.subnodes[1].is_closed == nullopt);
   assert(pn.subnodes[0].is_closed.value() == false);
+
+  pn = DoSolve(
+      "v12, v10, v9, v6, v4, v3, r, q, -p, -v8, -v11, (p=p), (v4=v3), "
+      "(v8=-v9), (v11=-v10), (v11=-v12), (v6=(p->r)), (v12=(p->p)), "
+      "(v7=(p->v8)), (v5=(p=q)), (v4=(v5->v6)), (v4=(v7=p)), (v9=(v10->v11))",
+      false);
+  assert(pn.is_closed.value());
+
+  // v5=(q=p) is false, because: q, -p
+  // v3=(v5->v6) is true, because v5 is false
+  // -v3, v3
+  pn = DoSolve(
+      "q, ¬p, ¬v3, ¬v4,(v5≡(q≡p)), v3≡(p≡v7)), (v3≡(v5→v6)), (v9≡(v10→v11))",
+      false);
+  assert(pn.is_closed.value());
+
+  pn =
+      DoSolve("q, v8, ¬p, ¬v3, ¬v4, ¬v9, (p≡p), (v3≡v4), (v8≡¬v9), (v11≡¬v12), "
+              "(v12≡(p→p)), (v7≡(p→v8)), (v6≡(p→r)), (v5≡(q≡p)), (v3≡(p≡v7)), "
+              "(v3≡(v5→v6)), (v9≡(v10→v11))",
+              false);
+  assert(pn.is_closed.value());
+
+  pn = DoSolve(
+      "q, ¬p, (p≡p), (v3≡v4), (v8≡¬v9), (v11≡¬v12), (v6≡(p→r)), (v12≡(p→p)), "
+      "(v7≡(p→v8)), (v5≡(p≡q)), (v3≡(p≡v7)), (v3≡(v5→v6)), (v9≡(v10→v11))",
+      false);
+  assert(pn.is_closed.value());
+
+  pn = DoSolve("-p, q, (p≡p), (v3≡v4), (v4≡(p≡(p→¬((p→p)→¬(p→p))))), "
+               "(v3≡((p≡q)→(p→r)))",
+               false);
+  assert(pn.is_closed.value());
+
+  pn = DoSolve("¬p, q, ((¬(r→¬p)→(p≡p))→¬((p≡p)→¬(r→¬p))), "
+               "((p≡(p→¬((p→p)→¬(p→p))))≡((q≡p)→(p→r)))",
+               false);
+  assert(pn.is_closed.value());
+
+  pn = DoSolve(
+      "-((((q = p) -> (p -> r)) = ((p -> (p <> p)) = p)) -> (((r & p) <>"
+      "(p = p)) | ((p & p) | -q)))",
+      false);
+  assert(pn.is_closed.value());
 }
 
 int main() {

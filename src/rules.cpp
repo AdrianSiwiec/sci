@@ -41,33 +41,52 @@ vector<Set> RNotImpl(const Formula &f) {
 }
 
 bool matchesRFun(const Formula &f) {
-  return f.IsOp(op_id) && f.Subformula(0).IsVar();
+  return f.IsOp(op_id) && f.Subformula(0).IsVar() &&
+         (f.Subformula(0) < f.Subformula(1));
 }
-Formula ReplaceAll(const Formula &f, const Formula &to_replace,
-                   const Formula &replace_with) {
+
+bool ReplaceAll(Formula &f, const Formula &to_replace,
+                const Formula &replace_with) {
   if (f == to_replace) {
-    return replace_with;
+    f = replace_with;
+    return true;
   }
   if (f.IsVar())
-    return f;
-  if (f.IsOp(op_not))
-    return Formula(op_not,
-                   {ReplaceAll(f.Subformula(), to_replace, replace_with)});
-  return Formula(f.Op(),
-                 {ReplaceAll(f.Subformula(0), to_replace, replace_with),
-                  ReplaceAll(f.Subformula(1), to_replace, replace_with)});
+    return false;
+  if (f.IsOp(op_not)) {
+    if (ReplaceAll(f.subformulas[0], to_replace, replace_with)) {
+      f.Normalize();
+      return true;
+    }
+    return false;
+  }
+  bool left = ReplaceAll(f.subformulas[0], to_replace, replace_with);
+  bool right = ReplaceAll(f.subformulas[1], to_replace, replace_with);
+  if (left || right) {
+    f.Normalize();
+    return true;
+  } else {
+    return false;
+  }
 }
 vector<Set> RFun(const Formula &f, const Set &s) {
   if (matchesRFun(f)) {
-    Formula to_replace = f.Subformula(1);
-    Formula replace_with = f.Subformula(0);
+    const Formula &to_replace = f.Subformula(1);
+    const Formula &replace_with = f.Subformula(0);
     vector<Formula> to_return;
-    auto formulas = s.Formulas();
+    const auto &formulas = s.Formulas();
     for (const Formula &formula : formulas) {
-      if (f != formula)
-        to_return.push_back(ReplaceAll(formula, to_replace, replace_with));
-      else
+      if (f != formula) {
+        if (to_replace == replace_with) {
+          to_return.push_back(formula);
+        } else {
+          Formula to_modify(formula);
+          ReplaceAll(to_modify, to_replace, replace_with);
+          to_return.push_back(to_modify);
+        }
+      } else {
         to_return.push_back(f);
+      }
     }
     return {Set(to_return)};
   }
@@ -113,10 +132,9 @@ bool MatchesRNEq1(const Formula &f) {
 vector<Set> RNEq1(const Formula &f) {
   if (MatchesRNEq1(f)) {
     Formula new_var(GetNewVar());
-    return {
-        Set({Formula(op_not,
-                     {{op_id, {{f.Subformula().Subformula(0), new_var}}}}),
-             Formula(op_id, {{new_var, f.Subformula().Subformula(1)}})})};
+    return {Set(
+        {Formula(op_not, {{op_id, {{f.Subformula().Subformula(0), new_var}}}}),
+         Formula(op_id, {{new_var, f.Subformula().Subformula(1)}})})};
   }
   return {};
 }
@@ -169,32 +187,32 @@ vector<Set> REqImpl(const Formula &f) {
   if (MatchesREqImpl(f)) {
     Formula alpha(GetNewVar());
     Formula beta(GetNewVar());
-    return {Set({Formula(op_id, {{f.Subformula(0),
-                                     Formula(op_impl, {{alpha, beta}})}}),
-                 Formula(op_id, {{alpha, f.Subformula(1).Subformula(0)}}),
-                 Formula(op_id, {{beta, f.Subformula(1).Subformula(1)}})})};
+    return {Set(
+        {Formula(op_id, {{f.Subformula(0), Formula(op_impl, {{alpha, beta}})}}),
+         Formula(op_id, {{alpha, f.Subformula(1).Subformula(0)}}),
+         Formula(op_id, {{beta, f.Subformula(1).Subformula(1)}})})};
   }
   return {};
 }
 vector<Set> REqImplLeft(const Formula &f) {
   if (MatchesREqImplLeft(f)) {
     Formula alpha(GetNewVar());
-    return {Set({Formula(op_id,
-                         {{f.Subformula(0),
-                           Formula(op_impl,
-                                   {{f.Subformula(1).Subformula(0), alpha}})}}),
-                 Formula(op_id, {{alpha, f.Subformula(1).Subformula(1)}})})};
+    return {Set(
+        {Formula(op_id, {{f.Subformula(0),
+                          Formula(op_impl,
+                                  {{f.Subformula(1).Subformula(0), alpha}})}}),
+         Formula(op_id, {{alpha, f.Subformula(1).Subformula(1)}})})};
   }
   return {};
 }
 vector<Set> REqImplRight(const Formula &f) {
   if (MatchesREqImplRight(f)) {
     Formula alpha(GetNewVar());
-    return {Set({Formula(op_id,
-                         {{f.Subformula(0),
-                           Formula(op_impl,
-                                   {{alpha, f.Subformula(1).Subformula(1)}})}}),
-                 Formula(op_id, {{alpha, f.Subformula(1).Subformula(0)}})})};
+    return {Set(
+        {Formula(op_id, {{f.Subformula(0),
+                          Formula(op_impl,
+                                  {{alpha, f.Subformula(1).Subformula(1)}})}}),
+         Formula(op_id, {{alpha, f.Subformula(1).Subformula(0)}})})};
   }
   return {};
 }
@@ -215,32 +233,32 @@ vector<Set> REqEq(const Formula &f) {
   if (MatchesREqEq(f)) {
     Formula alpha(GetNewVar());
     Formula beta(GetNewVar());
-    return {Set({Formula(op_id, {{f.Subformula(0),
-                                     Formula(op_id, {{alpha, beta}})}}),
-                 Formula(op_id, {{alpha, f.Subformula(1).Subformula(0)}}),
-                 Formula(op_id, {{beta, f.Subformula(1).Subformula(1)}})})};
+    return {Set(
+        {Formula(op_id, {{f.Subformula(0), Formula(op_id, {{alpha, beta}})}}),
+         Formula(op_id, {{alpha, f.Subformula(1).Subformula(0)}}),
+         Formula(op_id, {{beta, f.Subformula(1).Subformula(1)}})})};
   }
   return {};
 }
 vector<Set> REqEqLeft(const Formula &f) {
   if (MatchesREqEqLeft(f)) {
     Formula alpha(GetNewVar());
-    return {Set({Formula(op_id,
-                         {{f.Subformula(0),
-                           Formula(op_id,
-                                   {{f.Subformula(1).Subformula(0), alpha}})}}),
-                 Formula(op_id, {{alpha, f.Subformula(1).Subformula(1)}})})};
+    return {Set(
+        {Formula(op_id,
+                 {{f.Subformula(0),
+                   Formula(op_id, {{f.Subformula(1).Subformula(0), alpha}})}}),
+         Formula(op_id, {{alpha, f.Subformula(1).Subformula(1)}})})};
   }
   return {};
 }
 vector<Set> REqEqRight(const Formula &f) {
   if (MatchesREqEqRight(f)) {
     Formula alpha(GetNewVar());
-    return {Set({Formula(op_id,
-                         {{f.Subformula(0),
-                           Formula(op_id,
-                                   {{alpha, f.Subformula(1).Subformula(1)}})}}),
-                 Formula(op_id, {{alpha, f.Subformula(1).Subformula(0)}})})};
+    return {Set(
+        {Formula(op_id,
+                 {{f.Subformula(0),
+                   Formula(op_id, {{alpha, f.Subformula(1).Subformula(1)}})}}),
+         Formula(op_id, {{alpha, f.Subformula(1).Subformula(0)}})})};
   }
   return {};
 }
@@ -302,8 +320,7 @@ vector<Set> RTerEqImpl(const Formula &f) {
 }
 bool MatchesRTerEqEq(const Formula &f) {
   return f.IsOp(op_id) && f.Subformula(0).IsVar() &&
-         f.Subformula(1).IsOp(op_id) &&
-         f.Subformula(1).Subformula(0).IsVar() &&
+         f.Subformula(1).IsOp(op_id) && f.Subformula(1).Subformula(0).IsVar() &&
          f.Subformula(1).Subformula(1).IsVar();
 }
 vector<Set> RTerEqEq(const Formula &f) {
@@ -369,14 +386,14 @@ int GetRuleCode(Rule r) {
   else
     assert("Get Rule Code used on incompatible rule" == 0);
 }
-set<pair<int, Formula>> applied_rules;
-bool WasRuleApplied(Rule r, const Formula &f) {
+bool WasRuleApplied(Rule r, const Formula &f,
+                    const set<pair<int, Formula>> &applied_rules) {
   return applied_rules.count(make_pair(GetRuleCode(r), f)) > 0;
 }
-void MarkRuleAsApplied(Rule r, const Formula &f) {
+void MarkRuleAsApplied(Rule r, const Formula &f,
+                       set<pair<int, Formula>> &applied_rules) {
   applied_rules.insert(make_pair(GetRuleCode(r), f));
 }
-void ClearAppliedRules() { applied_rules.clear(); }
 
 string GetRuleName(Rule r) {
   if (r == RNot)

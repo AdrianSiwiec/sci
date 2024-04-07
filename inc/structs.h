@@ -14,7 +14,7 @@ enum Operator : char {
   op_equiv
 };
 
-ull GetHash(ull root, vector<ull> subhashes);
+// ull GetHash(ull root, const vector<ull> &subhashes);
 
 struct Formula {
   Formula(int var);
@@ -28,6 +28,7 @@ struct Formula {
   Operator Op() const;
   const vector<Formula> &Subformulas() const;
   const Formula &Subformula(int i = 0) const;
+  ull Hash() const;
 
   // Implemented in parser.cpp
   static optional<Formula> Parse(const string &s, int &pos);
@@ -45,6 +46,8 @@ private:
 
   friend bool operator==(const Formula &a, const Formula &b);
   friend bool operator<(const Formula &a, const Formula &b);
+  friend bool ReplaceAll(Formula &f, const Formula &to_replace,
+                         const Formula &replace_with);
 };
 
 ostream &operator<<(ostream &os, const Formula &f);
@@ -61,16 +64,19 @@ optional<int> ParseVar(const string &s, int &pos);
 optional<Operator> ParseOp(const string &s, int &pos);
 
 struct Set {
-  Set(vector<Formula> formulas);
+  Set(const vector<Formula> &formulas);
   Set(string input);
   void ReplaceFormula(int index, Formula f);
-  void RemoveFormula(int index);
-  void AddFormula(const Formula &f);
+  void RemoveFormula(int index, bool normalize = true);
+  void AddFormula(const Formula &f, bool normalize = true);
   const vector<Formula> &Formulas() const;
+  void Normalize();
 
 private:
-  void Normalize();
   vector<Formula> formulas;
+  ull hash;
+  friend bool operator==(const Set &a, const Set &b);
+  friend bool operator<(const Set &a, const Set &b);
 };
 
 ostream &operator<<(ostream &os, const Set &s);

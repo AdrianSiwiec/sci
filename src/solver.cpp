@@ -1,5 +1,7 @@
 #include "solver.h"
 #include "preprocessing.h"
+#include <chrono>
+#include <ctime>
 #include <set>
 
 bool IsAx1(const Formula &f) {
@@ -43,11 +45,16 @@ vector<ProofNode> BuildChildNodes(const ProofNode &node, int formula_to_remove,
   vector<ProofNode> to_return;
   for (const Set &formulas : formulas_to_add) {
     Set s = node.root;
-    s.RemoveFormula(formula_to_remove);
-    for (const Formula &formula : formulas.Formulas()) {
-      s.AddFormula(formula);
+    if (formulas.Formulas().size() == 1) {
+      s.ReplaceFormula(formula_to_remove, formulas.Formulas()[0]);
+    } else {
+      s.RemoveFormula(formula_to_remove, false);
+      for (const Formula &formula : formulas.Formulas()) {
+        s.AddFormula(formula, false);
+      }
+      s.Normalize();
     }
-    to_return.push_back(ProofNode(s));
+    to_return.push_back(ProofNode(std::move(s)));
   }
   sort(to_return.begin(), to_return.end());
   auto last = unique(to_return.begin(), to_return.end());
@@ -55,20 +62,29 @@ vector<ProofNode> BuildChildNodes(const ProofNode &node, int formula_to_remove,
   return to_return;
 }
 
+bool Contains(const vector<Formula> &v, const Formula &f) {
+  for (const auto &vf : v) {
+    if (vf == f)
+      return true;
+  }
+  return false;
+}
+
 bool NothingChanged(const ProofNode &previous,
                     const vector<ProofNode> &conclusions) {
   if (previous.subnodes.empty())
     return false;
   for (const auto &previous_node : previous.subnodes) {
-    set<Formula> previous_formulas_set;
-    for (const auto &f : previous_node.root.Formulas()) {
-      previous_formulas_set.insert(f);
-    }
+    // set<Formula> previous_formulas_set;
+    // for (const auto &f : previous_node.root.Formulas()) {
+    //   previous_formulas_set.insert(f);
+    // }
 
     bool changed = false;
     for (const auto &pf : conclusions) {
       for (const auto &formula : pf.root.Formulas()) {
-        if (previous_formulas_set.count(formula) == 0) {
+        // if (previous_formulas_set.count(formula) == 0) {
+        if (!Contains(previous_node.root.Formulas(), formula)) {
           // We found new formula
           changed = true;
         }
@@ -81,11 +97,12 @@ bool NothingChanged(const ProofNode &previous,
 }
 
 vector<ProofNode> ApplyRule(ProofNode &node, Rule rule,
+                            set<pair<int, Formula>> &applied_rules,
                             const ProofNode &previous) {
 
   for (int i = 0; i < node.root.Formulas().size(); i++) {
     if (IsSingleUseRule(rule) &&
-        WasRuleApplied(rule, node.root.Formulas()[i])) {
+        WasRuleApplied(rule, node.root.Formulas()[i], applied_rules)) {
       continue;
     }
     vector<Set> result;
@@ -95,19 +112,25 @@ vector<ProofNode> ApplyRule(ProofNode &node, Rule rule,
       result = RFun(node.root.Formulas()[i], node.root.Formulas());
     }
     if (!result.empty()) {
-      auto to_return = BuildChildNodes(node, i, result);
+      vector<ProofNode> to_return;
+      if (rule != nullptr) {
+        to_return = BuildChildNodes(node, i, result);
+      } else {
+        ProofNode pn(result[0]);
+        to_return.push_back(pn);
+      }
+
+      // If what we produced is what we already have, don't apply the rule
+      if (to_return.size() == 1 && to_return[0].root == node.root) {
+        continue;
+      }
 
       if (NothingChanged(previous, to_return)) {
         continue;
       }
 
-      // If what we produced is what we already have, don't apply the rule
-      // TODO: this is wrong. Need to compare sets
-      if (to_return.size() == 1 && to_return[0].root == node.root) {
-        continue;
-      }
       if (IsSingleUseRule(rule))
-        MarkRuleAsApplied(rule, node.root.Formulas()[i]);
+        MarkRuleAsApplied(rule, node.root.Formulas()[i], applied_rules);
       node.formula_used = node.root.Formulas()[i];
       node.rule_used = GetRuleName(rule);
       return to_return;
@@ -122,12 +145,22 @@ bool IsClosed(ProofNode &n) {
   return n.is_closed.value();
 }
 
-void Solve(ProofNode &n, ProofNode previous) {
-  if (previous.subnodes.empty())
-    ClearAppliedRules();
+// std::chrono::_V2::system_clock::time_point start;
 
-  // cout << "Solving: ";
-  // PrintProofNode(n);
+void Solve(ProofNode &n, ProofNode previous,
+           set<pair<int, Formula>> applied_rules) {
+  // if (previous.subnodes.empty()) {
+    // start = std::chrono::system_clock::now();
+  // }
+
+  // auto end = std::chrono::system_clock::now();
+  // std::chrono::duration<double> elapsed_seconds = end - start;
+  // if (elapsed_seconds.count() > 60) {
+    // cout << "Finishing on " << n.root << endl;
+    // exit(0);
+  // }
+
+  // cout << "Solving: " << n.root << endl;
   // cout << "\tPrevious: " << endl;
   // PrintProofNode(previous, "\t\t");
 
@@ -139,9 +172,11 @@ void Solve(ProofNode &n, ProofNode previous) {
   // If subnodes are not empty, it was already solved
   if (n.subnodes.empty()) {
     for (auto rule : AllRules) {
-      n.subnodes = ApplyRule(n, rule, previous);
-      if (!n.subnodes.empty())
+      // Modifies applied_rules
+      n.subnodes = ApplyRule(n, rule, applied_rules, previous);
+      if (!n.subnodes.empty()) {
         break;
+      }
     }
   }
 
@@ -151,7 +186,7 @@ void Solve(ProofNode &n, ProofNode previous) {
   }
 
   for (auto &subnode : n.subnodes) {
-    Solve(subnode, n);
+    Solve(subnode, n, applied_rules);
     assert(subnode.is_closed.has_value());
     if (!subnode.is_closed.value()) {
       n.is_closed = false;
@@ -162,9 +197,8 @@ void Solve(ProofNode &n, ProofNode previous) {
 }
 
 ProofNode DoSolve(string input_string, bool print) {
-  ClearAppliedRules();
   ClearVars();
-  
+
   vector<string> input_formulas = SplitString(input_string, ",");
   if (print)
     cout << "Your input: \"" << input_string
@@ -195,7 +229,7 @@ ProofNode DoSolve(string input_string, bool print) {
 
   Set s(formulas);
   ProofNode n(s);
-  Solve(n);
+  Solve(n, ProofNode(Set(vector<Formula>())), {});
   if (print)
     PrintProofNode(n);
   if (print)

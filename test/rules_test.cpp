@@ -23,21 +23,29 @@ void testRImpl() {
 void testRNotImpl() { assert(RNotImpl(f_not_impl) == ParseSets("phi, -psi")); }
 
 void testReplaceAll() {
-  assert(ReplaceAll(Formula("phi->psi"), Formula("phi"), Formula("psi")) ==
-         Formula("psi->psi"));
-  assert(ReplaceAll(Formula("-phi->psi"), Formula("phi"), Formula("psi")) ==
-         Formula("-psi->psi"));
-  assert(ReplaceAll(Formula("phi->psi"), Formula("phi->psi"), Formula("psi")) ==
-         Formula("psi"));
-  assert(ReplaceAll(Formula("-(phi->psi)"), Formula("phi->psi"),
-                    Formula("psi")) == Formula("-psi"));
+  Formula f("phi->psi");
+  assert(ReplaceAll(f, Formula("phi"), Formula("psi")));
+  assert(f == Formula("psi->psi"));
+
+  f = Formula("-phi->psi");
+  assert(ReplaceAll(f, Formula("phi"), Formula("psi")));
+  assert(f == Formula("-psi->psi"));
+
+  f = Formula("phi->psi");
+  assert(ReplaceAll(f, Formula("phi->psi"), Formula("psi")));
+  assert(f == Formula("psi"));
+
+  f = Formula("-(phi->psi)");
+  assert(ReplaceAll(f, Formula("phi->psi"), Formula("psi")));
+  assert(f == Formula("-psi"));
 }
 void testRFun() {
   vector<Set> sets = RFun(Formula("phi=-psi"), Set("-psi,phi=-psi,psi"));
   assert(RFun(Formula("phi=-psi"), Set("-psi,phi=-psi,psi")) ==
-         vector<Set>{Set("phi,psi,phi=-psi")});
+         vector<Set>{Set("phi,psi, phi=-psi")});
+
   assert(RFun(Formula("phi=psi"), Set("phi=psi, psi->psi, psi->phi")) ==
-         ParseSets("phi=psi, phi->phi"));
+         ParseSets("phi->phi, phi=psi"));
 }
 void testGetNewVar() {
   int var = GetNewVar();
@@ -162,13 +170,13 @@ void testRTerEq() {
 }
 
 void testApplyRule() {
-  ClearAppliedRules();
   Formula f("p");
-  assert(!WasRuleApplied(RTerSpike, f));
-  MarkRuleAsApplied(RTerSpike, f);
-  assert(WasRuleApplied(RTerSpike, f));
-  assert(!WasRuleApplied(RTerSpike, Formula("q")));
-  assert(!WasRuleApplied(RTerEqEq, f));
+  set<pair<int, Formula>> ar;
+  assert(!WasRuleApplied(RTerSpike, f, ar));
+  MarkRuleAsApplied(RTerSpike, f, ar);
+  assert(WasRuleApplied(RTerSpike, f, ar));
+  assert(!WasRuleApplied(RTerSpike, Formula("q"), ar));
+  assert(!WasRuleApplied(RTerEqEq, f, ar));
 }
 
 int main() {
