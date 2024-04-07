@@ -189,17 +189,44 @@
         and repeating ones are eliminated.
       </li>
       <li>
-        The current implementation is <b>very</b> unoptimized. If you input a difficult formula, the result page
-        can show no output for a prohibitively long time.
+        The performance could be improved. If you see no output for a long time, the formula you provided is too
+        complex. Let me know and I'll improve the performance.
+      </li>
+    </ul>
+    <br>
+    <br>
+    Changelog:
+    <ul>
+      <li>
+        07.04.2024 - Fixes:
+        <ul>
+          <li>
+            fixed bug in
+            <pre style="display:inline">fun</pre> rule implementation
+          </li>
+          <li> single-use rules are now single-use in a branch not globally</li>
+          <li>input can contain utf-8 symbols of
+            <pre style="display:inline">≡, ¬, →, ↔, ∧, ∨</pre> (to ease copy-pasting output)
+          </li>
+          <li>major performance improvements.</li>
+        </ul>
       </li>
     </ul>
     <br>
     You can click on the following examples to see their proof trees, or input your own formulas below.
+    <br>
     <script>
       function GetLink(formula) {
-        console.log("Hello from getlink!");
+        original_formula = formula
+        formula = formula.replaceAll("≡", "=");
+        formula = formula.replaceAll("→", "->");
+        formula = formula.replaceAll("¬", "-");
+        formula = formula.replaceAll("↔", "<>");
+        formula = formula.replaceAll("∧", "&");
+        formula = formula.replaceAll("∨", "|");
+        console.log("Hello from getlink!" + formula);
         var url = window.location.href.split('?')[0];
-        return "<a href=\"" + url + "?query=" + btoa(formula) + "\"><pre style=\"display:inline\">" + formula + "</pre></a>";
+        return "<a href=\"" + url + "?query=" + btoa(formula) + "\"><pre style=\"display:inline\">" + original_formula + "</pre></a>";
       }
     </script>
     <ul>
@@ -219,12 +246,15 @@
         <script> document.write(GetLink("p,p=-r,q=-s,p=(q=p),p=(s=r)")); </script>
         (Example from Table 7 from the T* paper.)
       </li>
-      <!-- <li>
-        <script> document.write(GetLink("((((q = p) -> (p -> r)) = ((p -> (p <> p)) = p)) -> (((r & p) <> (p = p)) | ((p & p) | -q)))")); </script>
-        (Formula ϕ from, "Tableau-based Decision Procedure for
-        Non-Fregean Logic of Sentential Identity", 
-        a formula "somewhat challenging" to the T SCI algorithm.)
-      </li> -->
+      <li>
+        <script> document.write(GetLink("(((q ≡ p) → (p → r)) ≡ ((p → (p ↔ p)) ≡ p)) → (((r ∧ p) ↔ (p ≡ p)) ∨ ((p ∧ p) ∨ ¬q))")); </script>
+        (Formula ϕ from "Tableau-based Decision Procedure for
+        Non-Fregean Logic of Sentential Identity")
+      </li>
+      <li>
+        <script> document.write(GetLink("-((((q ≡ p) → (p → r)) ≡ ((p → (p ↔ p)) ≡ p)) → (((r ∧ p) ↔ (p ≡ p)) ∨ ((p ∧ p) ∨ ¬q)))")); </script>
+        (Formula -ϕ from ibid.)
+      </li>
     </ul>
   </div>
   <div id="query_page">
