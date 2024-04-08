@@ -150,14 +150,14 @@ bool IsClosed(ProofNode &n) {
 void Solve(ProofNode &n, ProofNode previous,
            set<pair<int, Formula>> applied_rules) {
   // if (previous.subnodes.empty()) {
-    // start = std::chrono::system_clock::now();
+  // start = std::chrono::system_clock::now();
   // }
 
   // auto end = std::chrono::system_clock::now();
   // std::chrono::duration<double> elapsed_seconds = end - start;
   // if (elapsed_seconds.count() > 60) {
-    // cout << "Finishing on " << n.root << endl;
-    // exit(0);
+  // cout << "Finishing on " << n.root << endl;
+  // exit(0);
   // }
 
   // cout << "Solving: " << n.root << endl;
@@ -234,5 +234,12 @@ ProofNode DoSolve(string input_string, bool print) {
     PrintProofNode(n);
   if (print)
     cout << endl;
+
+  if (print) {
+    cout << "The total size of the (calculated) proof tree is: " << GetSize(n)
+         << endl;
+    cout << "The maximum depth of the (calculated) proof tree is: "
+         << GetDepth(n) << endl;
+  }
   return n;
 }

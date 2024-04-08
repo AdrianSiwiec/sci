@@ -221,8 +221,10 @@
     You can click on the following examples to see their proof trees, or input your own formulas below.
     <br>
     <script>
-      function GetLink(formula) {
-        original_formula = formula
+      function GetLink(formula, original_formula = null) {
+        if (original_formula == null) {
+          original_formula = formula
+        }
         formula = formula.replaceAll("≡", "=");
         formula = formula.replaceAll("→", "->");
         formula = formula.replaceAll("¬", "-");
@@ -259,6 +261,15 @@
       <li>
         <script> document.write(GetLink("-((((q ≡ p) → (p → r)) ≡ ((p → (p ↔ p)) ≡ p)) → (((r ∧ p) ↔ (p ≡ p)) ∨ ((p ∧ p) ∨ ¬q)))")); </script>
         (Formula -ϕ from ibid.)
+      </li>
+      <li>
+        <script> document.write(GetLink("((((((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))→(((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))↔((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))))≡((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q))))≡((q≡((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q))))→(((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))→r)))→(((r∧((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q))))↔(((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))≡((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))))∨((((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))∧((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q))))∨¬q)))", "φ(p/φ)")); </script>
+        (Formula ψ, equal to φ(p/φ) from ibid.)
+      </li>
+      <li>
+        <script> document.write(GetLink("¬((((((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))→(((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))↔((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))))≡((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q))))≡((q≡((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q))))→(((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))→r)))→(((r∧((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q))))↔(((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))≡((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))))∨((((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))∧((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q))))∨¬q)))", "¬φ(p/φ)")); </script>
+        (Formula -ψ, equal to -φ(p/φ) from ibid.) <b>Warning: </b> takes 1-2 minutes and around 1GB memory to run, might
+        crash in the browser.
       </li>
     </ul>
   </div>
@@ -330,11 +341,11 @@
           //text = text.replace(/</g, "&lt;");
           //text = text.replace(/>/g, "&gt;");
           //text = text.replace('\n', '<br>', 'g');
-          console.log(text);
-          if (element) {
-            element.value += text + "\n";
-            element.scrollTop = element.scrollHeight; // focus on bottom
-          }
+          // console.log(text);
+          // if (element) {
+          // element.value += text + "\n";
+          // element.scrollTop = element.scrollHeight; // focus on bottom
+          // }
           var v1 = document.getElementById("asdf");
           v1.append(text + "\n");
         };

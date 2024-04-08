@@ -101,3 +101,5 @@ bool operator<(const ProofNode &a, const ProofNode &b);
 bool operator==(const ProofNode &a, const ProofNode &b);
 
 void PrintProofNode(const ProofNode &n, string prefix = "");
+int GetDepth(const ProofNode &n);
+int GetSize(const ProofNode &n);

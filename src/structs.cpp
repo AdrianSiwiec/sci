@@ -289,3 +289,18 @@ bool operator<(const ProofNode &a, const ProofNode &b) {
 bool operator==(const ProofNode &a, const ProofNode &b) {
   return a.root == b.root;
 }
+
+int GetDepth(const ProofNode &n) {
+  int maxi = 0;
+  for (const auto &sn : n.subnodes) {
+    maxi = max(maxi, GetDepth(sn));
+  }
+  return maxi + 1;
+}
+int GetSize(const ProofNode &n) {
+  int sum = 0;
+  for (const auto &sn : n.subnodes) {
+    sum += GetSize(sn);
+  }
+  return sum + 1;
+}
