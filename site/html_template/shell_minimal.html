@@ -303,7 +303,14 @@
   <script>
     function DoSubmit() {
       var url = window.location.href.split('?')[0];
-      window.location.assign(url + "?query=" + btoa(document.getElementById("textArea").value));
+      formula = document.getElementById("textArea").value;
+      formula = formula.replaceAll("≡", "=");
+      formula = formula.replaceAll("→", "->");
+      formula = formula.replaceAll("¬", "-");
+      formula = formula.replaceAll("↔", "<>");
+      formula = formula.replaceAll("∧", "&");
+      formula = formula.replaceAll("∨", "|");
+      window.location.assign(url + "?query=" + btoa(formula));
     }
   </script>
 
