@@ -1,0 +1,89 @@
+\documentclass{article}
+
+\usepackage{amssymb}
+\usepackage[T1]{fontenc}
+% \usepackage[utf8]{inputenc}
+\usepackage[greek,polish]{babel}
+
+
+% Set page size and margins
+% Replace `letterpaper' with `a3paper' for UK/EU standard size
+\usepackage[a4paper,top=1cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{csquotes}
+% \usepackage{txfonts}
+% \usepackage{pxfonts}
+% \usepackage{newtxmath}
+\usepackage{mathtools}
+\usepackage{xspace}
+
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem*{przyklad}{Przykład}
+\usepackage{cleveref}
+\Crefname{definitionN}{Def.}{Def.}
+\usepackage{textcomp}
+\usepackage[multiple, perpage]{footmisc}
+\usepackage{lipsum}
+\usepackage{sidenotes}
+\usepackage{tikz,tikz-3dplot}
+\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{amsthm}
+\usepackage{framed}
+\usepackage{amsmath} 
+\usepackage{xcolor, colortbl}
+\usepackage{csquotes}
+\definecolor{c1}{HTML}{377eb8}
+\definecolor{c2}{HTML}{ff7f00}
+\definecolor{c3}{HTML}{4daf4a}
+\definecolor{c4}{HTML}{d62728}
+\usetikzlibrary{arrows}
+\usetikzlibrary{patterns}
+\usetikzlibrary{hobby}
+
+\usetikzlibrary{backgrounds}
+\tdplotsetmaincoords{80}{45}
+\tdplotsetrotatedcoords{-90}{180}{-90}
+\tikzset{surface/.style={draw=red!70!black, fill=red!40!white, fill opacity=.6}}
+
+\renewcommand*{\thefootnote}{\alph{footnote}}
+\interfootnotelinepenalty=1000000000
+
+\newenvironment{formal}{
+    \def\FrameCommand{{\vrule width 2pt}\hspace{2pt}}
+    \MakeFramed{\advance\hsize-\width}
+    \vspace{3pt}\em
+    }{\vspace{3pt}\endMakeFramed}
+
+
+\title{Implementation of satisfiability algorithms of non-Fregean logic SCI}
+\author{Adrian Siwiec}
+
+\begin{document}
+\date{\today}
+
+\maketitle
+
+\section{Sentential logic and the Fregean axiom}
+\section{SCI}
+\subsection{...}
+\subsection{Axiomatization of SCI}
+\section{Satisfiability in SCI}
+\subsection{SCI is decidable}
+\subsection{Decision procedures}
+\subsubsection{$T$ decision procedure}
+\subsubsection{$T*$ decision procedure}
+\section{Implementation}
+\subsection{Data structures}
+\subsection{Optimizations}
+\section{Comparison of $T$ and $T*$ systems}
+\subsection{Size of produced proof trees}
+\subsection{Time complexity}
+\subsection{Real time}
+
+\end{document}
