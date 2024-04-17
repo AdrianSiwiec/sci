@@ -17,7 +17,7 @@ int LabelSet::CreateLabel(bool positive, Formula f) {
   }
 }
 
-const Formula &LabelSet::GetFormula(int label) {
+const Formula &LabelSet::GetFormula(int label) const {
   assert(labels.count(label) > 0);
   return labels.at(label);
 }
