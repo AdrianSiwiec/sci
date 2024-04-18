@@ -12,4 +12,6 @@ LabelRule LRNotPlus;
 LabelRule LRNotMinus;
 LabelRule LRImplPlus;
 LabelRule LRImplMinus;
+LabelRule LRIdPlus;
+LabelRule LRIdMinus;
 

@@ -59,8 +59,13 @@ void LabelSolve(LabelNode &n) {
   if (subnodes.empty())
     subnodes = ApplyRule(n, LRNotMinus, false);
   if (subnodes.empty())
+    subnodes = ApplyRule(n, LRImplMinus, false);
+  if (subnodes.empty())
+    subnodes = ApplyRule(n, LRIdPlus, true);
+  if (subnodes.empty())
     subnodes = ApplyRule(n, LRImplPlus, true);
-  // if subnodes empty apply next rule
+  if (subnodes.empty())
+    subnodes = ApplyRule(n, LRIdMinus, false);
 
   if (!subnodes.empty()) {
     n.subnodes = subnodes;

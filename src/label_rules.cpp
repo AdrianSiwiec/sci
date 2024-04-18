@@ -48,3 +48,44 @@ vector<LabelNode> LRImplMinus(const LabelNode &n, int label) {
   }
   return {};
 }
+
+vector<LabelNode> LRIdPlus(const LabelNode &n, int label) {
+  if (n.root.GetFormula(label).IsOp(op_id)) {
+    const Formula &f = n.root.GetFormula(label);
+    vector<LabelNode> to_return = {n, n};
+
+    int a = to_return[0].root.CreateLabel(true, f.Subformula(0));
+    int b = to_return[0].root.CreateLabel(true, f.Subformula(1));
+    to_return[0].root.MakeEqual(a, b);
+
+    a = to_return[1].root.CreateLabel(false, f.Subformula(0));
+    b = to_return[1].root.CreateLabel(false, f.Subformula(1));
+    to_return[1].root.MakeEqual(a, b);
+    return to_return;
+  }
+  return {};
+}
+
+vector<LabelNode> LRIdMinus(const LabelNode &n, int label) {
+  if (n.root.GetFormula(label).IsOp(op_id)) {
+    const Formula &f = n.root.GetFormula(label);
+    vector<LabelNode> to_return = {n, n, n, n};
+
+    int a = to_return[0].root.CreateLabel(true, f.Subformula(0));
+    int b = to_return[0].root.CreateLabel(true, f.Subformula(1));
+    to_return[0].root.MakeNotEqual(a, b);
+
+    to_return[1].root.CreateLabel(true, f.Subformula(0));
+    to_return[1].root.CreateLabel(false, f.Subformula(1));
+
+    to_return[2].root.CreateLabel(false, f.Subformula(0));
+    to_return[2].root.CreateLabel(true, f.Subformula(1));
+
+    a = to_return[3].root.CreateLabel(false, f.Subformula(0));
+    b = to_return[3].root.CreateLabel(false, f.Subformula(1));
+    to_return[3].root.MakeNotEqual(a, b);
+
+    return to_return;
+  }
+  return {};
+}
