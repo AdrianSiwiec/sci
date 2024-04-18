@@ -15,12 +15,15 @@ struct LabelSet {
   const map<int, Formula> &GetLabels() { return labels; }
   bool IsEqual(int a, int b);
   void MakeEqual(int a, int b);
-  set<pair<int, int>> not_equal;
+  bool IsNotEqual(int a, int b);
+  void MakeNotEqual(int a, int b);
+  const set<pair<int, int>> &GetNotEquals() { return not_equal; }
   int max_label = 1;
   int min_label = -1;
 
 private:
   map<int, Formula> labels;
+  set<pair<int, int>> not_equal;
 
   // For find-union
   map<int, int> parent;
@@ -32,7 +35,8 @@ private:
 struct LabelNode {
   LabelSet root;
   vector<LabelNode> subnodes;
-  set<pair<int, vector<LabelNode>(*)(const LabelNode &n, int label)>> used_rules;
+  set<pair<int, vector<LabelNode> (*)(const LabelNode &n, int label)>>
+      used_rules;
 
   optional<bool> is_closed = nullopt;
 };

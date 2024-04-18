@@ -22,6 +22,17 @@ const Formula &LabelSet::GetFormula(int label) const {
   return labels.at(label);
 }
 
+bool LabelSet::IsNotEqual(int a, int b) {
+  if (a < b)
+    swap(a, b);
+  return not_equal.count(make_pair(a, b));
+}
+void LabelSet::MakeNotEqual(int a, int b) {
+  if (a < b)
+    swap(a, b);
+  not_equal.insert(make_pair(a, b));
+}
+
 int LabelSet::Find(int label) {
   if (parent[label] != label) {
     int answer = Find(parent[label]);

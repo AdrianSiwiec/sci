@@ -1,22 +1,32 @@
 #include "label_solver.h"
 
 vector<LabelNode> ApplyRule(const LabelNode &n, LabelRule rule,
+                            bool is_positive, int label) {
+  if (n.used_rules.count(make_pair(label, rule)) == 0) {
+    auto result = rule(n, label);
+    if (!result.empty()) {
+      for (auto &node : result) {
+        node.used_rules.insert(make_pair(label, rule));
+      }
+      return result;
+    }
+  }
+  return {};
+}
+
+vector<LabelNode> ApplyRule(const LabelNode &n, LabelRule rule,
                             bool is_positive) {
   if (is_positive) {
     for (int i = 1; i < n.root.max_label; i++) {
-      if (n.used_rules.count(make_pair(i, rule)) == 0) {
-        auto result = rule(n, i);
-        if (!result.empty())
-          return result;
-      }
+      auto result = ApplyRule(n, rule, is_positive, i);
+      if (!result.empty())
+        return result;
     }
   } else {
     for (int i = -1; i > n.root.min_label; i--) {
-      if (n.used_rules.count(make_pair(i, rule)) == 0) {
-        auto result = rule(n, i);
-        if (!result.empty())
-          return result;
-      }
+      auto result = ApplyRule(n, rule, is_positive, i);
+      if (!result.empty())
+        return result;
     }
   }
   return {};
@@ -25,8 +35,9 @@ vector<LabelNode> ApplyRule(const LabelNode &n, LabelRule rule,
 void LabelSolve(LabelNode &n) {
   // TODO: expand equalities
 
+  // ----------------- Termination Rules -------------
   // Termination rule 1
-  for (const auto &ne : n.root.not_equal) {
+  for (const auto &ne : n.root.GetNotEquals()) {
     if (n.root.IsEqual(ne.first, ne.second)) {
       n.is_closed = true;
       return;
@@ -42,8 +53,9 @@ void LabelSolve(LabelNode &n) {
     }
   }
 
+  // ----------------- Expansion Rules -------------
   vector<LabelNode> subnodes;
-  ApplyRule(n, LRNotPlus, true);
+  subnodes = ApplyRule(n, LRNotPlus, true);
   // if subnodes empty apply next rule
 
   if (!subnodes.empty()) {
@@ -54,6 +66,7 @@ void LabelSolve(LabelNode &n) {
 
     n.is_closed = true;
     for (auto &subnode : n.subnodes) {
+      assert(subnode.is_closed.has_value());
       if (subnode.is_closed.value() == false)
         n.is_closed = false;
     }
