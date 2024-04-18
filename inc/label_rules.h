@@ -5,5 +5,11 @@
 
 typedef vector<LabelNode>(LabelRule)(const LabelNode &n, int label);
 
-// LabelRules are only the decompositon rules.
+// LabelRules are only the decompositon rules. Other rules are hardcoded in the
+// LabelSolve method.
+
 LabelRule LRNotPlus;
+LabelRule LRNotMinus;
+LabelRule LRImplPlus;
+LabelRule LRImplMinus;
+

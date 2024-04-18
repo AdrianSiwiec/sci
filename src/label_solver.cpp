@@ -56,6 +56,10 @@ void LabelSolve(LabelNode &n) {
   // ----------------- Expansion Rules -------------
   vector<LabelNode> subnodes;
   subnodes = ApplyRule(n, LRNotPlus, true);
+  if (subnodes.empty())
+    subnodes = ApplyRule(n, LRNotMinus, false);
+  if (subnodes.empty())
+    subnodes = ApplyRule(n, LRImplPlus, true);
   // if subnodes empty apply next rule
 
   if (!subnodes.empty()) {
