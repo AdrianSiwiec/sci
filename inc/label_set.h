@@ -30,7 +30,11 @@ private:
   map<int, int> size;
   int Find(int label);
   void Union(int a, int b);
+
+  friend ostream &operator<<(ostream &os, LabelSet &s);
 };
+
+ostream &operator<<(ostream &os, LabelSet &s);
 
 struct LabelNode {
   LabelSet root;

@@ -61,3 +61,53 @@ void LabelSet::MakeEqual(int a, int b) {
          a != 0 && b != 0);
   Union(Find(a), Find(b));
 }
+
+ostream &operator<<(ostream &os, LabelSet &s) {
+  os << "Labels: {";
+  for (int i = 1; i < s.max_label; i++) {
+    os << i << ": " << s.GetFormula(i);
+    if (s.min_label < -1 || i + 1 < s.max_label)
+      os << ", ";
+  }
+  for (int i = -1; i > s.min_label; i--) {
+    os << i << ": " << s.GetFormula(i);
+    if (i - 1 > s.min_label)
+      os << ", ";
+  }
+  os << "}";
+
+  os << " Equalities:";
+  set<int> printed;
+  for (int i = s.min_label + 1; i < s.max_label; i++) {
+    if (i == 0)
+      continue;
+    if (printed.count(i) > 0)
+      continue;
+    for (int j = i + 1; j < s.max_label; j++) {
+      if (j == 0)
+        continue;
+      if (s.IsEqual(i, j)) {
+        if (printed.count(i) == 0) {
+          if (!printed.empty())
+            os << ",";
+          os << " " << i;
+          printed.insert(i);
+        }
+        os << "=" << j;
+        printed.insert(j);
+      }
+    }
+  }
+
+  os << " Non-equalities:";
+  bool printed_ne = false;
+  for (const auto &ne : s.GetNotEquals()) {
+    if (printed_ne)
+      os << ",";
+    printed_ne = true;
+    os << " ";
+    os << ne.second << "≠" << ne.first;
+  }
+
+  return os;
+}

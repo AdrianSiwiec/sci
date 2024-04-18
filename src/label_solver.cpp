@@ -71,14 +71,14 @@ void LabelSolve(LabelNode &n) {
     n.subnodes = subnodes;
     for (auto &subnode : n.subnodes) {
       LabelSolve(subnode);
+      assert(subnode.is_closed.has_value());
+      if (subnode.is_closed.value() == false) {
+        n.is_closed = false;
+        return;
+      }
     }
 
     n.is_closed = true;
-    for (auto &subnode : n.subnodes) {
-      assert(subnode.is_closed.has_value());
-      if (subnode.is_closed.value() == false)
-        n.is_closed = false;
-    }
   } else {
     n.is_closed = false;
   }
