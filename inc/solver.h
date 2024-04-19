@@ -23,5 +23,8 @@ bool IsClosed(ProofNode &n);
 void Solve(ProofNode &n, ProofNode previous = ProofNode(Set(vector<Formula>())),
            set<pair<int, Formula>> applied_rules = {});
 
+vector<Formula> DoParseFormulas(string input_string, bool print);
+
 // Solve with printing etc.
 ProofNode DoSolve(string s, bool print = true);
+ProofNode DoSolve(vector<Formula> formulas, bool print = true);

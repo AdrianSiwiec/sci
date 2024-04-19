@@ -196,9 +196,7 @@ void Solve(ProofNode &n, ProofNode previous,
   n.is_closed = true;
 }
 
-ProofNode DoSolve(string input_string, bool print) {
-  ClearVars();
-
+vector<Formula> DoParseFormulas(string input_string, bool print) {
   vector<string> input_formulas = SplitString(input_string, ",");
   if (print)
     cout << "Your input: \"" << input_string
@@ -220,6 +218,10 @@ ProofNode DoSolve(string input_string, bool print) {
         cout << "\tThis formula didn't parse: " << s << endl;
     }
   }
+  return formulas;
+}
+
+ProofNode DoSolve(vector<Formula> formulas, bool print) {
   if (formulas.empty()) {
     return ProofNode(Set(vector<Formula>()));
   }
@@ -242,4 +244,10 @@ ProofNode DoSolve(string input_string, bool print) {
          << GetDepth(n) << endl;
   }
   return n;
+}
+ProofNode DoSolve(string input_string, bool print) {
+  ClearVars();
+
+  auto formulas = DoParseFormulas(input_string, print);
+  return DoSolve(formulas, print);
 }

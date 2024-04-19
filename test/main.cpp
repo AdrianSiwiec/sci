@@ -78,7 +78,12 @@ int main() {
   LabelNode ln;
   ln.root.CreateLabel(
       true,
-      Formula("((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))"));
+      Formula("-((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))"));
   LabelSolve(ln);
   PrintLabelNode(ln);
+
+  for (string line; getline(cin, line);) {
+    DoSolveLabel(line, true);
+    cout << endl << "Enter your set of formulas (divided by ','): " << endl;
+  }
 }

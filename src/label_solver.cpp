@@ -1,4 +1,5 @@
 #include "label_solver.h"
+#include "preprocessing.h"
 
 vector<LabelNode> ApplyRule(const LabelNode &n, LabelRule rule,
                             bool is_positive, int label) {
@@ -106,4 +107,56 @@ void LabelSolve(LabelNode &n) {
   } else {
     n.is_closed = false;
   }
+}
+
+LabelNode DoSolveLabel(vector<Formula> formulas, bool print) {
+  if (formulas.empty())
+    return LabelNode();
+
+  if (print)
+    cout << "\nWhich produces the following proof tree:" << endl;
+  LabelNode ln;
+  for (const auto &f : formulas) {
+    ln.root.CreateLabel(true, f);
+  }
+  LabelSolve(ln);
+  if (print) {
+    PrintLabelNode(ln);
+    cout << endl;
+  }
+  return ln;
+}
+
+LabelNode DoSolveLabel(string input_string, bool print) {
+  ClearVars();
+  auto formulas = DoParseFormulas(input_string, print);
+  return DoSolveLabel(formulas, print);
+}
+
+void TestInput(string input_string, bool print) {
+  auto proof_node = DoSolve(input_string, false);
+  auto label_node = DoSolveLabel(input_string, false);
+
+  if (print && proof_node.is_closed.value() != label_node.is_closed.value()) {
+    PrintProofNode(proof_node);
+    PrintLabelNode(label_node);
+  }
+
+  assert(proof_node.is_closed.value() == label_node.is_closed.value());
+}
+
+bool TestFormula(const Formula &f, bool print) {
+  vector<Formula> vec{PostprocessFormula(f)};
+
+  auto proof_node = DoSolve(vec, false);
+  auto label_node = DoSolveLabel(vec, false);
+
+  if (print && proof_node.is_closed.value() != label_node.is_closed.value()) {
+    PrintProofNode(proof_node);
+    PrintLabelNode(label_node);
+  }
+
+  assert(proof_node.is_closed.value() == label_node.is_closed.value());
+
+  return proof_node.is_closed.value();
 }

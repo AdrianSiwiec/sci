@@ -117,6 +117,9 @@ void TestExamples() {
       "(p = p)) | ((p & p) | -q)))",
       false);
   assert(pn.is_closed.value());
+
+  pn = DoSolve("¬(((b→b)→b)→b)", false);
+  assert(pn.is_closed.value());
 }
 
 int main() {

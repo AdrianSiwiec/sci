@@ -2,7 +2,7 @@
 
 #include "commons.h"
 
-enum Operator : char {
+enum Operator {
   // Canonical operators
   op_not,
   op_impl,
@@ -13,6 +13,7 @@ enum Operator : char {
   op_or,
   op_equiv
 };
+const int COUNT_OP = 6;
 
 // ull GetHash(ull root, const vector<ull> &subhashes);
 
