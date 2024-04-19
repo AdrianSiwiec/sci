@@ -1,5 +1,6 @@
 #include "commons.h"
 #include "label_set.h"
+#include "label_solver.h"
 #include "solver.h"
 #include "structs.h"
 
@@ -56,16 +57,21 @@ int main() {
   //   cout << endl << "Enter your set of formulas (divided by ','): " << endl;
   // }
 
-  LabelSet ls;
-  ls.CreateLabel(true, Formula("phi->psi"));
-  ls.CreateLabel(false, Formula("phi"));
-  ls.CreateLabel(true, Formula("a"));
-  ls.CreateLabel(true, Formula("b"));
-  ls.CreateLabel(true, Formula("c"));
-  ls.MakeEqual(3, 2);
-  ls.MakeEqual(-1, 2);
-  ls.MakeEqual(1, 4);
-  ls.MakeNotEqual(1, 3);
-  ls.MakeNotEqual(-1, 2);
-  cout << ls << endl;
+  // LabelSet ls;
+  // ls.CreateLabel(true, Formula("phi->psi"));
+  // ls.CreateLabel(false, Formula("phi"));
+  // ls.CreateLabel(true, Formula("a"));
+  // ls.CreateLabel(true, Formula("b"));
+  // ls.CreateLabel(true, Formula("c"));
+  // ls.MakeEqual(3, 2);
+  // ls.MakeEqual(-1, 2);
+  // ls.MakeEqual(1, 4);
+  // ls.MakeNotEqual(1, 3);
+  // ls.MakeNotEqual(-1, 2);
+  // cout << ls << endl;
+
+  LabelNode ln;
+  ln.root.CreateLabel(true, Formula("-((p=q)->(q=p))"));
+  LabelSolve(ln);
+  PrintLabelNode(ln);
 }

@@ -34,7 +34,7 @@ private:
   friend ostream &operator<<(ostream &os, LabelSet &s);
 };
 
-ostream &operator<<(ostream &os, LabelSet &s);
+ostream &operator<<(ostream &os, const LabelSet &s);
 
 struct LabelNode {
   LabelSet root;
@@ -44,3 +44,5 @@ struct LabelNode {
 
   optional<bool> is_closed = nullopt;
 };
+
+void PrintLabelNode(LabelNode &n, string prefix = "");

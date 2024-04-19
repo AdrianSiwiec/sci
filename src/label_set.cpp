@@ -65,18 +65,18 @@ void LabelSet::MakeEqual(int a, int b) {
 ostream &operator<<(ostream &os, LabelSet &s) {
   os << "Labels: {";
   for (int i = 1; i < s.max_label; i++) {
-    os << i << ": " << s.GetFormula(i);
+    os << i << ":" << s.GetFormula(i);
     if (s.min_label < -1 || i + 1 < s.max_label)
       os << ", ";
   }
   for (int i = -1; i > s.min_label; i--) {
-    os << i << ": " << s.GetFormula(i);
+    os << i << ":" << s.GetFormula(i);
     if (i - 1 > s.min_label)
       os << ", ";
   }
   os << "}";
 
-  os << " Equalities:";
+  os << "\tEqualities:";
   set<int> printed;
   for (int i = s.min_label + 1; i < s.max_label; i++) {
     if (i == 0)
@@ -99,7 +99,7 @@ ostream &operator<<(ostream &os, LabelSet &s) {
     }
   }
 
-  os << " Non-equalities:";
+  os << "\tNon-equalities:";
   bool printed_ne = false;
   for (const auto &ne : s.GetNotEquals()) {
     if (printed_ne)
@@ -110,4 +110,20 @@ ostream &operator<<(ostream &os, LabelSet &s) {
   }
 
   return os;
+}
+
+void PrintLabelNode(LabelNode &n, string prefix) {
+  cout << prefix << "--: " << n.root << "\t(is ";
+  if (n.is_closed.has_value()) {
+    cout << (n.is_closed.value() ? "closed" : "open");
+  } else {
+    cout << "?";
+  }
+  cout << ")";
+
+  cout << endl;
+  for (int i = 0; i < n.subnodes.size(); i++) {
+    string add_to_prefix = " |";
+    PrintLabelNode(n.subnodes[i], prefix + add_to_prefix);
+  }
 }
