@@ -16,3 +16,12 @@ LabelRule LRIdPlus;
 LabelRule LRIdMinus;
 
 string GetLabelRuleString(LabelRule rule);
+
+typedef bool(LabelEqRule)(LabelNode &n);
+
+LabelEqRule LERNot;
+LabelEqRule LERImpl;
+LabelEqRule LEREq;
+LabelEqRule LERF;
+
+string GelLabelEqRuleString(LabelEqRule rule);

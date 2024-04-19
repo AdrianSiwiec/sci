@@ -46,6 +46,7 @@ struct LabelNode {
 
   optional<string> rule_used;
   optional<int> label_used;
+  vector<string> eq_rules_used;
 };
 
 void PrintLabelNode(LabelNode &n, string prefix = "");

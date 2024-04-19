@@ -103,6 +103,62 @@ void TestLRIdMinus() {
   assert(result[3].root.IsNotEqual(-2, -3));
 }
 
+void TestLERNot() {
+  LabelNode n;
+  n.root.CreateLabel(true, Formula("p"));
+  n.root.CreateLabel(true, Formula("q"));
+  n.root.CreateLabel(true, Formula("-p"));
+  n.root.CreateLabel(true, Formula("-q"));
+
+  assert(LERNot(n) == false);
+
+  n.root.MakeEqual(1, 2);
+  assert(LERNot(n) == true);
+  assert(n.root.IsEqual(3, 4));
+
+  assert(LERNot(n) == false);
+}
+
+void TestLERImpl() {
+  LabelNode n;
+  n.root.CreateLabel(true, Formula("p"));
+  n.root.CreateLabel(true, Formula("q"));
+  n.root.CreateLabel(true, Formula("r"));
+  n.root.CreateLabel(true, Formula("s"));
+  n.root.CreateLabel(true, Formula("p->q"));
+  n.root.CreateLabel(true, Formula("r->s"));
+  n.root.MakeEqual(1, 3);
+  assert(LERImpl(n) == false);
+  n.root.MakeEqual(2, 4);
+  assert(LERImpl(n) == true);
+  assert(n.root.IsEqual(5, 6));
+}
+
+void TestLEREq() {
+  LabelNode n;
+  n.root.CreateLabel(true, Formula("p"));
+  n.root.CreateLabel(true, Formula("q"));
+  n.root.CreateLabel(true, Formula("r"));
+  n.root.CreateLabel(true, Formula("s"));
+  n.root.CreateLabel(true, Formula("p=q"));
+  n.root.CreateLabel(true, Formula("r=s"));
+  n.root.MakeEqual(1, 3);
+  assert(LEREq(n) == false);
+  n.root.MakeEqual(2, 4);
+  assert(LEREq(n) == true);
+  assert(n.root.IsEqual(5, 6));
+}
+
+void TestLERF() {
+  LabelNode n;
+  n.root.CreateLabel(true, Formula("p"));
+  n.root.CreateLabel(true, Formula("p"));
+  n.root.CreateLabel(true, Formula("q"));
+  assert(LERF(n) == true);
+  assert(LERF(n) == false);
+  assert(n.root.IsEqual(1, 2));
+}
+
 int main() {
   TestLRNotPlus();
   TestLRNotMinus();
@@ -110,4 +166,9 @@ int main() {
   TestLRImplMinus();
   TestLRIdPlus();
   TestLRIdMinus();
+
+  TestLERNot();
+  TestLERImpl();
+  TestLEREq();
+  TestLERF();
 }

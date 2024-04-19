@@ -70,8 +70,15 @@ int main() {
   // ls.MakeNotEqual(-1, 2);
   // cout << ls << endl;
 
+  // LabelNode ln;
+  // ln.root.CreateLabel(false, Formula("-((p=q)->(q=p))"));
+  // LabelSolve(ln);
+  // PrintLabelNode(ln);
+
   LabelNode ln;
-  ln.root.CreateLabel(false, Formula("-((p=q)->(q=p))"));
+  ln.root.CreateLabel(
+      true,
+      Formula("((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))"));
   LabelSolve(ln);
   PrintLabelNode(ln);
 }

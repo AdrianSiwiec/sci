@@ -105,3 +105,148 @@ string GetLabelRuleString(LabelRule rule) {
     return "≡-";
   assert(0);
 }
+
+bool LERNot(LabelNode &n) {
+  for (int u = n.root.min_label + 1; u < n.root.max_label; u++) {
+    if (u == 0 || !n.root.GetFormula(u).IsOp(op_not))
+      continue;
+    for (int y = u + 1; y < n.root.max_label; y++) {
+      if (y == 0 || !n.root.GetFormula(y).IsOp(op_not))
+        continue;
+      if (n.root.IsEqual(u, y) || n.root.GetFormula(u) == n.root.GetFormula(y))
+        continue;
+      for (int w = n.root.min_label + 1; w < n.root.max_label; w++) {
+        if (w == 0 ||
+            !(n.root.GetFormula(w) == n.root.GetFormula(u).Subformula()))
+          continue;
+        for (int v = n.root.min_label + 1; v < n.root.max_label; v++) {
+          if (v == 0 ||
+              !(n.root.GetFormula(v) == n.root.GetFormula(y).Subformula()))
+            continue;
+          if (!n.root.IsEqual(w, v))
+            continue;
+          n.root.MakeEqual(u, y);
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+}
+
+bool LERImpl(LabelNode &n) {
+  int start = n.root.min_label + 1;
+  int maxi = n.root.max_label;
+  for (int x = start; x < maxi; x++) {
+    if (x == 0 || !n.root.GetFormula(x).IsOp(op_impl))
+      continue;
+    for (int z = x + 1; z < maxi; z++) {
+      if (z == 0 || !n.root.GetFormula(z).IsOp(op_impl))
+        continue;
+      if (n.root.IsEqual(x, z))
+        continue;
+      for (int w = start; w < maxi; w++) {
+        if (w == 0 ||
+            !(n.root.GetFormula(w) == n.root.GetFormula(x).Subformula(0)))
+          continue;
+        for (int v = start; v < maxi; v++) {
+          if (v == 0 ||
+              !(n.root.GetFormula(v) == n.root.GetFormula(z).Subformula(0)))
+            continue;
+          if (!n.root.IsEqual(w, v))
+            continue;
+          for (int u = start; u < maxi; u++) {
+            if (u == 0 ||
+                !(n.root.GetFormula(u) == n.root.GetFormula(x).Subformula(1)))
+              continue;
+            for (int y = start; y < maxi; y++) {
+              if (y == 0 ||
+                  !(n.root.GetFormula(y) == n.root.GetFormula(z).Subformula(1)))
+                continue;
+              if (!n.root.IsEqual(u, y))
+                continue;
+              n.root.MakeEqual(x, z);
+              return true;
+            }
+          }
+        }
+      }
+    }
+  }
+  return false;
+}
+
+bool LEREq(LabelNode &n) {
+  int start = n.root.min_label + 1;
+  int maxi = n.root.max_label;
+  for (int x = start; x < maxi; x++) {
+    if (x == 0 || !n.root.GetFormula(x).IsOp(op_id))
+      continue;
+    for (int z = x + 1; z < maxi; z++) {
+      if (z == 0 || !n.root.GetFormula(z).IsOp(op_id))
+        continue;
+      if (n.root.IsEqual(x, z))
+        continue;
+      for (int w = start; w < maxi; w++) {
+        if (w == 0 ||
+            !(n.root.GetFormula(w) == n.root.GetFormula(x).Subformula(0)))
+          continue;
+        for (int v = start; v < maxi; v++) {
+          if (v == 0 ||
+              !(n.root.GetFormula(v) == n.root.GetFormula(z).Subformula(0)))
+            continue;
+          if (!n.root.IsEqual(w, v))
+            continue;
+          for (int u = start; u < maxi; u++) {
+            if (u == 0 ||
+                !(n.root.GetFormula(u) == n.root.GetFormula(x).Subformula(1)))
+              continue;
+            for (int y = start; y < maxi; y++) {
+              if (y == 0 ||
+                  !(n.root.GetFormula(y) == n.root.GetFormula(z).Subformula(1)))
+                continue;
+              if (!n.root.IsEqual(u, y))
+                continue;
+              n.root.MakeEqual(x, z);
+              return true;
+            }
+          }
+        }
+      }
+    }
+  }
+  return false;
+}
+
+bool LERF(LabelNode &n) {
+  int start = n.root.min_label + 1;
+  int maxi = n.root.max_label;
+  for (int w = start; w < maxi; w++) {
+    if (w == 0)
+      continue;
+    for (int v = w + 1; v < maxi; v++) {
+      if (v == 0)
+        continue;
+      if (n.root.IsEqual(w, v))
+        continue;
+      if (n.root.GetFormula(v) == n.root.GetFormula(w)) {
+        n.root.MakeEqual(v, w);
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+string GelLabelEqRuleString(LabelEqRule rule) {
+  if (rule == LERNot)
+    return "≡¬";
+  if (rule == LERImpl)
+    return "≡→";
+  if (rule == LEREq)
+    return "≡≡";
+  if (rule == LERF)
+    return "F";
+
+  assert(0);
+}

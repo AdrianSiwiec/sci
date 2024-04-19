@@ -108,18 +108,34 @@ ostream &operator<<(ostream &os, LabelSet &s) {
     os << " ";
     os << ne.second << "≠" << ne.first;
   }
-  os<<";";
+  os << ";";
 
   return os;
 }
 
 void PrintLabelNode(LabelNode &n, string prefix) {
   cout << prefix << "--: " << n.root;
+  if (!n.subnodes.empty())
+    prefix = prefix + " |";
+  if (!n.eq_rules_used.empty()) {
+    cout << "\n" << prefix << "\t";
+    cout << "\tEquality rules used: [";
+    bool printed = false;
+    for (const auto &r : n.eq_rules_used) {
+      if (printed)
+        cout << " ,";
+      printed = true;
+      cout << r;
+    }
+    cout << "]";
+  }
   if (n.label_used.has_value()) {
+    cout << "\n" << prefix << "\t";
     cout << "\tApplied rule " << n.rule_used.value() << " to "
          << n.label_used.value() << " to generate descendant"
-         << (n.subnodes.size() > 1 ? "s" : "")<<";";
+         << (n.subnodes.size() > 1 ? "s" : "") << ";";
   }
+  cout << "\n" << prefix << "\t";
   cout << "\t(is ";
   if (n.is_closed.has_value()) {
     cout << (n.is_closed.value() ? "closed" : "open");
@@ -129,7 +145,7 @@ void PrintLabelNode(LabelNode &n, string prefix) {
   cout << ")";
   cout << endl;
   for (int i = 0; i < n.subnodes.size(); i++) {
-    string add_to_prefix = " |";
+    string add_to_prefix = "";
     PrintLabelNode(n.subnodes[i], prefix + add_to_prefix);
   }
 }

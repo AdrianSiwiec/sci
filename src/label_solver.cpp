@@ -37,8 +37,27 @@ vector<LabelNode> ApplyRule(LabelNode &n, LabelRule rule, bool is_positive) {
   return {};
 }
 
+bool ApplyEqRule(LabelNode &n, LabelEqRule rule) {
+  bool result = rule(n);
+  if (result) {
+    n.eq_rules_used.push_back(GelLabelEqRuleString(rule));
+  }
+  return result;
+}
+
 void LabelSolve(LabelNode &n) {
-  // TODO: expand equalities
+  while (true) {
+    if (ApplyEqRule(n, LERF))
+      continue;
+    if (ApplyEqRule(n, LERNot))
+      continue;
+    if (ApplyEqRule(n, LERImpl))
+      continue;
+    if (ApplyEqRule(n, LEREq))
+      continue;
+
+    break;
+  }
 
   // ----------------- Termination Rules -------------
   // Termination rule 1
