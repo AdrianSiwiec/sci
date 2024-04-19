@@ -89,3 +89,19 @@ vector<LabelNode> LRIdMinus(const LabelNode &n, int label) {
   }
   return {};
 }
+
+string GetLabelRuleString(LabelRule rule) {
+  if (rule == LRNotPlus)
+    return "¬+";
+  if (rule == LRNotMinus)
+    return "¬-";
+  if (rule == LRImplPlus)
+    return "→+";
+  if (rule == LRImplMinus)
+    return "→-";
+  if (rule == LRIdPlus)
+    return "≡+";
+  if (rule == LRIdMinus)
+    return "≡-";
+  assert(0);
+}

@@ -14,19 +14,24 @@ vector<LabelNode> ApplyRule(const LabelNode &n, LabelRule rule,
   return {};
 }
 
-vector<LabelNode> ApplyRule(const LabelNode &n, LabelRule rule,
-                            bool is_positive) {
+vector<LabelNode> ApplyRule(LabelNode &n, LabelRule rule, bool is_positive) {
   if (is_positive) {
     for (int i = 1; i < n.root.max_label; i++) {
       auto result = ApplyRule(n, rule, is_positive, i);
-      if (!result.empty())
+      if (!result.empty()) {
+        n.rule_used = GetLabelRuleString(rule);
+        n.label_used = i;
         return result;
+      }
     }
   } else {
     for (int i = -1; i > n.root.min_label; i--) {
       auto result = ApplyRule(n, rule, is_positive, i);
-      if (!result.empty())
+      if (!result.empty()) {
+        n.rule_used = GetLabelRuleString(rule);
+        n.label_used = i;
         return result;
+      }
     }
   }
   return {};

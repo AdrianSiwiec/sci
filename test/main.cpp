@@ -71,7 +71,7 @@ int main() {
   // cout << ls << endl;
 
   LabelNode ln;
-  ln.root.CreateLabel(true, Formula("-((p=q)->(q=p))"));
+  ln.root.CreateLabel(false, Formula("-((p=q)->(q=p))"));
   LabelSolve(ln);
   PrintLabelNode(ln);
 }

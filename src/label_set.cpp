@@ -99,7 +99,7 @@ ostream &operator<<(ostream &os, LabelSet &s) {
     }
   }
 
-  os << "\tNon-equalities:";
+  os << ";\tNon-equalities:";
   bool printed_ne = false;
   for (const auto &ne : s.GetNotEquals()) {
     if (printed_ne)
@@ -108,19 +108,25 @@ ostream &operator<<(ostream &os, LabelSet &s) {
     os << " ";
     os << ne.second << "≠" << ne.first;
   }
+  os<<";";
 
   return os;
 }
 
 void PrintLabelNode(LabelNode &n, string prefix) {
-  cout << prefix << "--: " << n.root << "\t(is ";
+  cout << prefix << "--: " << n.root;
+  if (n.label_used.has_value()) {
+    cout << "\tApplied rule " << n.rule_used.value() << " to "
+         << n.label_used.value() << " to generate descendant"
+         << (n.subnodes.size() > 1 ? "s" : "")<<";";
+  }
+  cout << "\t(is ";
   if (n.is_closed.has_value()) {
     cout << (n.is_closed.value() ? "closed" : "open");
   } else {
     cout << "?";
   }
   cout << ")";
-
   cout << endl;
   for (int i = 0; i < n.subnodes.size(); i++) {
     string add_to_prefix = " |";

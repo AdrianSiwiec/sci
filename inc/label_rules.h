@@ -15,3 +15,4 @@ LabelRule LRImplMinus;
 LabelRule LRIdPlus;
 LabelRule LRIdMinus;
 
+string GetLabelRuleString(LabelRule rule);

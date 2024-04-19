@@ -43,6 +43,9 @@ struct LabelNode {
       used_rules;
 
   optional<bool> is_closed = nullopt;
+
+  optional<string> rule_used;
+  optional<int> label_used;
 };
 
 void PrintLabelNode(LabelNode &n, string prefix = "");
