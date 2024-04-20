@@ -2,6 +2,10 @@
 #include "preprocessing.h"
 #include "solver.h"
 
+ull hash_combine(ull a, ull b) {
+  return a ^ (b + 0x9e3779b9 + (a<<6) + (a>>2));
+}
+
 Formula::Formula(int var) : is_var(true), var(var) { Normalize(); }
 Formula::Formula(Operator op, const vector<Formula> &subformulas)
     : is_var(false), op(op), subformulas(subformulas) {
@@ -78,12 +82,11 @@ void Formula::Normalize() {
   // }
 
   if (is_var) {
-    hash = (var + 10) * 43;
+    hash = var;
   } else {
-    hash = (op + 17000000) * 47;
+    hash = (op + 17000000);
     for (const auto &sf : subformulas) {
-      hash += sf.hash;
-      hash *= 239;
+      hash = hash_combine(hash, sf.hash);
     }
   }
 
@@ -197,10 +200,9 @@ void Set::Normalize() {
     formulas.erase(last, formulas.end());
   }
 
-  hash = 167;
+  hash = 1670000000000;
   for (const auto &f : formulas) {
-    hash += f.Hash();
-    hash *= 13;
+    hash = hash_combine(hash, f.Hash());
   }
 }
 

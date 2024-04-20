@@ -23,7 +23,7 @@ int main() {
   // DoSolve("p<>q, -(p=q)");
 
   // DoSolve("((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))");
-  DoSolve("-((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))");
+  // DoSolve("-((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))");
 
   // DoSolve(
   //     "-((((((((q=p)->(p->r))=(p=(p->(p<>p))))->(((r&p)<>(p=p))|((p&p)|-q)))->("
@@ -86,6 +86,7 @@ int main() {
   // assert(DoSolve("p, ¬q, (p≡¬q), (r≡¬p), (q≡¬r)", true).is_closed.value());
   // assert(DoSolve("b≡¬¬¬b", true).is_closed.value());
   // assert(pn.is_closed.value());
+
 
   cout << "LABEL SOLVE" << endl;
   for (string line; getline(cin, line);) {

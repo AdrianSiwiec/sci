@@ -134,6 +134,7 @@ LabelNode DoSolveLabel(string input_string, bool print) {
 }
 
 void TestInput(string input_string, bool print) {
+  ClearVars();
   auto proof_node = DoSolve(input_string, false);
   auto label_node = DoSolveLabel(input_string, false);
 
@@ -146,7 +147,6 @@ void TestInput(string input_string, bool print) {
 }
 
 bool TestFormula(const Formula &f, bool print) {
-  ClearVars();
   vector<Formula> vec{PostprocessFormula(f)};
 
   auto proof_node = DoSolve(vec, false);
