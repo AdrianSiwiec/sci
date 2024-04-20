@@ -383,16 +383,18 @@ int GetRuleCode(Rule r) {
     return 4;
   else if (r == RTerSpike)
     return 5;
+  else if (r == nullptr)
+    return 6;
   else
     assert("Get Rule Code used on incompatible rule" == 0);
 }
-bool WasRuleApplied(Rule r, const Formula &f,
-                    const set<pair<int, Formula>> &applied_rules) {
-  return applied_rules.count(make_pair(GetRuleCode(r), f)) > 0;
+bool WasRuleApplied(Rule r, const FormulaSet &s,
+                    const set<pair<int, FormulaSet>> &applied_rules) {
+  return applied_rules.count(make_pair(GetRuleCode(r), s)) > 0;
 }
-void MarkRuleAsApplied(Rule r, const Formula &f,
-                       set<pair<int, Formula>> &applied_rules) {
-  applied_rules.insert(make_pair(GetRuleCode(r), f));
+void MarkRuleAsApplied(Rule r, const FormulaSet &s,
+                       set<pair<int, FormulaSet>> &applied_rules) {
+  applied_rules.insert(make_pair(GetRuleCode(r), s));
 }
 
 string GetRuleName(Rule r) {

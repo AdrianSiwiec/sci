@@ -23,33 +23,20 @@ int main() {
   // DoSolve("p<>q, -(p=q)");
 
   // DoSolve("((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))");
-  // DoSolve("-((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))");
+  DoSolve("-((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))");
 
   // DoSolve(
-  //     "-((((q = ((((q = p) -> (p -> r)) = ((p -> (p <> p)) = p)) -> (((r & p)
-  //     "
-  //     "<> (p = p)) | ((p & p) | -q)))) -> (((((q = p) -> (p -> r)) = ((p ->
-  //     (p "
-  //     "<> p)) = p)) -> (((r & p) <> (p = p)) | ((p & p) | -q)))-> r)) = "
-  //     "((((((q = p) -> (p -> r)) = ((p -> (p <> p)) = p)) -> (((r & p) <> (p
-  //     = " "p)) | ((p & p) | -q)))-> (((((q = p) -> (p -> r)) = ((p -> (p <>
-  //     p)) = " "p)) -> (((r & p) <> (p = p)) | ((p & p) | -q)))<> ((((q = p)
-  //     -> (p -> " "r)) = ((p -> (p <> p)) = p)) -> (((r & p) <> (p = p)) | ((p
-  //     & p) | "
-  //     "-q))))) = ((((q = p) -> (p -> r)) = ((p -> (p <> p)) = p)) -> (((r &
-  //     p) "
-  //     "<> (p = p)) | ((p & p) | -q))))) -> (((r & ((((q = p) -> (p -> r)) = "
-  //     "((p -> (p <> p)) = p)) -> (((r & p) <> (p = p)) | ((p & p) | -q)))) <>
-  //     "
-  //     "(((((q = p) -> (p -> r)) = ((p -> (p <> p)) = p)) -> (((r & p) <> (p =
-  //     " "p)) | ((p & p) | -q)))= ((((q = p) -> (p -> r)) = ((p -> (p <> p)) =
-  //     " "p)) -> (((r & p) <> (p = p)) | ((p & p) | -q))))) | ((((((q = p) ->
-  //     (p "
-  //     "-> r)) = ((p -> (p <> p)) = p)) -> (((r & p) <> (p = p)) | ((p & p) |
-  //     "
-  //     "-q)))& ((((q = p) -> (p -> r)) = ((p -> (p <> p)) = p)) -> (((r & p)
-  //     <> "
-  //     "(p = p)) | ((p & p) | -q)))) | -q)))");
+  //     "-((((((((q=p)->(p->r))=(p=(p->(p<>p))))->(((r&p)<>(p=p))|((p&p)|-q)))->("
+  //     "((((q=p)->(p->r))=(p=(p->(p<>p))))->(((r&p)<>(p=p))|((p&p)|-q)))<>((((q="
+  //     "p)->(p->r))=(p=(p->(p<>p))))->(((r&p)<>(p=p))|((p&p)|-q)))))=((((q=p)->("
+  //     "p->r))=(p=(p->(p<>p))))->(((r&p)<>(p=p))|((p&p)|-q))))=((q=((((q=p)->(p-"
+  //     ">r))=(p=(p->(p<>p))))->(((r&p)<>(p=p))|((p&p)|-q))))->(((((q=p)->(p->r))"
+  //     "=(p=(p->(p<>p))))->(((r&p)<>(p=p))|((p&p)|-q)))->r)))->(((r&((((q=p)->("
+  //     "p->r))=(p=(p->(p<>p))))->(((r&p)<>(p=p))|((p&p)|-q))))<>(((((q=p)->(p->"
+  //     "r))=(p=(p->(p<>p))))->(((r&p)<>(p=p))|((p&p)|-q)))=((((q=p)->(p->r))=(p="
+  //     "(p->(p<>p))))->(((r&p)<>(p=p))|((p&p)|-q)))))|((((((q=p)->(p->r))=(p=(p-"
+  //     ">(p<>p))))->(((r&p)<>(p=p))|((p&p)|-q)))&((((q=p)->(p->r))=(p=(p->(p<>p)"
+  //     ")))->(((r&p)<>(p=p))|((p&p)|-q))))|-q)))");
 
   // cout << endl << "Enter your set of formulas (divided by ','): " << endl;
   // for (string line; getline(cin, line);) {
@@ -75,13 +62,32 @@ int main() {
   // LabelSolve(ln);
   // PrintLabelNode(ln);
 
-  LabelNode ln;
-  ln.root.CreateLabel(
-      true,
-      Formula("-((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))"));
-  LabelSolve(ln);
-  PrintLabelNode(ln);
+  // LabelNode ln;
+  // ln.root.CreateLabel(
+  //     true,
+  //     Formula("-((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))"));
+  // LabelSolve(ln);
+  // PrintLabelNode(ln);
 
+  // for (string line; getline(cin, line);) {
+  //   DoSolveLabel(line, true);
+  //   cout << endl << "Enter your set of formulas (divided by ','): " << endl;
+  // }
+
+  // ProofNode pn = DoSolve("¬(((b→b)→b)→b)", true);
+  // assert(pn.is_closed.value());
+
+  // DoSolve("b, ¬v1, (b≡¬v1), (v2≡¬b), (v1≡¬v2)", true);
+  // assert(DoSolve("b, ¬v1, (b≡¬v1), (v2≡¬b), (v1≡¬v2)",
+  // true).is_closed.value()); assert(DoSolve("b, ¬v1, (b≡¬v1), (v2≡¬b),
+  // (v1≡¬v2)", true).is_closed.value());
+
+  // assert(DoSolve("p, (p≡¬q), (r≡¬p), (q≡¬r)", true).is_closed.value());
+  // assert(DoSolve("p, ¬q, (p≡¬q), (r≡¬p), (q≡¬r)", true).is_closed.value());
+  // assert(DoSolve("b≡¬¬¬b", true).is_closed.value());
+  // assert(pn.is_closed.value());
+
+  cout << "LABEL SOLVE" << endl;
   for (string line; getline(cin, line);) {
     DoSolveLabel(line, true);
     cout << endl << "Enter your set of formulas (divided by ','): " << endl;

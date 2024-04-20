@@ -52,6 +52,7 @@ void TestCompare() {
   TestInput("-((((q = p) -> (p -> r)) = ((p -> (p <> p)) = p)) -> (((r & p) <>"
             "(p = p)) | ((p & p) | -q)))");
   TestInput("¬(((b→b)→b)→b)");
+  TestInput("b≡((b↔b)∧¬b)");
 }
 
 int main() {

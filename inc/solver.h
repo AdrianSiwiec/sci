@@ -8,7 +8,7 @@
 
 // If worked, returns non-empty.
 vector<ProofNode>
-ApplyRule(ProofNode &node, Rule rule, set<pair<int, Formula>> &applied_rules,
+ApplyRule(ProofNode &node, Rule rule, set<pair<int, FormulaSet>> &applied_rules,
           const ProofNode &previous = ProofNode(Set(vector<Formula>())));
 
 vector<ProofNode> BuildChildNodes(const ProofNode &node, int formula_to_remove,
@@ -21,7 +21,7 @@ bool IsClosed(ProofNode &n);
 
 // Will build a tree.
 void Solve(ProofNode &n, ProofNode previous = ProofNode(Set(vector<Formula>())),
-           set<pair<int, Formula>> applied_rules = {});
+           set<pair<int, FormulaSet>> applied_rules = {});
 
 vector<Formula> DoParseFormulas(string input_string, bool print);
 

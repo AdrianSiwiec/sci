@@ -72,6 +72,7 @@ struct Set {
   void AddFormula(const Formula &f, bool normalize = true);
   const vector<Formula> &Formulas() const;
   void Normalize();
+  ull GetHash() { return hash; }
 
 private:
   vector<Formula> formulas;

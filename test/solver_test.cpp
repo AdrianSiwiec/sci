@@ -14,7 +14,7 @@ void TestBuildChildNodes() {
 
 void TestApplyRule() {
   ProofNode pn(Set({Formula(1)}));
-  set<pair<int, Formula>> ar;
+  set<pair<int, FormulaSet>> ar;
   assert(ApplyRule(pn, RNot, ar).empty());
 
   Formula nn3(op_not, {{op_not, {3}}});
@@ -118,8 +118,15 @@ void TestExamples() {
       false);
   assert(pn.is_closed.value());
 
+  pn = DoSolve("¬b, ¬(b→b)", false);
+  assert(pn.is_closed.value());
+
   pn = DoSolve("¬(((b→b)→b)→b)", false);
   assert(pn.is_closed.value());
+
+  assert(DoSolve("b≡¬¬¬b", false).is_closed.value());
+
+  assert(DoSolve("b≡((b↔b)∧¬b)").is_closed.value());
 }
 
 int main() {

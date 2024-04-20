@@ -97,12 +97,15 @@ bool NothingChanged(const ProofNode &previous,
 }
 
 vector<ProofNode> ApplyRule(ProofNode &node, Rule rule,
-                            set<pair<int, Formula>> &applied_rules,
+                            set<pair<int, FormulaSet>> &applied_rules,
                             const ProofNode &previous) {
 
   for (int i = 0; i < node.root.Formulas().size(); i++) {
     if (IsSingleUseRule(rule) &&
-        WasRuleApplied(rule, node.root.Formulas()[i], applied_rules)) {
+        WasRuleApplied(
+            rule,
+            make_pair(node.root.Formulas()[i].Hash(), node.root.GetHash()),
+            applied_rules)) {
       continue;
     }
     vector<Set> result;
@@ -125,12 +128,16 @@ vector<ProofNode> ApplyRule(ProofNode &node, Rule rule,
         continue;
       }
 
-      if (NothingChanged(previous, to_return)) {
-        continue;
-      }
+      // if (NothingChanged(previous, to_return)) {
+      //   // cout << "Nothing changed" << endl;
+      //   continue;
+      // }
 
       if (IsSingleUseRule(rule))
-        MarkRuleAsApplied(rule, node.root.Formulas()[i], applied_rules);
+        MarkRuleAsApplied(
+            rule,
+            make_pair(node.root.Formulas()[i].Hash(), node.root.GetHash()),
+            applied_rules);
       node.formula_used = node.root.Formulas()[i];
       node.rule_used = GetRuleName(rule);
       return to_return;
@@ -148,7 +155,7 @@ bool IsClosed(ProofNode &n) {
 // std::chrono::_V2::system_clock::time_point start;
 
 void Solve(ProofNode &n, ProofNode previous,
-           set<pair<int, Formula>> applied_rules) {
+           set<pair<int, FormulaSet>> applied_rules) {
   // if (previous.subnodes.empty()) {
   // start = std::chrono::system_clock::now();
   // }

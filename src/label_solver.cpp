@@ -146,6 +146,7 @@ void TestInput(string input_string, bool print) {
 }
 
 bool TestFormula(const Formula &f, bool print) {
+  ClearVars();
   vector<Formula> vec{PostprocessFormula(f)};
 
   auto proof_node = DoSolve(vec, false);

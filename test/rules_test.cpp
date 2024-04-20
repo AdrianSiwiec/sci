@@ -171,12 +171,15 @@ void testRTerEq() {
 
 void testApplyRule() {
   Formula f("p");
-  set<pair<int, Formula>> ar;
-  assert(!WasRuleApplied(RTerSpike, f, ar));
-  MarkRuleAsApplied(RTerSpike, f, ar);
-  assert(WasRuleApplied(RTerSpike, f, ar));
-  assert(!WasRuleApplied(RTerSpike, Formula("q"), ar));
-  assert(!WasRuleApplied(RTerEqEq, f, ar));
+  Set s({f});
+  set<pair<int, FormulaSet>> ar;
+  FormulaSet fs(make_pair(f.Hash(), s.GetHash()));
+  assert(!WasRuleApplied(RTerSpike, fs, ar));
+  MarkRuleAsApplied(RTerSpike, fs, ar);
+  assert(WasRuleApplied(RTerSpike, fs, ar));
+  assert(!WasRuleApplied(
+      RTerSpike, make_pair(f.Hash(), Set({Formula("q")}).GetHash()), ar));
+  assert(!WasRuleApplied(RTerEqEq, fs, ar));
 }
 
 int main() {
