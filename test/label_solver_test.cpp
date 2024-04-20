@@ -51,9 +51,10 @@ void TestCompare() {
       "(v7≡(p→v8)), (v5≡(p≡q)), (v3≡(p≡v7)), (v3≡(v5→v6)), (v9≡(v10→v11))");
   TestInput("-((((q = p) -> (p -> r)) = ((p -> (p <> p)) = p)) -> (((r & p) <>"
             "(p = p)) | ((p & p) | -q)))");
-  // TestInput("¬(((b→b)→b)→b)");
-  // TestInput("b≡((b↔b)∧¬b)");
+  TestInput("¬(((b→b)→b)→b)");
+  TestInput("b≡((b↔b)∧¬b)");
   TestInput("a≡¬¬(a→¬a)");
+  // TestInput("a≡¬((b↔a)↔b)");
 }
 
 int main() {

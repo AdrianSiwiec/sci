@@ -16,6 +16,8 @@ Formula GetRandomFormula(int subformulas, int variables_size) {
   if (op == op_not) {
     return FNot(GetRandomFormula(subformulas - 1, variables_size));
   } else {
+    if (op == op_equiv && subformulas > 2)
+      subformulas--;
     int left = GetRandom(1, subformulas);
     int right = subformulas - left;
     return Formula(op, {GetRandomFormula(left, variables_size),

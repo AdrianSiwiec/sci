@@ -129,6 +129,8 @@ void TestExamples() {
   assert(DoSolve("b≡((b↔b)∧¬b)", false).is_closed.value());
   assert(DoSolve("a≡(a→¬a)", false).is_closed.value());
   assert(DoSolve("a≡¬¬(a→¬a)", false).is_closed.value());
+  // Is it really closed?
+  assert(DoSolve("a≡¬((b↔a)↔b)", false).is_closed.value());
 }
 
 int main() {
