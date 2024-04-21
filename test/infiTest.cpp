@@ -24,8 +24,7 @@ int main() {
       variables = 4;
     if ((rand() % 10) == 0)
       variables = 7;
-    // Formula f = GetRandomFormula((rand()%4)+4, variables);
-    Formula f = GetRandomFormula((rand() % 4) + 3, variables);
+    Formula f = GetRandomFormula((rand()%4)+6, variables);
     Test(i, f);
     Test(i, Formula(op_not, {f}));
     ClearVars();

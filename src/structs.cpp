@@ -84,7 +84,7 @@ void Formula::Normalize() {
   if (is_var) {
     hash = var;
   } else {
-    hash = (op + 17000000);
+    hash = hash_combine(1000000, op);
     for (const auto &sf : subformulas) {
       hash = hash_combine(hash, sf.hash);
     }

@@ -86,6 +86,9 @@ int main() {
   // assert(DoSolve("p, ¬q, (p≡¬q), (r≡¬p), (q≡¬r)", true).is_closed.value());
   // assert(DoSolve("b≡¬¬¬b", true).is_closed.value());
   // assert(pn.is_closed.value());
+  Formula("b");
+  DoSolveLabel("¬(¬(a≡(b≡a))→(a→(b→a)))", true);
+  assert(DoSolve("¬(¬(a≡(b≡a))→(a→(b→a)))", true).is_closed.value());
 
 
   cout << "LABEL SOLVE" << endl;

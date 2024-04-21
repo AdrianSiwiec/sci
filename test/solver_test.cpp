@@ -125,12 +125,10 @@ void TestExamples() {
   assert(pn.is_closed.value());
 
   assert(DoSolve("b≡¬¬¬b", false).is_closed.value());
-
   assert(DoSolve("b≡((b↔b)∧¬b)", false).is_closed.value());
   assert(DoSolve("a≡(a→¬a)", false).is_closed.value());
   assert(DoSolve("a≡¬¬(a→¬a)", false).is_closed.value());
-  // Is it really closed?
-  assert(DoSolve("¬(((a∧b)≡(b∧b))→(b→a))", true).is_closed.value());
+  assert(DoSolve("¬(((a∧b)≡(b∧b))→(b→a))", false).is_closed.value());
   assert(DoSolve("(b≡((b→(b→b))→(b→¬b)))", false).is_closed.value());
   assert(DoSolve("(c≡(c→¬((b→c)→(c→c))))", false).is_closed.value());
   assert(DoSolve("(¬(a→a)≡(b→(a→(a→b))))", false).is_closed.value());
@@ -142,6 +140,30 @@ void TestExamples() {
   assert(DoSolve("¬¬((b↔a)≡(b↔¬a))", false).is_closed.value());
   assert(DoSolve("¬¬((b↔a)≡(a↔¬b))", false).is_closed.value());
   assert(DoSolve("¬(b↔b)≡((a∧a)↔a)", false).is_closed.value());
+
+  assert(DoSolve("¬(¬(a≡(b≡a))→(a→(b→a)))", true).is_closed.value());
+//  --: {¬(¬(a≡(b≡a))→(a→(b→a)))}	(is open) applied rule ¬→ to ¬(¬(a≡(b≡a))→(a→(b→a)))
+//  |--: {¬(a≡(b≡a))}	(is open) applied rule ≢1 to ¬(a≡(b≡a))
+//  | |--: {¬(a≡v2), (v2≡(b≡a))}	(is open) applied rule ≡⊤≡ to (v2≡(b≡a))
+//  | | |--: {a, ¬b, ¬v2, ¬(a≡v2), ¬(b≡a), (v2≡(b≡a))}	(is open) applied rule fun to (v2≡(b≡a))
+//  | | | |--: {a, ¬b, ¬v2, ¬(a≡v2), (v2≡(b≡a))}	(is open) applied rule ≡⊤≡ to (v2≡(b≡a))
+//  | | | | |--: {a, ¬b, ¬v2, ¬(a≡v2), ¬(b≡a), (v2≡(b≡a))}	(is open) applied rule fun to (v2≡(b≡a))
+//  | | | | | |--: {a, ¬b, ¬v2, ¬(a≡v2), (v2≡(b≡a))}	(is open) applied rule ≡⊥ to ¬(a≡v2)
+//  | | | | | | |--: {a, ¬b, ¬v2, ¬(a≡v2), (v2≡(b≡a))}	(is open)
+//  | | | | | | |--: {a, ¬b, ¬v2, ¬a, ¬(a≡v2), (v2≡(b≡a))}	(is ?)
+//  | | | | | | |--: {a, v2, ¬b, ¬v2, ¬(a≡v2), (v2≡(b≡a))}	(is ?)
+//  | | | | | | |--: {a, v2, ¬b, ¬v2, ¬a, ¬(a≡v2), (v2≡(b≡a))}	(is ?)
+//  | | | | |--: {a, ¬b, ¬v2, ¬a, ¬(a≡v2), ¬(b≡a), (v2≡(b≡a))}	(is ?)
+//  | | | | |--: {b, a, ¬b, ¬v2, ¬(a≡v2), ¬(b≡a), (v2≡(b≡a))}	(is ?)
+//  | | | | |--: {a, v2, ¬b, ¬v2, ¬a, (b≡a), ¬(a≡v2), (v2≡(b≡a))}	(is ?)
+//  | | | | |--: {b, a, ¬b, ¬v2, ¬a, ¬(a≡v2), ¬(b≡a), (v2≡(b≡a))}	(is ?)
+//  | | | | |--: {b, a, v2, ¬b, ¬v2, (b≡a), ¬(a≡v2), (v2≡(b≡a))}	(is ?)
+//  | | |--: {b, ¬v2, ¬a, ¬(a≡v2), ¬(b≡a), (v2≡(b≡a))}	(is ?)
+//  | | |--: {v2, ¬b, ¬a, (b≡a), ¬(a≡v2), (v2≡(b≡a))}	(is ?)
+//  | | |--: {b, a, ¬v2, ¬(a≡v2), ¬(b≡a), (v2≡(b≡a))}	(is ?)
+//  | | |--: {b, a, v2, (b≡a), ¬(a≡v2), (v2≡(b≡a))}	(is ?)
+//  | | |--: {¬b, ¬v2, ¬a, ¬(a≡v2), ¬(b≡a), (v2≡(b≡a))}	(is ?)
+
 }
 
 int main() {
