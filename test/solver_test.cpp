@@ -130,7 +130,18 @@ void TestExamples() {
   assert(DoSolve("a≡(a→¬a)", false).is_closed.value());
   assert(DoSolve("a≡¬¬(a→¬a)", false).is_closed.value());
   // Is it really closed?
+  assert(DoSolve("¬(((a∧b)≡(b∧b))→(b→a))", true).is_closed.value());
+  assert(DoSolve("(b≡((b→(b→b))→(b→¬b)))", false).is_closed.value());
+  assert(DoSolve("(c≡(c→¬((b→c)→(c→c))))", false).is_closed.value());
+  assert(DoSolve("(¬(a→a)≡(b→(a→(a→b))))", false).is_closed.value());
+  assert(DoSolve("(¬(a≡a)≡(a→(b→(b→b))))", false).is_closed.value());
+  assert(DoSolve("((a≡¬a)≡((b→a)→(a→a)))", false).is_closed.value());
+  assert(DoSolve("¬((¬¬a≡(a→(b→¬b)))→¬b)", false).is_closed.value());
   assert(DoSolve("a≡¬((b↔a)↔b)", false).is_closed.value());
+  assert(DoSolve("b≡((b↔b)↔¬b)", false).is_closed.value());
+  assert(DoSolve("¬¬((b↔a)≡(b↔¬a))", false).is_closed.value());
+  assert(DoSolve("¬¬((b↔a)≡(a↔¬b))", false).is_closed.value());
+  assert(DoSolve("¬(b↔b)≡((a∧a)↔a)", false).is_closed.value());
 }
 
 int main() {

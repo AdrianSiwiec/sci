@@ -12,7 +12,7 @@ Formula GetRandomFormula(int subformulas, int variables_size) {
   if (subformulas == 1)
     return Formula(string(1, 'a' + (rand() % variables_size)));
 
-  Operator op = static_cast<Operator>(GetRandom(COUNT_OP));
+  Operator op = static_cast<Operator>(GetRandom(3));
   if (op == op_not) {
     return FNot(GetRandomFormula(subformulas - 1, variables_size));
   } else {

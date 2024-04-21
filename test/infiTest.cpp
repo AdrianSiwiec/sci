@@ -4,9 +4,14 @@
 #include "preprocessing.h"
 
 void Test(int i, const Formula &f) {
-  cout << "Testing " << i << ": " << f << flush;
-  cout << "\t\t" << (TestFormula(f) ? "(closed)" : "(open)");
-  cout << endl;
+  bool print = i % 100 == 0;
+  if (print)
+    cout << "Testing " << i << ": " << f << flush;
+  bool result = TestFormula(f);
+  if (print) {
+    cout << "\t\t" << (result ? "(closed)" : "(open)");
+    cout << endl;
+  }
 }
 
 int main() {
@@ -19,7 +24,8 @@ int main() {
       variables = 4;
     if ((rand() % 10) == 0)
       variables = 7;
-    Formula f = GetRandomFormula(6, variables);
+    // Formula f = GetRandomFormula((rand()%4)+4, variables);
+    Formula f = GetRandomFormula((rand() % 4) + 3, variables);
     Test(i, f);
     Test(i, Formula(op_not, {f}));
     ClearVars();
