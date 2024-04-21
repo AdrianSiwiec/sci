@@ -102,10 +102,8 @@ vector<ProofNode> ApplyRule(ProofNode &node, Rule rule,
 
   for (int i = 0; i < node.root.Formulas().size(); i++) {
     if (IsSingleUseRule(rule) &&
-        WasRuleApplied(
-            rule,
-            make_pair(node.root.Formulas()[i].Hash(), node.root.GetHash()),
-            applied_rules)) {
+        WasRuleApplied(rule, make_pair(node.root.Formulas()[i], node.root),
+                       applied_rules)) {
       continue;
     }
     vector<Set> result;
@@ -134,10 +132,8 @@ vector<ProofNode> ApplyRule(ProofNode &node, Rule rule,
       // }
 
       if (IsSingleUseRule(rule))
-        MarkRuleAsApplied(
-            rule,
-            make_pair(node.root.Formulas()[i].Hash(), node.root.GetHash()),
-            applied_rules);
+        MarkRuleAsApplied(rule, make_pair(node.root.Formulas()[i], node.root),
+                          applied_rules);
       node.formula_used = node.root.Formulas()[i];
       node.rule_used = GetRuleName(rule);
       return to_return;

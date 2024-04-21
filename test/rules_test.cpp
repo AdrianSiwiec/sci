@@ -173,12 +173,11 @@ void testApplyRule() {
   Formula f("p");
   Set s({f});
   set<pair<int, FormulaSet>> ar;
-  FormulaSet fs(make_pair(f.Hash(), s.GetHash()));
+  FormulaSet fs(make_pair(f, s));
   assert(!WasRuleApplied(RTerSpike, fs, ar));
   MarkRuleAsApplied(RTerSpike, fs, ar);
   assert(WasRuleApplied(RTerSpike, fs, ar));
-  assert(!WasRuleApplied(
-      RTerSpike, make_pair(f.Hash(), Set({Formula("q")}).GetHash()), ar));
+  assert(!WasRuleApplied(RTerSpike, make_pair(f, Set({Formula("q")})), ar));
   assert(!WasRuleApplied(RTerEqEq, fs, ar));
 }
 

@@ -128,7 +128,7 @@ bool ReplaceAll(Formula &f, const Formula &to_replace,
 int GetNewVar();
 
 bool IsSingleUseRule(Rule r);
-typedef pair<ull, ull> FormulaSet;
+typedef pair<Formula, Set> FormulaSet;
 bool WasRuleApplied(Rule r, const FormulaSet &f,
                     const set<pair<int, FormulaSet>> &applied_rules);
 void MarkRuleAsApplied(Rule r, const FormulaSet &f,

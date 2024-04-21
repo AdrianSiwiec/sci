@@ -155,6 +155,8 @@ bool TestFormula(const Formula &f, bool print) {
   if (print && proof_node.is_closed.value() != label_node.is_closed.value()) {
     PrintProofNode(proof_node);
     PrintLabelNode(label_node);
+    cout<<"a = "<<Formula("a").Var()<<endl;
+    cout<<"b = "<<Formula("b").Var()<<endl;
   }
 
   assert(proof_node.is_closed.value() == label_node.is_closed.value());

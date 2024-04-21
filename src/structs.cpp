@@ -3,7 +3,7 @@
 #include "solver.h"
 
 ull hash_combine(ull a, ull b) {
-  return a ^ (b + 0x9e3779b9 + (a<<6) + (a>>2));
+  return a ^ (b + 0x9e3779b9 + (a << 6) + (a >> 2));
 }
 
 Formula::Formula(int var) : is_var(true), var(var) { Normalize(); }
@@ -84,10 +84,20 @@ void Formula::Normalize() {
   if (is_var) {
     hash = var;
   } else {
-    hash = hash_combine(1000000, op);
-    for (const auto &sf : subformulas) {
-      hash = hash_combine(hash, sf.hash);
-    }
+    // hash = op + 100000000;
+    // for (const auto &sf : subformulas) {
+    //   hash *= 2654435761;
+    //   hash += sf.hash;
+    // }
+
+    // hash = hash_combine(1000000, op);
+    // for (const auto &sf : subformulas) {
+    //   hash = hash_combine(hash, sf.hash);
+    // }
+
+    hash = 100;
+    for (const auto &sf : subformulas)
+      hash += sf.Hash();
   }
 
   // cout << "Hash of " << *this << " : " << hash << endl;
@@ -138,19 +148,21 @@ ostream &operator<<(ostream &os, const Formula &f) {
 }
 
 bool operator==(const Formula &a, const Formula &b) {
-  return a.hash == b.hash;
-  // if (a.IsVar() != b.IsVar())
-  //   return false;
-  // if (a.IsVar())
-  //   return a.Var() == b.Var();
-  // if (a.Op() != b.Op())
-  //   return false;
-  // assert(a.Subformulas().size() == b.Subformulas().size());
-  // for (int i = 0; i < a.Subformulas().size(); i++) {
-  //   if (!(a.Subformula(i) == b.Subformula(i)))
-  //     return false;
-  // }
-  // return true;
+  if (a.hash != b.hash)
+    return false;
+  // return a.hash == b.hash;
+  if (a.IsVar() != b.IsVar())
+    return false;
+  if (a.IsVar())
+    return a.Var() == b.Var();
+  if (a.Op() != b.Op())
+    return false;
+  assert(a.Subformulas().size() == b.Subformulas().size());
+  for (int i = 0; i < a.Subformulas().size(); i++) {
+    if (!(a.Subformula(i) == b.Subformula(i)))
+      return false;
+  }
+  return true;
 }
 
 bool operator!=(const Formula &a, const Formula &b) { return !(a == b); }
@@ -160,15 +172,18 @@ bool operator<(const Formula &a, const Formula &b) {
     return a.IsVar() > b.IsVar();
   if (a.IsVar())
     return a.Var() < b.Var();
-  return a.hash < b.hash;
-  // if (a.Op() != b.Op())
-  //   return a.Op() < b.Op();
-  // assert(a.Subformulas().size() == b.Subformulas().size());
-  // for (int i = 0; i < a.Subformulas().size(); i++) {
-  //   if (!(a.Subformula(i) == b.Subformula(i)))
-  //     return a.Subformula(i) < b.Subformula(i);
-  // }
-  // return 0 < 0;
+
+  if (a.hash != b.hash)
+    return a.hash < b.hash;
+
+  if (a.Op() != b.Op())
+    return a.Op() < b.Op();
+  assert(a.Subformulas().size() == b.Subformulas().size());
+  for (int i = 0; i < a.Subformulas().size(); i++) {
+    if (!(a.Subformula(i) == b.Subformula(i)))
+      return a.Subformula(i) < b.Subformula(i);
+  }
+  return 0 < 0;
 }
 bool operator>(const Formula &a, const Formula &b) { return b < a; }
 
@@ -236,7 +251,9 @@ vector<Set> ParseSets(string input) {
 }
 
 bool operator==(const Set &a, const Set &b) {
-  return a.hash == b.hash;
+  if (a.hash != b.hash)
+    return false;
+  // return a.hash == b.hash;
   return a.Formulas() == b.Formulas();
 }
 bool operator!=(const Set &a, const Set &b) { return !(a == b); }
@@ -256,7 +273,8 @@ bool operator<(const Set &a, const Set &b) {
   if (a.Formulas().size() != b.Formulas().size()) {
     return a.Formulas().size() < b.Formulas().size();
   }
-  return a.hash < b.hash;
+  if (a.hash != b.hash)
+    return a.hash < b.hash;
   for (int i = 0; i < a.Formulas().size(); i++) {
     if (a.Formulas()[i] != b.Formulas()[i]) {
       return a.Formulas()[i] < b.Formulas()[i];
