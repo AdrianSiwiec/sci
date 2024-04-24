@@ -7,8 +7,8 @@ TESTDIR=test
 #G++ compiler settings
 CXX=g++
 CXXINC=-I ./$(INCDIR)/
-# CXXFLAGS= -std=c++17 $(CXXINC) -g -rdynamic -Werror=return-type -Werror -Wall -Wno-sign-compare 
-CXXFLAGS=-O3 -std=c++17 $(CXXINC) -g -rdynamic -Werror=return-type -Werror -Wall -Wno-sign-compare 
+CXXFLAGS= -std=c++17 $(CXXINC) -g -rdynamic -Werror=return-type -Werror -Wall -Wno-sign-compare 
+# CXXFLAGS=-O3 -std=c++17 $(CXXINC) -g -rdynamic -Werror=return-type -Werror -Wall -Wno-sign-compare 
 # CXXFLAGS=-Og -std=c++17 $(CXXINC) -g -rdynamic -Werror=return-type -Werror -Wall -Wno-sign-compare -pg -g
 
 INCFILES=$(wildcard $(INCDIR)/*.h)

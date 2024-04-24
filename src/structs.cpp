@@ -90,14 +90,14 @@ void Formula::Normalize() {
     //   hash += sf.hash;
     // }
 
-    // hash = hash_combine(1000000, op);
-    // for (const auto &sf : subformulas) {
-    //   hash = hash_combine(hash, sf.hash);
-    // }
+    hash = hash_combine(1000000, op);
+    for (const auto &sf : subformulas) {
+      hash = hash_combine(hash, sf.hash);
+    }
 
-    hash = 100;
-    for (const auto &sf : subformulas)
-      hash += sf.Hash();
+    // hash = 100;
+    // for (const auto &sf : subformulas)
+    //   hash += sf.Hash();
   }
 
   // cout << "Hash of " << *this << " : " << hash << endl;

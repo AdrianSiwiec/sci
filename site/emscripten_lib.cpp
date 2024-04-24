@@ -1,4 +1,5 @@
 #include "commons.h"
+#include "label_solver.h"
 #include "solver.h"
 #include "structs.h"
 #include <emscripten.h>
@@ -12,4 +13,5 @@ void sayHi(char *name) {
 }
 
 void SolveFormulas(char *formulas) { DoSolve(formulas); }
+void SolveFormulasLabel(char *formulas) { DoSolveLabel(formulas, true); }
 }
