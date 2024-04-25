@@ -213,9 +213,23 @@
           <li>major performance improvements.</li>
         </ul>
       </li>
+      <li>
+        25.04.2024 - Fixed two bugs that were causing the results to be incorrectly "open" in some cases. The fix
+        changes the order of applied rules in some cases, unfortunately making formula
+        <pre style="display:inline">-ψ</pre> too difficult for the current
+        implementation.
+      </li>
     </ul>
     <b>NOTE: to see the improvements you might need to hard-refresh this page (ctrl+shift+r) to reload
       the binary. </b>Otherwise you might be using the old binary (it won't work for ϕ and -ϕ below)
+    <br>
+    <br>
+    Click
+    <script>
+      var url = window.location.href.split('?')[0].replace("sci", "sci_label");
+      document.write("<a href=\"" + url + "\">here</a>");
+    </script>
+    to see a labelled Tableau implementation -- a different algorithm solving the exact same problem.
     <br>
     <br>
     You can click on the following examples to see their proof trees, or input your own formulas below.
@@ -266,11 +280,11 @@
         <script> document.write(GetLink("((((((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))→(((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))↔((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))))≡((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q))))≡((q≡((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q))))→(((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))→r)))→(((r∧((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q))))↔(((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))≡((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))))∨((((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))∧((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q))))∨¬q)))", "φ(p/φ)")); </script>
         (Formula ψ, equal to φ(p/φ) from ibid.)
       </li>
-      <li>
+      <!-- <li>
         <script> document.write(GetLink("¬((((((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))→(((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))↔((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))))≡((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q))))≡((q≡((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q))))→(((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))→r)))→(((r∧((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q))))↔(((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))≡((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))))∨((((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q)))∧((((q≡p)→(p→r))≡(p≡(p→(p↔p))))→(((r∧p)↔(p≡p))∨((p∧p)∨¬q))))∨¬q)))", "¬φ(p/φ)")); </script>
         (Formula -ψ, equal to -φ(p/φ) from ibid.) <b>Warning: </b> takes 1-2 minutes and around 2GB memory to run, might
         crash in the browser.
-      </li>
+      </li> -->
     </ul>
   </div>
   <div id="query_page">
