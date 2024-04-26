@@ -297,6 +297,15 @@
       document.write(GetMainUrl());
     </script>
     <br>
+    <br>
+    <script>
+      function GetMainUrl() {
+        url = window.location.href.replace("sci", "sci_label");
+        return "<a href=\"" + url + "\">Go to the Labelled Tableau for the same query.</a>";
+      }
+      document.write(GetMainUrl());
+    </script>
+    <br>
   </div>
   <script>
     query = window.location.search.replace("?query=", "");

@@ -1,6 +1,7 @@
 obj/*
 site/main.wasm
 .vscode/settings.json
+discussion/*
 
 # Created by https://www.gitignore.io
 

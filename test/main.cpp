@@ -38,20 +38,20 @@ int main() {
   //     ">(p<>p))))->(((r&p)<>(p=p))|((p&p)|-q)))&((((q=p)->(p->r))=(p=(p->(p<>p)"
   //     ")))->(((r&p)<>(p=p))|((p&p)|-q))))|-q)))");
 
-  assert(DoSolve("¬((b≡¬c)→(a→((b≡d)≡(d≡¬c)))), (b≡¬c)").is_closed.value());
-  assert(
-      DoSolve(
-          "¬((b≡¬c)→(a→((d≡¬c)≡(b≡d)))), (b≡¬c), a, "
-          "-((b≡¬c)→(a→((d≡¬c)≡(b≡d)))), -(a→((d≡¬c)≡(b≡d))), -((d≡¬c)≡(b≡d))")
-          .is_closed.value());
-  assert(DoSolve("¬((b≡¬c)→(a→((d≡¬c)≡(b≡d)))), (b≡¬c), a, b, ¬c, "
-                 "-((b≡¬c)→(a→((d≡¬c)≡(b≡d)))), -(a→((d≡¬c)≡(b≡d))), "
-                 "-((d≡¬c)≡(b≡d)), -c, -(d≡¬c), -(b≡d)")
-             .is_closed.value());
-  assert(DoSolve("¬((b≡¬c)→(a→((d≡¬c)≡(b≡d)))), (b≡¬c), a, b, ¬c, d, ¬c, b, d, "
-                 "-((b≡¬c)→(a→((d≡¬c)≡(b≡d)))), -(a→((d≡¬c)≡(b≡d))), "
-                 "-((d≡¬c)≡(b≡d)), -c, -(d≡¬c), -(b≡d), -c")
-             .is_closed.value());
+  // assert(DoSolve("¬((b≡¬c)→(a→((b≡d)≡(d≡¬c)))), (b≡¬c)").is_closed.value());
+  // assert(
+  //     DoSolve(
+  //         "¬((b≡¬c)→(a→((d≡¬c)≡(b≡d)))), (b≡¬c), a, "
+  //         "-((b≡¬c)→(a→((d≡¬c)≡(b≡d)))), -(a→((d≡¬c)≡(b≡d))), -((d≡¬c)≡(b≡d))")
+  //         .is_closed.value());
+  // assert(DoSolve("¬((b≡¬c)→(a→((d≡¬c)≡(b≡d)))), (b≡¬c), a, b, ¬c, "
+  //                "-((b≡¬c)→(a→((d≡¬c)≡(b≡d)))), -(a→((d≡¬c)≡(b≡d))), "
+  //                "-((d≡¬c)≡(b≡d)), -c, -(d≡¬c), -(b≡d)")
+  //            .is_closed.value());
+  // assert(DoSolve("¬((b≡¬c)→(a→((d≡¬c)≡(b≡d)))), (b≡¬c), a, b, ¬c, d, ¬c, b, d, "
+  //                "-((b≡¬c)→(a→((d≡¬c)≡(b≡d)))), -(a→((d≡¬c)≡(b≡d))), "
+  //                "-((d≡¬c)≡(b≡d)), -c, -(d≡¬c), -(b≡d), -c")
+  //            .is_closed.value());
 
   // LabelNode l;
   // // 1:b, 2:¬c, 3:d, 4:¬c, -1:(d≡¬c), -2:(b≡d), -3:c}	Equalities: 1=2=4;

@@ -315,6 +315,15 @@
       document.write(GetMainUrl());
     </script>
     <br>
+    <br>
+    <script>
+      function GetMainUrl() {
+        url = window.location.href.replace("sci_label", "sci");
+        return "<a href=\"" + url + "\">Go to the T* for the same query.</a>";
+      }
+      document.write(GetMainUrl());
+    </script>
+    <br>
   </div>
   <script>
     query = window.location.search.replace("?query=", "");
