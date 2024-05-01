@@ -226,7 +226,7 @@
     <br>
     Click
     <script>
-      var url = window.location.href.split('?')[0].replace("sci", "sci_label");
+      var url = window.location.href.split('?')[0].replace("sci.html", "sci_label.html");
       document.write("<a href=\"" + url + "\">here</a>");
     </script>
     to see a labelled Tableau implementation -- a different algorithm solving the exact same problem.
@@ -300,7 +300,7 @@
     <br>
     <script>
       function GetMainUrl() {
-        url = window.location.href.replace("sci", "sci_label");
+        url = window.location.href.replace("sci.html", "sci_label.html");
         return "<a href=\"" + url + "\">Go to the Labelled Tableau for the same query.</a>";
       }
       document.write(GetMainUrl());

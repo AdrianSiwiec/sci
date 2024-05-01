@@ -3,7 +3,7 @@
 \usepackage{amssymb}
 \usepackage[T1]{fontenc}
 % \usepackage[utf8]{inputenc}
-\usepackage[greek,polish]{babel}
+\usepackage[greek,polish,english]{babel}
 
 
 % Set page size and margins
@@ -22,10 +22,8 @@
 \usepackage{xspace}
 
 \usepackage{amsthm}
-\theoremstyle{definition}
-\newtheorem*{przyklad}{Przykład}
+\usepackage{amssymb,amsmath,amsthm}
 \usepackage{cleveref}
-\Crefname{definitionN}{Def.}{Def.}
 \usepackage{textcomp}
 \usepackage[multiple, perpage]{footmisc}
 \usepackage{lipsum}
@@ -54,11 +52,13 @@
 \renewcommand*{\thefootnote}{\alph{footnote}}
 \interfootnotelinepenalty=1000000000
 
-\newenvironment{formal}{
-    \def\FrameCommand{{\vrule width 2pt}\hspace{2pt}}
-    \MakeFramed{\advance\hsize-\width}
-    \vspace{3pt}\em
-    }{\vspace{3pt}\endMakeFramed}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+
+\newcommand*{\Ts}{T^*}
 
 
 \title{Implementation of decision procedures for non-Fregean logic SCI}
@@ -69,6 +69,8 @@
 
 \maketitle
 
+Test: ążźćłóęń
+
 \section{Sentential logic and the Fregean axiom}
 \section{SCI}
 \subsection{...}
@@ -77,7 +79,111 @@
 \subsection{SCI is decidable}
 \subsection{Decision procedures}
 \subsubsection{$T$ decision procedure}
-\subsubsection{$T*$ decision procedure}
+\subsubsection{$\Ts$ decision procedure}
+TODO: differences compared to \enquote{Dedukcyjne Dylematy} (DD):
+\begin{itemize}
+    \item Rule $sym$ is replaced by $sym_1$ and $sym_2$.
+    \item Make a clear distinction of two phases: decomposition-reduction phase and closure phase. The decomposition-reduction phase only uses decomposition, reduction and equality rules, the closure phase only the closure rules and the reduction rules.
+    \item Make it clear that when applying rule to $\Phi \cup \{\varphi\}$ the $\varphi$ is removed from the conclusion, unless otherwise noted (i.e. in closure rules).
+    \item No need to say: \enquote{w wyniku zastosowania reguły co najmniej jedna z konkluzji zawiera formułę,
+    która nie występuje w $X \cup \{\varphi\}$}. In decomposition-reduction phase simply apply all the rules as long as you can. In closure phase apply closure rule only once to any given formula.
+\end{itemize}
+\subsubsection{Correctness and completeness of $\Ts$}
+\begin{theorem}
+    $\Ts$ is correct.
+\end{theorem}
+
+\begin{proof}
+We want to show that if $\Ts$ says the formula is closed, it is indeed closed. TODO:
+\begin{enumerate}
+    \item All the rules of $\Ts$ are strongly correct. TODO at least the non-obvious ones.
+    \item We're given a closed tree.
+    \item Going up the tree, on every step we have a closed set of formulas, because every rule is strongly correct.
+    \item The root is closed.
+\end{enumerate}
+\end{proof}
+
+\begin{theorem}
+    $\Ts$ is complete.
+\end{theorem}
+
+We want to show, that if the formula is closed, the tree produced by $\Ts$ is closed, or by contraposition, that if the tree produced by $\Ts$ is open, the given formula is open.
+
+
+First, let us show that first the decomposition-reduction phase finishes and then that the closure phase finishes.
+
+\begin{theorem}
+    Decomposition-reduction phase of $\Ts$ finishes and produces finite trees.
+\end{theorem}
+\begin{proof}
+
+    First, to show that the decomposition-reduction phase finishes, let us define:
+
+    \begin{definition}[Size of formula]
+        Given a formula $\varphi$, let us define:
+        $$
+        s(\varphi) = \begin{cases}
+            1, &\text{if } \varphi = p,\\
+            c(\psi) + 1, &\text{if } \varphi = \lnot \psi,\\
+            c(\psi) + c(\vartheta) + 1, &\text{if } \varphi = \psi \equiv \vartheta,\text{ or } \varphi = \psi \rightarrow \vartheta.
+        \end{cases}
+        $$
+    \end{definition}
+    \begin{definition}[Complexity of a set of formulas]
+        Given a set of formulas $\Phi$, let us define:
+        $$
+            c(\Phi) = \sum_{\phi \in \Phi} 3^{s(\phi)}
+        $$
+    \end{definition}
+
+    \begin{lemma}
+        \label{l_c}
+        If rule $R$ is a decomposition rule or an identity rule, $\Phi$ is its premise and $\Phi_1, ... \Phi_n$ are its conclusions, then $c(\Phi) > c(\Phi_i)$, for $1 \leq i \leq n$.
+    \end{lemma}
+    \begin{proof}
+        TODO: Przerachować. Chyba zdaje się działać, ewentualnie trochę podkręcić $s$ lub $c$.
+    \end{proof}
+    \begin{lemma}
+        \label{l_c2}
+        If rule $R$ is a reduction rule $\Phi$ is its premise and $\Phi_1$ is its conclusion, then $c(\Phi) \geq c(\Phi_1)$.
+    \end{lemma}
+    \begin{proof}
+        Trivial.
+    \end{proof}
+    \begin{lemma}
+        \label{l_c3}
+        The reduction rules cannot be applied indefinitely without lowering the $c$ function.
+    \end{lemma}
+    \begin{proof}
+        TODO: proste.
+    \end{proof}
+
+    As a consequence of lemmas \ref{l_c}, \ref{l_c2} and \ref{l_c3} it is clear that, for each node of the produced tree, after a finite number of rules applied, either a closed node or a node with lower complexity will be reached. Since the complexity of the node is always positive and finite the produced tree will be finite.
+
+\end{proof}
+
+\begin{theorem}
+    All leaves produced by the decomposition-reduction phase are either closed or contain only simple formulas.
+\end{theorem}
+\begin{proof}
+    Simple. Assume there is a non-simple formula in an open leaf. One of decomposition, reduction or equality rules would apply (TODO, simple, because some will match and we don't have any additional conditions on applying rules). Contradiction.
+\end{proof}
+
+\begin{theorem}
+    Open leaf of a $\Ts$ tree satisfies the following conditions:
+    TODO: rewrite from DD.
+    \begin{enumerate}
+        \item X1. Shown by theorem above.
+        \item X2
+        \item X3
+        \item X4
+        \item X5
+        \item X6
+        \item X7
+        \item X8
+    \end{enumerate}
+\end{theorem}
+
 \section{Implementation}
 \subsection{Data structures}
 \subsection{Optimizations}

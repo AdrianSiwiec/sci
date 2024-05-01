@@ -243,7 +243,7 @@
 
     Click
     <script>
-      var url = window.location.href.split('?')[0].replace("sci_label", "sci");
+      var url = window.location.href.split('?')[0].replace("sci_label.html", "sci.html");
       document.write("<a href=\"" + url + "\">here</a>");
     </script>
     to see a T* system implementation -- a different algorithm solving the exact same problem.
@@ -318,7 +318,7 @@
     <br>
     <script>
       function GetMainUrl() {
-        url = window.location.href.replace("sci_label", "sci");
+        url = window.location.href.replace("sci_label.html", "sci.html");
         return "<a href=\"" + url + "\">Go to the T* for the same query.</a>";
       }
       document.write(GetMainUrl());
