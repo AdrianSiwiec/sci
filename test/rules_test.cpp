@@ -22,6 +22,14 @@ void testRImpl() {
 }
 void testRNotImpl() { assert(RNotImpl(f_not_impl) == ParseSets("phi, -psi")); }
 
+void testSym() {
+  ClearVars();
+  assert(RSym1(Formula("p=q")).empty());
+  assert(RSym1(Formula("q=p"))[0].Formulas()[0] == Formula("p=q"));
+  assert(RSym2(Formula("-(p=q)")).empty());
+  assert(RSym2(Formula("-(q=p)"))[0].Formulas()[0] == Formula("-(p=q)"));
+}
+
 void testReplaceAll() {
   Formula f("phi->psi");
   assert(ReplaceAll(f, Formula("phi"), Formula("psi")));
@@ -48,10 +56,11 @@ void testRFun() {
          ParseSets("phi->phi, phi=psi"));
 }
 void testGetNewVar() {
+  // Brittle
   int var = GetNewVar();
-  assert(var == 2);
-  assert(int_to_variable[var] == "v2");
-  assert(variable_to_int["v2"] = 2);
+  assert(var == 4);
+  assert(int_to_variable[var] == "v4");
+  assert(variable_to_int["v4"] = 4);
 }
 
 void testIsSimple() {
@@ -59,7 +68,8 @@ void testIsSimple() {
   assert(IsSimple(Formula("-p")));
   assert(IsSimple(Formula("p=q")));
   assert(IsSimple(Formula("-(p=q)")));
-  assert(IsSimple(Formula("-p=q")));
+  assert(!IsSimple(Formula("-p=q")));
+  assert(IsSimple(Formula("p=-q")));
   assert(IsSimple(Formula("p=(p=p)")));
   assert(IsSimple(Formula("p=(p->p)")));
 
@@ -88,7 +98,7 @@ void testNEq2() {
   // First calculate...
   auto result = RNEq2(Formula("-(phi=(phi->psi))"));
   // Then parse the answer, otherwise it creates v4
-  assert(result == ParseSets("(phi=v2),v3=(phi->psi),-(v2=v3)"));
+  assert(result == ParseSets("(v2=phi),v3=(phi->psi),-(v2=v3)"));
   assert(RNEq1(Formula("-(phi=psi)")).empty());
 }
 void testREqNot() {
@@ -185,6 +195,7 @@ int main() {
   testRNot();
   testRImpl();
   testRNotImpl();
+  testSym();
   testReplaceAll();
   testRFun();
   testGetNewVar();

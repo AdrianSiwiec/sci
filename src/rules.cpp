@@ -45,6 +45,27 @@ bool matchesRFun(const Formula &f) {
          (f.Subformula(0) < f.Subformula(1));
 }
 
+bool matchesRSym1(const Formula &f) {
+  return f.IsOp(op_id) && f.Subformula(0) > f.Subformula(1);
+}
+vector<Set> RSym1(const Formula &f) {
+  if (matchesRSym1(f)) {
+    return {Set({FId(f.Subformula(1), f.Subformula(0))})};
+  }
+  return {};
+}
+
+bool matchesRSym2(const Formula &f) {
+  return f.IsOp(op_not) && matchesRSym1(f.Subformula());
+}
+vector<Set> RSym2(const Formula &f) {
+  if (matchesRSym2(f)) {
+    return {Set({FNot(
+        FId(f.Subformula().Subformula(1), f.Subformula().Subformula(0)))})};
+  }
+  return {};
+}
+
 bool ReplaceAll(Formula &f, const Formula &to_replace,
                 const Formula &replace_with) {
   if (f == to_replace) {
@@ -404,6 +425,10 @@ string GetRuleName(Rule r) {
     return "→";
   else if (r == RNotImpl)
     return "¬→";
+  else if (r == RSym1)
+    return "sym1";
+  else if (r == RSym2)
+    return "sym2";
   else if (r == nullptr)
     return "fun";
   else if (r == RNEq1)

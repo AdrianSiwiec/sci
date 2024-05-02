@@ -57,11 +57,7 @@ void Formula::Normalize() {
     else
       assert(this->subformulas.size() == 2);
   }
-  if (IsOp(op_id) && subformulas[0] > subformulas[1]) {
-    swap(subformulas[0], subformulas[1]);
-    // sort(subformulas.begin(), subformulas.end());
-  }
-
+  
   // if (is_var) {
   //   hash = GetHash(var + 10, {});
   // } else {

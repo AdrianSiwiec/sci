@@ -87,7 +87,7 @@ void TestParserNotAllParen() {
              Formula(op_id, {{op_not, {{7}}},
                                 {op_id, {{3}, {op_impl, {{4}, {1}}}}}}));
   TestParser("((1=0)->(1->0))",
-             Formula(op_impl, {{op_id, {{0}, {1}}}, {op_impl, {{1}, {0}}}}));
+             Formula(op_impl, {{op_id, {{1}, {0}}}, {op_impl, {{1}, {0}}}}));
   TestParser("((((1=0)->(1->0))))",
              Formula(op_impl, {{op_id, {{1}, {0}}}, {op_impl, {{1}, {0}}}}));
 }

@@ -61,12 +61,21 @@ void TestSimple() {
 
   n.root.ReplaceFormula(
       1, Formula(op_not, {{op_not, {{op_not, {{op_id, {{3}, {3}}}}}}}}));
+  n.phase2 = false;
   assert(IsClosed(n));
   assert(n.subnodes.size() == 1);
   assert(n.subnodes[0].root.Formulas().size() == 2);
   assert(n.subnodes[0].root.Formulas()[0] == Formula(3));
   assert(n.subnodes[0].root.Formulas()[1] ==
          Formula(op_not, {{op_id, {{3}, {3}}}}));
+}
+
+void TestNonAxiomsSCI() {
+  assert(DoSolve("-(p=--p)", false).is_closed.value() == false);
+  assert(DoSolve("-(p=(p & p))", false).is_closed.value() == false);
+  assert(DoSolve("-(p=(p | p))", false).is_closed.value() == false);
+  assert(DoSolve("-((q|p)=(p|q))", false).is_closed.value() == false);
+  assert(DoSolve("-((q=p)=(p=q))", false).is_closed.value() == false);
 }
 
 void TestExamples() {
@@ -144,6 +153,10 @@ void TestExamples() {
   assert(DoSolve("¬(b↔b)≡((a∧a)↔a)", false).is_closed.value());
   assert(DoSolve("¬(¬(a≡(b≡a))→(a→(b→a)))", false).is_closed.value());
   assert(DoSolve("¬¬((b→(b≡b))≡¬((b≡b)→(b→b)))", false).is_closed.value());
+
+  assert(!DoSolve(
+             "¬((b≡¬c)→((b≡d)≡(d≡¬c)))", false)
+             .is_closed.value());
 }
 
 int main() {
@@ -151,5 +164,6 @@ int main() {
   TestApplyRule();
   TestAx();
   TestSimple();
+  TestNonAxiomsSCI();
   TestExamples();
 }

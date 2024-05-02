@@ -174,11 +174,25 @@ void Solve(ProofNode &n, ProofNode previous,
 
   // If subnodes are not empty, it was already solved
   if (n.subnodes.empty()) {
-    for (auto rule : AllRules) {
-      // Modifies applied_rules
-      n.subnodes = ApplyRule(n, rule, applied_rules, previous);
-      if (!n.subnodes.empty()) {
-        break;
+    if (!n.phase2) {
+      bool usedPhase1 = false;
+      for (auto rule : Phase1Rules) {
+        // Modifies applied_rules
+        n.subnodes = ApplyRule(n, rule, applied_rules, previous);
+        if (!n.subnodes.empty()) {
+          usedPhase1 = true;
+          break;
+        }
+      }
+      if (!usedPhase1)
+        n.phase2 = true;
+    }
+    if (n.phase2) {
+      for (auto rule : Phase2Rules) {
+        n.subnodes = ApplyRule(n, rule, applied_rules, previous);
+        if (!n.subnodes.empty()) {
+          break;
+        }
       }
     }
   }
@@ -189,6 +203,7 @@ void Solve(ProofNode &n, ProofNode previous,
   }
 
   for (auto &subnode : n.subnodes) {
+    subnode.phase2 = n.phase2;
     Solve(subnode, n, applied_rules);
     assert(subnode.is_closed.has_value());
     if (!subnode.is_closed.value()) {

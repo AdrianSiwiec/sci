@@ -37,6 +37,16 @@ Rule RImpl;
 // {f, -g}
 Rule RNotImpl;
 
+// f = g // f>g
+// -----
+// g = f
+Rule RSym1;
+
+// -(f = g) // f>g
+// -----
+// -(g = f)
+Rule RSym2;
+
 // p = f
 // ----------------
 // F(f/p) u {p = f}
@@ -136,10 +146,17 @@ void MarkRuleAsApplied(Rule r, const FormulaSet &f,
 
 string GetRuleName(Rule r);
 
-const vector<Rule *> AllRules{RNot, RNotImpl, RImpl, nullptr,
-                              // Equality Rules
-                              RNEq1, RNEq2, REqNot, REqImplLeft, REqImplRight,
-                              REqImpl, REqEqLeft, REqEqRight, REqEq, REq,
-                              // Termination Rules
-                              RTerEq, RTerEqNot, RTerEqImpl, RTerEqEq,
-                              RTerSpike};
+const vector<Rule *> Phase1Rules{// Decomposition rules
+                                 RNot, RNotImpl, RImpl,
+                                 // Reduction rules
+                                 RSym1, RSym2, nullptr,
+                                 // Equality Rules
+                                 RNEq1, RNEq2, REqNot, REqImplLeft,
+                                 REqImplRight, REqImpl, REqEqLeft, REqEqRight,
+                                 REqEq, REq};
+
+const vector<Rule *> Phase2Rules{// Reduction rules
+                                 RSym1, RSym2, nullptr,
+                                 // Termination Rules
+                                 RTerEq, RTerEqNot, RTerEqImpl, RTerEqEq,
+                                 RTerSpike};

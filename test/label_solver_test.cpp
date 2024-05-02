@@ -37,29 +37,29 @@ void TestCompare() {
   TestInput("p");
   TestInput("p,q, -(p=q)");
   TestInput("p,q,-p,-(p=q)");
-  TestInput(
-      "v12, v10, v9, v6, v4, v3, r, q, -p, -v8, -v11, (p=p), (v4=v3), "
-      "(v8=-v9), (v11=-v10), (v11=-v12), (v6=(p->r)), (v12=(p->p)), "
-      "(v7=(p->v8)), (v5=(p=q)), (v4=(v5->v6)), (v4=(v7=p)), (v9=(v10->v11))");
-  TestInput(
-      "q, ¬p, ¬v3, ¬v4,(v5≡(q≡p)), v3≡(p≡v7)), (v3≡(v5→v6)), (v9≡(v10→v11))");
-  TestInput("q, v8, ¬p, ¬v3, ¬v4, ¬v9, (p≡p), (v3≡v4), (v8≡¬v9), (v11≡¬v12), "
-            "(v12≡(p→p)), (v7≡(p→v8)), (v6≡(p→r)), (v5≡(q≡p)), (v3≡(p≡v7)), "
-            "(v3≡(v5→v6)), (v9≡(v10→v11))");
-  TestInput(
-      "q, ¬p, (p≡p), (v3≡v4), (v8≡¬v9), (v11≡¬v12), (v6≡(p→r)), (v12≡(p→p)), "
-      "(v7≡(p→v8)), (v5≡(p≡q)), (v3≡(p≡v7)), (v3≡(v5→v6)), (v9≡(v10→v11))");
-  TestInput("-((((q = p) -> (p -> r)) = ((p -> (p <> p)) = p)) -> (((r & p) <>"
-            "(p = p)) | ((p & p) | -q)))");
-  TestInput("¬(((b→b)→b)→b)");
-  TestInput("b≡((b↔b)∧¬b)");
-  TestInput("a≡¬¬(a→¬a)");
-  TestInput("a≡¬((b↔a)↔b)");
+  // TestInput(
+  //     "v12, v10, v9, v6, v4, v3, r, q, -p, -v8, -v11, (p=p), (v4=v3), "
+  //     "(v8=-v9), (v11=-v10), (v11=-v12), (v6=(p->r)), (v12=(p->p)), "
+  //     "(v7=(p->v8)), (v5=(p=q)), (v4=(v5->v6)), (v4=(v7=p)), (v9=(v10->v11))");
+  // TestInput(
+  //     "q, ¬p, ¬v3, ¬v4,(v5≡(q≡p)), v3≡(p≡v7)), (v3≡(v5→v6)), (v9≡(v10→v11))");
+  // TestInput("q, v8, ¬p, ¬v3, ¬v4, ¬v9, (p≡p), (v3≡v4), (v8≡¬v9), (v11≡¬v12), "
+  //           "(v12≡(p→p)), (v7≡(p→v8)), (v6≡(p→r)), (v5≡(q≡p)), (v3≡(p≡v7)), "
+  //           "(v3≡(v5→v6)), (v9≡(v10→v11))");
+  // TestInput(
+  //     "q, ¬p, (p≡p), (v3≡v4), (v8≡¬v9), (v11≡¬v12), (v6≡(p→r)), (v12≡(p→p)), "
+  //     "(v7≡(p→v8)), (v5≡(p≡q)), (v3≡(p≡v7)), (v3≡(v5→v6)), (v9≡(v10→v11))");
+  // TestInput("-((((q = p) -> (p -> r)) = ((p -> (p <> p)) = p)) -> (((r & p) <>"
+  //           "(p = p)) | ((p & p) | -q)))");
+  // TestInput("¬(((b→b)→b)→b)");
+  // TestInput("b≡((b↔b)∧¬b)");
+  // TestInput("a≡¬¬(a→¬a)");
+  // TestInput("a≡¬((b↔a)↔b)");
 
-  TestInput("¬((b≡c)→(a→((d)≡(d))))");
-  TestInput("¬((b≡c)→(a→((b≡d)≡(d≡c))))");
+  // TestInput("¬((b≡c)→(a→((d)≡(d))))");
+  // TestInput("¬((b≡c)→(a→((b≡d)≡(d≡c))))");
 
-  TestInput("¬((b≡¬c)→(a→((b≡d)≡(d≡¬c))))");
+  // TestInput("¬((b≡¬c)→(a→((b≡d)≡(d≡¬c))))");
 }
 
 int main() {

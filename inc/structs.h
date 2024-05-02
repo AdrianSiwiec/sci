@@ -93,6 +93,7 @@ struct ProofNode {
 
   Set root;
   vector<ProofNode> subnodes;
+  bool phase2 = false;
   optional<bool> is_closed = nullopt;
 
   optional<string> rule_used;
