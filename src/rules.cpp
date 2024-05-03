@@ -90,11 +90,12 @@ bool ReplaceAll(Formula &f, const Formula &to_replace,
     return false;
   }
 }
-vector<Set> RFun(const Formula &f, const Set &s) {
+vector<Set> RFun(const Formula &f, const Set &s, bool remove_replaced) {
   if (matchesRFun(f)) {
     const Formula &to_replace = f.Subformula(1);
     const Formula &replace_with = f.Subformula(0);
     vector<Formula> to_return;
+    to_return.reserve(s.Formulas().size());
     const auto &formulas = s.Formulas();
     for (const Formula &formula : formulas) {
       if (f != formula) {
@@ -104,6 +105,8 @@ vector<Set> RFun(const Formula &f, const Set &s) {
           Formula to_modify(formula);
           ReplaceAll(to_modify, to_replace, replace_with);
           to_return.push_back(to_modify);
+          if (!remove_replaced)
+            to_return.push_back(formula);
         }
       } else {
         to_return.push_back(f);

@@ -1,0 +1,2001 @@
+1000
+S
+(a=((((c=b)->a)-> not b)=a))
+S
+ not (( not b=(a=b))-> not a)
+S
+( not b->(b->b))
+S
+((c->a)= not c)
+S
+ not ((a->b)->((b->a)->(c->b)))
+S
+(f=((g=f)=( not (f->g)=d)))
+S
+ not (((b->(a->b))->b)=(a= not b))
+S
+( not (a->a)= not  not a)
+S
+((a=((b=b)=a))=((b=a)->b))
+S
+((a->a)-> not b)
+S
+((b-> not a)->b)
+S
+((b->(a=b))=a)
+S
+(c-> not (( not b=(b=(a->d)))=b))
+S
+ not (a=(a=(a=b)))
+S
+ not (b=(c=c))
+S
+( not a=(a->a))
+S
+((b->a)->( not g=(b=g)))
+S
+( not  not (a-> not  not a)=(a->a))
+S
+(((b=(b->a))->((b=a)=a))->(a->(b=a)))
+S
+ not (((b->b)=a)=a)
+S
+( not c-> not (a=c))
+S
+((c->(a->a))->b)
+S
+(((a-> not  not (a->b))->b)=b)
+S
+( not  not a=((b->b)->((a->b)->b)))
+S
+( not ((f= not g)=g)=f)
+S
+ not ( not (c->a)=c)
+S
+( not ( not  not c->((b->d)=b))=b)
+S
+((((a->(a=a))=b)->(b->a))->((a->a)=b))
+S
+(b= not (a->b))
+S
+ not (( not c= not (b->b))=b)
+S
+(( not (b=a)=b)=b)
+S
+(( not c=(c->b))= not  not ((c->c)=b))
+S
+( not (((a->a)->b)=a)-> not b)
+S
+ not (( not b-> not a)=a)
+S
+(( not b->a)=( not a->( not a->a)))
+S
+((a->((a= not a)->a))=((b->b)=a))
+S
+ not  not ((b=(a->a))-> not (b->a))
+S
+( not ((a->b)->a)=( not  not (b=a)=a))
+S
+ not ( not  not (a=b)=(b= not c))
+S
+(( not a=c)->a)
+S
+(f=( not g=c))
+S
+ not ( not (b->b)->(c=c))
+S
+ not ((b=g)=(f=c))
+S
+( not ( not b=b)->a)
+S
+( not ((a=d)= not ((c=d)=a))=(d->c))
+S
+( not b-> not a)
+S
+(((c=e)->b)->(c=c))
+S
+((a->(b->(a->a)))=(a->b))
+S
+((b->a)=((b->a)->a))
+S
+( not b->(a=b))
+S
+((b->(b->a))=( not ((b->a)->a)->a))
+S
+(b-> not  not  not (b=(a->(a=b))))
+S
+ not ( not (f=e)=b)
+S
+((b->c)=( not b=((c=b)=a)))
+S
+(((( not b=(c->b))=(c=a))=c)-> not a)
+S
+( not (((a->a)-> not a)=c)->a)
+S
+( not ((((a=a)->b)=b)-> not (a=b))=b)
+S
+ not (( not  not c->a)= not (a->c))
+S
+((b=(a-> not a))->b)
+S
+ not  not  not b
+S
+((((b->a)=a)->(b=b))->( not b=b))
+S
+ not ((b=b)=(b=b))
+S
+ not  not ( not (a=(c->c))=(c->(c=c)))
+S
+ not (b=((c->(a->a))=(a= not b)))
+S
+(a-> not  not (a-> not b))
+S
+ not (a-> not  not c)
+S
+( not b->( not (a->b)= not a))
+S
+((a-> not ((a->c)=c))= not a)
+S
+ not ((b=b)->b)
+S
+(d-> not  not (b= not b))
+S
+ not  not (a=( not b->a))
+S
+ not (b->(a->b))
+S
+( not (((c=f)->(e=d))->d)->g)
+S
+ not  not ( not b= not (b=b))
+S
+((a= not b)=(b=(a->c)))
+S
+ not  not  not a
+S
+(a-> not (a-> not a))
+S
+((a=(b->c))->a)
+S
+((b-> not a)=( not b=a))
+S
+ not (a=(b=b))
+S
+ not  not  not ( not  not (b->b)->b)
+S
+( not  not  not (c->c)=c)
+S
+( not  not (b->(c->c))->a)
+S
+ not  not ( not (b->b)=((b=b)->a))
+S
+ not (a=( not b->a))
+S
+((b->(a=c))=(c->b))
+S
+(b=(c= not (b->b)))
+S
+((b->((a->b)->b))-> not ((a=(c->a))->b))
+S
+( not (d=a)->g)
+S
+((b-> not  not  not a)->(c->b))
+S
+ not  not  not  not (b->(b-> not a))
+S
+ not ((g=e)-> not (g=(e->g)))
+S
+((b=b)=(b=a))
+S
+( not (a=b)->(b->b))
+S
+(b-> not ((b->b)=a))
+S
+( not ( not a->a)=b)
+S
+ not (((( not a=a)->b)->b)->(a=(b=a)))
+S
+((((b=b)=a)=b)=(a=a))
+S
+ not  not (b-> not  not (b->a))
+S
+(((a=(a=b))=( not (a->b)=a))->(b->a))
+S
+ not (a->(d=(c=a)))
+S
+((b= not (a=g))->(d=g))
+S
+ not (b=( not (c->a)=((c->(c->b))=b)))
+S
+ not (((b=b)->( not b-> not b))=(a->a))
+S
+(((d->b)= not ( not c->a))=(c=a))
+S
+ not ((( not c->(c= not c))=(a=a))=a)
+S
+ not ((a->c)=(c=a))
+S
+ not ((c->a)->a)
+S
+( not  not (b->a)-> not (b=a))
+S
+((b=b)=((b-> not  not (a=a))=(b=c)))
+S
+(((b->c)=c)-> not a)
+S
+((c-> not c)-> not  not (a=c))
+S
+(( not b-> not  not b)->b)
+S
+ not (b=((b=a)->(a->a)))
+S
+ not ((b->((a=a)=a))->a)
+S
+(((a=(b=b))->a)= not  not (b->a))
+S
+((b=b)=((((b->a)->b)->((a->a)->b))->a))
+S
+ not  not  not  not a
+S
+((b->a)-> not  not ((c->a)=((a->c)->a)))
+S
+ not  not ( not b->(a= not a))
+S
+( not b->( not (d->f)= not g))
+S
+( not (c->(a->a))= not (b->(b->a)))
+S
+ not ( not  not ( not a->b)->(a-> not a))
+S
+(a-> not (c->(e->e)))
+S
+(a= not (a= not (a->b)))
+S
+(((b=((c=(b=b))->c))->(b=(a->c)))=c)
+S
+ not  not ((c= not b)=c)
+S
+ not ( not c=c)
+S
+(c=( not  not b=((c->c)->b)))
+S
+ not ( not (c->b)=b)
+S
+((b=((b->b)=b))= not ((a=a)=b))
+S
+( not (b-> not a)=a)
+S
+((b->(a=b))= not (b-> not (b->b)))
+S
+( not a-> not (a=b))
+S
+ not ( not a->b)
+S
+ not  not (b->b)
+S
+(b= not ( not b= not ( not b=(b=a))))
+S
+ not ( not c->(c->( not a=a)))
+S
+((a->a)->( not  not b->b))
+S
+((c-> not c)-> not c)
+S
+((a=a)->(b=b))
+S
+((a->b)= not (a=c))
+S
+ not  not (a->a)
+S
+( not (((a->a)=b)->a)=a)
+S
+(b->(( not  not b=b)=a))
+S
+ not  not  not a
+S
+( not ((b->b)=b)-> not b)
+S
+( not b=( not a->b))
+S
+ not ( not (a-> not (b->b))->a)
+S
+((c=( not (c->c)->(b=a)))->(b->c))
+S
+ not (b->(c->a))
+S
+(( not a->b)->(a=a))
+S
+((d-> not (b=(f=b)))->e)
+S
+( not c->( not ( not a=a)-> not  not a))
+S
+((( not a->b)= not e)=(((e=f)->f)=b))
+S
+(( not b->(a->( not b->c)))->(b=b))
+S
+(((b=e)=(c->d))=e)
+S
+ not (b-> not ( not d= not  not  not c))
+S
+((b->b)->((b->( not a->b))->(a=a)))
+S
+( not c=(b->a))
+S
+((a->a)->( not a=(b->c)))
+S
+(a= not  not  not (( not  not a->a)->a))
+S
+(((c=b)->(c=(b->a)))=(c->c))
+S
+((c->(f=(c->g)))=d)
+S
+ not  not ((c->a)->(c->b))
+S
+ not (b->((b=b)->a))
+S
+((a->b)= not  not  not  not  not (b->a))
+S
+((b-> not b)= not  not  not ((b=c)=a))
+S
+( not b= not (a=a))
+S
+ not (a->(b=( not (a=(c=b))->a)))
+S
+(( not ((c=c)=a)=(a->(d=c)))=d)
+S
+( not (c->a)= not (b= not b))
+S
+ not  not (c=a)
+S
+(((f=g)->e)= not  not (e->f))
+S
+(((b->a)= not  not b)=(( not b->c)->c))
+S
+ not  not (((a->b)->(b->b))=(a->a))
+S
+((( not (a=b)=b)->(a=(a->a)))->(b->a))
+S
+(a->((a->a)->c))
+S
+ not ((a= not (a-> not a))=a)
+S
+ not (((a->b)-> not  not a)->((a->b)->a))
+S
+((a=( not b->c))=a)
+S
+ not ((b->a)=b)
+S
+(((a=e)= not e)= not  not (c=(f->e)))
+S
+(b->(( not g-> not f)->( not  not f->f)))
+S
+ not ( not b->b)
+S
+(a= not  not (b=a))
+S
+ not  not (((a=a)->c)=d)
+S
+ not (a= not (a->a))
+S
+ not ((b->(a=( not b=b)))=(b->b))
+S
+ not ((a->(a=(a=a)))=(b=a))
+S
+(a-> not ((b=a)=(a->b)))
+S
+((a=((d= not (d=c))-> not  not a))=c)
+S
+ not ((a=a)= not a)
+S
+((a=(a=a))->b)
+S
+(a=((b=b)->c))
+S
+((a=(((b=a)->b)->a))=((b-> not a)->b))
+S
+ not (a=(a->b))
+S
+((a->(a->((b=a)->b)))=((a=b)= not a))
+S
+((a->a)=(b=a))
+S
+((a->e)= not (a=(d=d)))
+S
+ not  not (((a=a)-> not b)=(b=b))
+S
+((b=b)-> not  not (a->c))
+S
+( not  not (b->b)->(c=b))
+S
+( not  not (a= not  not (a=b))->a)
+S
+( not c->(b=c))
+S
+ not ((a=(b=a))= not a)
+S
+ not  not ((a->a)->(a->(b= not b)))
+S
+ not  not  not (a-> not ((b->b)=b))
+S
+(c=((c=a)->c))
+S
+((c=(b->c))=(b=b))
+S
+ not ((a=b)->b)
+S
+((b->c)=( not (a->(c-> not (a->c)))=b))
+S
+ not (( not a->f)=(e=(e->b)))
+S
+((g=( not a=(c->b)))->((a=g)=a))
+S
+( not (a->a)->d)
+S
+((c->(a=c))=((d-> not a)= not b))
+S
+(( not a->(a->a))-> not a)
+S
+((b= not ((a->b)=a))->(b->((b->b)=a)))
+S
+((a= not (a=a))->a)
+S
+(((e= not (b=(d=(a=c))))=b)=g)
+S
+ not (((b->((b->b)=c))=(b=(b->b)))->c)
+S
+(b=(a->(a=a)))
+S
+( not (c=c)-> not  not  not c)
+S
+((b->( not (a->(b=a))->a))= not a)
+S
+ not ( not  not b=( not a=a))
+S
+(((b=a)=(b->b))=(b= not  not b))
+S
+(( not ( not d=(c->b))=a)-> not c)
+S
+ not ( not ((a->(b=b))->a)->(b->a))
+S
+(a= not ( not a= not  not (a=b)))
+S
+((e-> not a)=(( not d=g)->((e=f)=c)))
+S
+((b->a)->(c= not a))
+S
+(((a=b)-> not  not a)= not  not b)
+S
+ not  not (a=( not (a->a)->a))
+S
+((a=a)=(b=a))
+S
+(( not (b=(b->b))->(a->b))->(c=b))
+S
+(((b->a)=b)->(a->a))
+S
+((a=b)->(b=b))
+S
+(( not (b->a)-> not (b->(a->c)))= not c)
+S
+ not ((c=a)=b)
+S
+( not  not ((a=(b->a))->a)-> not b)
+S
+((a-> not b)=((a-> not (c=b))-> not a))
+S
+ not ( not a=b)
+S
+( not b->( not a=(b=a)))
+S
+ not ((a=b)-> not b)
+S
+(b->((a->c)=a))
+S
+(a-> not  not  not (b-> not (b=a)))
+S
+ not ((a->b)->((a->b)=a))
+S
+( not ((a->b)= not ( not a->(a=b)))=a)
+S
+ not ((c=d)=((a=b)=a))
+S
+ not  not (((b= not b)->b)=(a= not b))
+S
+(f-> not (((d=f)=c)=(e=g)))
+S
+ not (((a->a)->(d->(c=d)))->(c->c))
+S
+((a->a)->(c-> not (c=c)))
+S
+((b=a)->(a->b))
+S
+(((b=b)=a)-> not  not (a=a))
+S
+( not (b=(b=(b=a)))->(b->a))
+S
+((a= not c)=( not b= not a))
+S
+( not a= not  not ((b=b)->a))
+S
+ not (b->(b-> not  not b))
+S
+ not  not (( not b->a)=(b->(b=a)))
+S
+ not (g->(c->f))
+S
+((a->a)->(a->(a->b)))
+S
+((b->(a->c))=(a->c))
+S
+((a->b)=((b->a)= not a))
+S
+((g->b)=( not e=(e->(d->c))))
+S
+(( not a=b)=a)
+S
+ not  not ( not c->( not  not c->(d->c)))
+S
+ not ((a= not (a->a))= not ( not a->a))
+S
+ not  not (g=c)
+S
+ not (( not  not b=a)=(a=a))
+S
+ not ( not  not (b=(b->b))=a)
+S
+( not ( not (a=(b->a))=a)->b)
+S
+( not b-> not b)
+S
+(a->(((b=b)=b)=b))
+S
+ not  not  not a
+S
+((b-> not b)=(b->c))
+S
+((a->b)= not b)
+S
+(f-> not  not (c->d))
+S
+(( not ( not b=(a=a))=a)= not a)
+S
+( not a-> not a)
+S
+(b=( not (a-> not (a=a))->a))
+S
+( not (( not b->g)=e)->g)
+S
+ not  not ((a=b)->(b->(b->b)))
+S
+ not ((b=( not (b->c)=(a->b)))=(b->c))
+S
+ not (( not (a->a)=(a->b))->(b=a))
+S
+ not ((c->a)= not (b=a))
+S
+((a-> not a)=(b->b))
+S
+ not (a->((b=b)=b))
+S
+(c-> not (b-> not  not ( not d=a)))
+S
+(b->(a-> not b))
+S
+((c=c)-> not  not ((b->a)= not a))
+S
+ not  not  not  not  not c
+S
+ not ( not (b= not b)->a)
+S
+((a->a)= not a)
+S
+ not ( not ((((a=b)=(a=c))=a)=c)=b)
+S
+((b=(b=a))= not (b=b))
+S
+(( not  not c->a)= not ((a->a)=c))
+S
+( not d->( not a->a))
+S
+( not  not a-> not  not (b=b))
+S
+( not (a=a)-> not a)
+S
+( not a->(b->a))
+S
+( not (b-> not a)->c)
+S
+(( not c= not ((b->c)->a))-> not (b->b))
+S
+(((b->b)=b)=((b->(b=b))=a))
+S
+ not  not ( not ((a->b)=b)->(a=b))
+S
+(((a=b)=((a->a)=a))=(((b=a)=b)->a))
+S
+ not  not  not a
+S
+( not (b=a)=b)
+S
+ not  not ((a-> not b)-> not a)
+S
+ not (((b->b)=b)=b)
+S
+(a=((a=b)=b))
+S
+ not ( not ( not f=b)=e)
+S
+ not  not ( not b= not (a->(b->a)))
+S
+(( not a-> not a)->((a->a)=b))
+S
+ not ((a= not a)->(a->b))
+S
+((a->(a=b))=(((a-> not a)->a)=b))
+S
+( not b=(a=(b=b)))
+S
+( not b= not  not (a->(b=a)))
+S
+ not ((b=c)->(a->((c->b)=c)))
+S
+(((b=(c->c))->(b=(a=a)))=((a->c)=b))
+S
+(( not a=(a-> not  not (b= not b)))=b)
+S
+((a=a)->(a=(b->(b=b))))
+S
+ not  not ( not  not a=a)
+S
+((c->g)= not (b=d))
+S
+( not (f=e)= not  not (( not g=f)=g))
+S
+((a-> not ( not b->a))=a)
+S
+(a=(((b=d)=d)=a))
+S
+ not  not (((b->b)=(a= not b))->(a->b))
+S
+ not (a=((c=a)->a))
+S
+ not (( not a=b)->(d->((a=g)-> not a)))
+S
+(c=(a= not  not a))
+S
+ not (g->( not b->e))
+S
+ not (b-> not (b->(a->b)))
+S
+((c= not (a=a))=a)
+S
+((a->((a->a)=a))->((a=a)-> not (a->b)))
+S
+( not (a->(a=b))=(a=b))
+S
+ not ( not  not  not  not b= not a)
+S
+ not (((c=c)=c)->(c=a))
+S
+((b->((c->c)->b))=b)
+S
+ not  not  not a
+S
+((c-> not e)=g)
+S
+((a=a)= not (b->b))
+S
+((b-> not (b->a))=(a= not (a->a)))
+S
+((b=a)= not  not a)
+S
+( not  not c->b)
+S
+((a->(b=a))-> not b)
+S
+( not (((c->a)=b)=b)=(c->a))
+S
+((((a->a)-> not a)= not a)->((b=b)=b))
+S
+((b= not b)=a)
+S
+((a=a)->((a=b)=((a->a)=(a->a))))
+S
+ not  not ((a=a)= not  not (b=b))
+S
+(((g->d)->(e=(g->e)))->(d->g))
+S
+(a->(((b=a)=b)=a))
+S
+ not ((e= not (d=d))=e)
+S
+( not (a=a)-> not a)
+S
+ not  not  not  not  not  not  not (a->b)
+S
+ not ((b-> not (a->b))=b)
+S
+(( not (b=a)=a)->b)
+S
+( not ((a->c)= not d)->(((d->b)=d)->d))
+S
+( not (c=a)->(a=((c->(a=c))=c)))
+S
+((a->a)=((b=(a->(a-> not b)))=a))
+S
+ not (a-> not b)
+S
+ not ( not  not  not  not a=b)
+S
+ not ((b=(c=b))=a)
+S
+((e->(g=e))=((c=e)=(b->e)))
+S
+((c=(c->b))->((b=b)->(b->a)))
+S
+(b=(b->(b->b)))
+S
+( not (b->((a=b)->a))=((a->b)->b))
+S
+ not  not (a->( not (b=(b->b))->(a=c)))
+S
+(c=(((b=a)= not b)=b))
+S
+( not a->((b=a)=((c=b)=d)))
+S
+(( not b->a)= not b)
+S
+((a=b)=(((b=a)-> not a)=b))
+S
+ not  not (a->(b=((b->b)->b)))
+S
+(b-> not (b=a))
+S
+ not  not  not ( not d=((c->a)->(a->a)))
+S
+ not  not (((a=b)->(b=(a= not b)))=b)
+S
+(a-> not  not  not a)
+S
+ not ( not  not ( not c=a)->c)
+S
+ not ((a->a)->a)
+S
+( not (b->(a-> not  not a))->b)
+S
+( not (a=b)->( not a=b))
+S
+ not  not  not (a=a)
+S
+ not ( not  not ((c->c)->d)= not a)
+S
+( not a=(b=a))
+S
+((a->a)->(b->(b= not b)))
+S
+ not ( not b->(a= not  not a))
+S
+( not (a=a)= not a)
+S
+(a->(b= not ((b=a)-> not b)))
+S
+(( not a=(a=a))->(c->c))
+S
+ not (( not ( not d=d)=((c=b)=b))=b)
+S
+(((a=( not a=c))-> not c)=c)
+S
+((b=(b= not a))= not (a=b))
+S
+ not ((a=a)->(a->b))
+S
+((c->(c=(b->a)))->f)
+S
+ not ( not  not ((c=b)=d)->(d->a))
+S
+(a=(a->( not (b->a)= not (b-> not a))))
+S
+ not ((a->(a=a))-> not (((b->b)->b)=a))
+S
+((b->c)-> not  not ((b=b)=a))
+S
+((a->c)->(c-> not (b->a)))
+S
+((a->a)=(( not b=b)->(a->(a=b))))
+S
+((b=b)=(( not b->c)=c))
+S
+ not (b=( not b=b))
+S
+ not (a-> not  not (a->(a=a)))
+S
+ not  not (a->(b=(((b=a)=c)->a)))
+S
+ not  not ( not  not a= not (a->a))
+S
+(b-> not ((a->b)->(b=a)))
+S
+ not ( not c->((c->a)->c))
+S
+ not ((a->(b=b))->( not b->(a->b)))
+S
+(((a-> not a)=(c->c))=(c->a))
+S
+((b=(a->a))=b)
+S
+(a->(((c->f)->(a->d))= not d))
+S
+((b=(a->(a->b)))->(a-> not b))
+S
+ not (( not b=a)->b)
+S
+ not (b=(a= not (b->(a=(a->b)))))
+S
+((c->(b=(a->c)))= not (c->c))
+S
+ not ((b= not b)-> not b)
+S
+( not  not  not a=(a=a))
+S
+ not ( not a->(a=a))
+S
+(a=(( not b=a)= not ( not a->b)))
+S
+(a-> not ((b=b)=((b->a)=(b->(b=a)))))
+S
+ not (a->( not a=(a->a)))
+S
+ not ( not (a=b)-> not  not b)
+S
+((b->b)->(( not ((a=a)->a)=a)=a))
+S
+(((a=a)=(a=b))= not (b->(b->(a=b))))
+S
+(c-> not ((b->a)->c))
+S
+ not  not ( not b= not b)
+S
+( not (( not b= not b)=c)= not c)
+S
+ not (((a->(b->b))=(a->c))->a)
+S
+(( not c=(a->c))->((b->a)=a))
+S
+ not ((b->b)->( not (b=b)->b))
+S
+(((b->c)->a)->(c->(c->(c->a))))
+S
+((( not b->(b=a))=c)->c)
+S
+ not ( not (a->((a->a)->(d=a)))=(b=b))
+S
+ not (b=((((b->b)->a)-> not a)=(b->b)))
+S
+((a=b)=(((b=a)=b)->(b-> not (b=a))))
+S
+( not b=(((a->(b->a))=a)->(b->(b=b))))
+S
+( not (((b=c)=((b->b)->a))->c)=(c=b))
+S
+(a=((a->a)=b))
+S
+ not  not ((b->(b=a))=b)
+S
+(((c=d)->d)= not  not (c=d))
+S
+((a->(c=b))=a)
+S
+ not (c->(a->b))
+S
+(( not (a->b)->b)=a)
+S
+(((b->a)->b)=((c->a)=(a=a)))
+S
+ not ((a=a)->(a=b))
+S
+((( not  not a=a)=b)=(b=a))
+S
+(( not b=b)->(a->b))
+S
+((((a->b)=b)=a)->( not (a=(b->b))->a))
+S
+((b->b)-> not  not  not ( not (b=a)->a))
+S
+(b->(c= not c))
+S
+(d= not (c->b))
+S
+((a=b)-> not a)
+S
+(((b=a)->a)->( not  not (a=b)=b))
+S
+((b=a)=(a-> not a))
+S
+ not ( not  not e->(a->((a->f)=(d=c))))
+S
+(( not b->a)=a)
+S
+((c=b)=( not a=( not b=c)))
+S
+((a->(a=(b=b)))->(a=b))
+S
+((f=d)->( not f->(b->c)))
+S
+(b->(( not a->b)->(b=a)))
+S
+( not (e=a)=(g=(e= not c)))
+S
+((b->c)= not  not b)
+S
+(a=(a->(b->a)))
+S
+ not ((a=(a->(b->a)))->((a=b)->b))
+S
+( not (b=(c->((a=c)->b)))-> not b)
+S
+ not ( not b->(b=(b->(b=b))))
+S
+(a= not  not b)
+S
+( not a= not b)
+S
+((a=b)= not a)
+S
+( not a=(a=b))
+S
+( not b=(b->(a->b)))
+S
+(( not c->(c=a))->b)
+S
+( not a->((b=(a=b))=b))
+S
+ not ((a->b)-> not (c=a))
+S
+(a=(b-> not b))
+S
+(a= not (a=b))
+S
+( not (c->b)-> not  not  not (a->(c=a)))
+S
+((a=((b=a)->b))=(b=b))
+S
+(((b=b)=(b=a))->b)
+S
+((c= not ( not b=(b=c)))-> not  not c)
+S
+((e->f)=(((f->a)->(f->g))-> not f))
+S
+ not  not (( not c->(a->(c=a)))->(c=c))
+S
+ not ((b=a)->((a->a)= not  not (b->a)))
+S
+((b=a)->( not b=(a=a)))
+S
+((a-> not a)=(a=((b=b)->b)))
+S
+( not (c=e)=(e=c))
+S
+((b->b)->(( not  not b= not b)=(b->b)))
+S
+ not  not  not  not ((a=a)->a)
+S
+(((a=a)->a)=((b->a)=a))
+S
+( not (d=c)->( not (f->b)->b))
+S
+ not ((c=a)->a)
+S
+ not  not  not (((d->b)->c)=b)
+S
+ not ((c= not  not a)->((c->b)->b))
+S
+(((c-> not  not d)-> not (a-> not b))->c)
+S
+(( not  not a->( not a-> not c))=(c=b))
+S
+ not ((a-> not b)=(b=b))
+S
+((b->(a->a))->(b->b))
+S
+ not ((((b=b)=a)->b)-> not  not b)
+S
+ not (((a=(b=b))->(b-> not a))->b)
+S
+((b->a)->(e->(e= not  not (d=(g->g)))))
+S
+ not ( not (b-> not a)=a)
+S
+((d=c)->(e=(((g=(a=f))=d)= not b)))
+S
+ not  not  not  not ((b->b)-> not  not a)
+S
+((a-> not a)->((a=a)=b))
+S
+((c=a)->(((b->a)->(c->c))->(b->b)))
+S
+(((b=b)->a)=(b=b))
+S
+(((b->a)->b)=( not a=(a->(b=b))))
+S
+(b-> not  not b)
+S
+((a->b)=(a->a))
+S
+(( not e=f)=(g->f))
+S
+ not  not  not b
+S
+ not (c->(a=c))
+S
+(( not  not  not (c->c)->b)-> not c)
+S
+(b=(b= not ( not b->a)))
+S
+ not  not  not (b->(a->a))
+S
+(a=(a->( not a=a)))
+S
+((b->d)->(a->a))
+S
+((((a=b)=a)= not a)->b)
+S
+(b=(b= not a))
+S
+( not  not (a->d)->( not (a=a)->a))
+S
+( not (b->a)-> not (a=(b->a)))
+S
+(b-> not (c=(a->b)))
+S
+((a->(a->a))->c)
+S
+ not ((b-> not c)-> not (c= not a))
+S
+( not (c=d)=d)
+S
+ not  not (c=c)
+S
+ not (b-> not (b->a))
+S
+ not ( not c= not  not  not  not b)
+S
+ not  not ((b->b)-> not b)
+S
+( not  not (a->c)=(c=b))
+S
+((a-> not a)= not (a->b))
+S
+( not b-> not (b->(a=(b->a))))
+S
+ not ( not a=((a->a)=((a=b)->b)))
+S
+( not  not  not  not (c->c)->a)
+S
+((b-> not b)->a)
+S
+ not  not (b->b)
+S
+(( not b=a)->c)
+S
+( not a= not a)
+S
+(b= not (((a=b)->b)-> not  not (b->a)))
+S
+ not (a=(b=(( not (a=a)=b)->b)))
+S
+((a=a)->(((b->a)->a)->(a->a)))
+S
+ not ( not b->(b=(b-> not a)))
+S
+ not  not  not ( not c-> not (f=a))
+S
+(b->((((a->b)=b)=( not b=a))->a))
+S
+ not ( not (a=a)=(a->a))
+S
+ not  not  not ((a=b)=((a=a)->b))
+S
+(((b=a)=c)=( not (b=b)=a))
+S
+(( not a->b)=(c=(c=b)))
+S
+(b-> not ((b->a)=a))
+S
+ not ((((b=(a=b))->(a=b))->a)= not a)
+S
+ not ( not (a=b)=(b-> not b))
+S
+(a=( not  not b=(b-> not  not (a->a))))
+S
+ not (b->(a=(b=a)))
+S
+ not (e= not  not  not ( not (b->c)->a))
+S
+((a->b)-> not (b=(a->(a=b))))
+S
+(b->(((b->(b=b))= not a)=b))
+S
+((c=c)=(c->(a->(c->c))))
+S
+( not a->((a->b)->( not b=a)))
+S
+( not b->((b= not (b->a))->a))
+S
+(c=(((a->c)= not b)=b))
+S
+(((c->b)=c)->(a=c))
+S
+ not (c-> not  not ( not a=(a= not b)))
+S
+ not ( not  not b=(b->b))
+S
+( not (c->((a=b)=b))= not d)
+S
+ not ( not b=(b->a))
+S
+ not ((((a->c)=c)-> not a)=b)
+S
+( not  not b=b)
+S
+(( not b=(a->a))->a)
+S
+((c=( not b=(d=c)))=d)
+S
+( not e=(a=(b=(((d=b)=(f=b))=f))))
+S
+((c->c)-> not (b=a))
+S
+(a-> not (d=d))
+S
+ not ( not ((a->b)=( not a=b))->(c=c))
+S
+(((a->b)->a)=((a=b)->b))
+S
+ not ((a=a)=a)
+S
+( not (d= not  not ( not d=c))->a)
+S
+ not (c=( not c=(a->c)))
+S
+(( not a=b)=(a->a))
+S
+ not (( not (a->b)= not f)=d)
+S
+ not (( not b->b)= not  not b)
+S
+((b-> not (d=f))=(g->(b=(a->f))))
+S
+ not ( not (a->a)->(b=(a=( not a->b))))
+S
+( not ((b=c)-> not  not a)->a)
+S
+ not (( not b-> not  not a)=a)
+S
+( not ((a->(b=(a=c)))->b)->(b->(c->c)))
+S
+ not (b-> not b)
+S
+(a=(( not b=(a->(a=b)))->a))
+S
+ not ( not a= not (d=b))
+S
+((b->c)->((b=c)=a))
+S
+(b->( not (b=( not c=b))=b))
+S
+ not ( not a= not ( not ((b->a)->b)=b))
+S
+ not ((b= not ((a->a)->b))=(b=(b=a)))
+S
+ not ( not (a=( not  not b->b))=(a->b))
+S
+ not ( not (((a->a)->b)->(b=a))->(a->b))
+S
+ not  not ( not (c=b)->(c=(a->a)))
+S
+((a->(a=b))= not a)
+S
+( not  not b->( not ((a=b)->a)=b))
+S
+((a=b)= not (a=a))
+S
+ not  not (a=a)
+S
+( not a->( not (b= not b)->(b=a)))
+S
+( not (a->c)-> not ((a->c)->b))
+S
+( not (a->b)->(a=b))
+S
+ not ( not (d= not  not a)->(d=d))
+S
+ not ( not  not c-> not (a=a))
+S
+(((a->( not a=(c->b)))=c)-> not c)
+S
+(( not b->a)=((a->b)= not  not b))
+S
+ not ((e=b)->g)
+S
+((((a=a)->a)->b)=(b->(b= not b)))
+S
+((b=(b->a))->( not  not (b-> not c)=b))
+S
+((( not  not b->b)->(b->a))= not a)
+S
+( not ((b->(a->(b->a)))=c)->b)
+S
+(((a->c)=(b=b))=c)
+S
+(( not (b->a)->b)->(a=b))
+S
+(a=( not (a->a)=(a->a)))
+S
+(b=((b=b)->(( not b= not b)=b)))
+S
+(((c=e)->b)->(((c->a)=(f->f))=d))
+S
+((b=((a-> not b)->b))-> not (a->b))
+S
+((a->((b->(b=b))= not (b->b)))=(b->b))
+S
+(c=((c=b)=(((c->b)->a)= not a)))
+S
+(( not (a=b)->((b->a)=a))=a)
+S
+((((b->a)->a)=a)->(b->(a=(b->a))))
+S
+(b= not (a->b))
+S
+ not (( not a=(a->(a=a)))->b)
+S
+ not  not (a->((b=b)->b))
+S
+(b=(a=(a= not b)))
+S
+( not ((b-> not (a->b))=(b=a))=b)
+S
+((b->a)-> not a)
+S
+ not  not ( not ((a=a)->a)->( not a->a))
+S
+( not b->((a->b)->((b=a)=(a=a))))
+S
+ not (((b=b)=(b->b))->(b=a))
+S
+(((a->b)-> not b)->a)
+S
+((((b= not  not b)->(a->a))=a)-> not a)
+S
+( not (a=a)=(b-> not a))
+S
+ not  not (((a=b)=b)= not  not a)
+S
+(c->( not  not (c->a)-> not  not b))
+S
+ not (((d-> not  not a)=a)=(a->c))
+S
+(((b=a)->c)=(a=(((c->a)->c)=(b=a))))
+S
+( not (b->d)->(b->b))
+S
+((((a=(b=a))=(b->b))->b)->(a-> not a))
+S
+((a->a)->(a=a))
+S
+ not ( not d->((a=d)->(c->b)))
+S
+ not (((d->b)=c)->g)
+S
+(a->((b->c)=(b=c)))
+S
+ not ( not  not  not (a->c)=b)
+S
+((a->b)=(((a->a)-> not b)=a))
+S
+( not  not ( not f->f)=(f->a))
+S
+(c->(c=(c->a)))
+S
+(( not d->a)->c)
+S
+((c=b)->(c->b))
+S
+( not  not (b=a)=a)
+S
+ not ((b->b)-> not (a->b))
+S
+( not (a->(a=a))->b)
+S
+ not (( not (a=a)->a)=(a->b))
+S
+ not (((b=a)=b)=a)
+S
+(((a->a)=(c=a))= not a)
+S
+(((b->(a=a))->b)= not b)
+S
+(a->(( not a=(d-> not  not c))=a))
+S
+(((a=(a=a))=b)->(b=(a=a)))
+S
+(((a=(b=c))=( not (c->(a=b))=c))->b)
+S
+( not  not ( not e=((d->e)->f))->e)
+S
+((a=a)=( not  not (a=(b=a))=(b->a)))
+S
+ not ((b=a)=((c->b)->(b=c)))
+S
+ not (((a= not f)=b)->e)
+S
+((c=(b=a))->c)
+S
+( not  not  not a=d)
+S
+((a=( not (c=c)=c))->b)
+S
+ not (( not  not ( not a= not a)=b)->a)
+S
+(((a->b)=a)->((a->((b=a)->(a->a)))->b))
+S
+((b=b)=( not b->b))
+S
+( not  not (a=b)->b)
+S
+(a->((c->c)->(a=b)))
+S
+ not (b= not (b=a))
+S
+ not ((c-> not c)->b)
+S
+ not ( not ((a=a)= not b)->(a=b))
+S
+( not b->((a=b)=b))
+S
+( not (b=b)->c)
+S
+(((c=a)=d)->(a->( not b->a)))
+S
+((b=(b=a))->(a=b))
+S
+ not  not ((b=a)->(b=c))
+S
+(((b=b)->b)=b)
+S
+ not (((a->b)=b)=a)
+S
+(( not (((d=c)=f)=e)=b)-> not (a->b))
+S
+ not  not (((a->a)-> not d)->(g=(a=f)))
+S
+( not b-> not  not (a->(b=c)))
+S
+ not ( not (f=(b=e))-> not (f->(a=e)))
+S
+(( not (c= not (b->a))=(c=c))= not c)
+S
+ not (b= not ((b=b)=a))
+S
+( not ( not a=a)->( not b=a))
+S
+ not (c-> not  not (b->b))
+S
+ not ( not b=(b->(a->b)))
+S
+(( not (c=c)->c)= not ((b=a)=(b=b)))
+S
+(( not  not  not a=b)-> not (b-> not b))
+S
+((b=a)= not (b->(a= not ( not b=a))))
+S
+(((a->b)->b)=a)
+S
+(b= not  not  not (a=(b->(b=b))))
+S
+( not ( not e-> not a)->(a->e))
+S
+ not ((c=d)-> not b)
+S
+((d-> not a)->(g-> not a))
+S
+ not (a-> not a)
+S
+((b=b)->(( not b->(b= not a))->b))
+S
+( not a->(b->((a=b)->((b->a)=b))))
+S
+( not (c->a)-> not  not ((c=a)=a))
+S
+ not ((( not (b->b)=b)-> not a)->(a=b))
+S
+ not  not  not ((c=a)->(((a=a)=c)->a))
+S
+(b= not  not ((b=a)=b))
+S
+ not (b->(e->b))
+S
+((a=b)-> not (a->(a->(b->a))))
+S
+ not  not (c->(( not (a=a)=c)=(a->c)))
+S
+((b->(a=b))=(b=b))
+S
+(((c=b)->b)=c)
+S
+ not  not (((b=(b=a))=b)=(b=b))
+S
+( not c->(c=(f=(b->e))))
+S
+ not ((b=a)->a)
+S
+ not  not ((b=b)->a)
+S
+( not a->( not  not ((b=a)=b)=a))
+S
+((c=b)-> not (( not a->c)->( not b->a)))
+S
+ not (a-> not (a-> not  not ((b=b)=a)))
+S
+ not ( not  not ((b->b)->a)=a)
+S
+(a-> not ((b->a)=(b->(b->a))))
+S
+ not ((b=((a=b)-> not a))=a)
+S
+(( not (b=a)=a)->( not  not a->a))
+S
+((c->b)->( not (c= not a)->(a=b)))
+S
+(b-> not  not  not (a=b))
+S
+(((a=b)->a)= not b)
+S
+ not  not  not  not  not (b->b)
+S
+(a-> not  not b)
+S
+((a->(c=a))=(( not a->a)->b))
+S
+ not  not ((d->b)=((b->d)=(e=(g->e))))
+S
+(a=(c->(b=b)))
+S
+( not b-> not (a-> not b))
+S
+ not  not (a->( not (a->(a=b))->(a->a)))
+S
+(a->(b-> not a))
+S
+(c=(b-> not c))
+S
+(((b->b)=((b=a)=(b=b)))->b)
+S
+(((b=(a->a))-> not a)=(a->(a->b)))
+S
+(((((c=( not b=a))=c)->c)=a)=(c->c))
+S
+((d-> not a)=((d->b)= not  not  not c))
+S
+ not ((b=b)=( not b=(b->b)))
+S
+(( not (a=a)->b)-> not (b-> not b))
+S
+(((c= not (c->a))->(c=c))=b)
+S
+((( not c->a)=a)=(a->a))
+S
+((a-> not (a=b))= not a)
+S
+ not ((c-> not c)=( not c=((a=b)=c)))
+S
+ not ((( not a=(c->c))->b)= not (b=a))
+S
+ not  not ((c-> not a)=(b=c))
+S
+((c=( not a=(b->b)))->b)
+S
+( not (a->(b=a))->a)
+S
+((b-> not (b->b))-> not a)
+S
+((a= not a)-> not a)
+S
+(((c=c)=c)= not  not (b->a))
+S
+((a->a)->(a=b))
+S
+( not  not ( not (b=a)->a)=c)
+S
+(((b->b)=((a=b)=b))->(b=b))
+S
+ not  not ( not a->a)
+S
+( not ((a->f)=g)= not (c->f))
+S
+ not ( not  not c=((b=c)->c))
+S
+(( not b=b)=(a= not b))
+S
+(( not ( not a->e)=c)->((b=b)=b))
+S
+( not (a=a)=(a->a))
+S
+ not ((a=b)->(a->a))
+S
+ not  not (b->((b=a)->a))
+S
+(a->((b=a)->a))
+S
+(( not b->b)->( not  not a=a))
+S
+ not (d= not (( not b->a)->g))
+S
+((( not c=b)=(a=g))->(g->b))
+S
+((b-> not (b=b))=( not a=b))
+S
+((c->b)= not  not  not ((c->a)=c))
+S
+ not ( not (a=b)=(a->a))
+S
+((a->c)-> not  not  not (c->c))
+S
+ not ( not (a=((b=b)-> not a))->b)
+S
+ not  not ( not (b->a)=b)
+S
+ not ( not a->( not (a->b)= not (b=b)))
+S
+((b->a)= not (b=a))
+S
+(((a->b)= not (a=a))-> not ( not b->a))
+S
+( not (b= not a)-> not  not ( not a=b))
+S
+((c-> not  not d)=(d=(c=(g=e))))
+S
+ not ((a->a)=(a=(b=b)))
+S
+ not  not  not ((d->d)=(a=a))
+S
+(a=(a=(a=((b->c)->c))))
+S
+(( not b->(c=c))=((c=(b->b))->b))
+S
+ not ( not a=((b=b)->(b->b)))
+S
+ not  not (b=( not c->d))
+S
+( not c-> not a)
+S
+ not ( not (c= not b)->(c=c))
+S
+ not ( not a->(((a=(a=b))=b)= not a))
+S
+((c=(e->c))->( not c= not e))
+S
+(a->(a-> not (b=a)))
+S
+(c=(a-> not  not (b->b)))
+S
+(( not a=a)->( not a=a))
+S
+( not  not ((c->d)->f)=c)
+S
+ not ( not (b=(a=b))->((d->(b->b))->c))
+S
+( not  not  not (b=b)=a)
+S
+((a= not (b->a))->((b->b)->(b=b)))
+S
+((b=b)=(c=b))
+S
+(( not  not (b->b)->b)->(b->b))
+S
+( not (b=a)->b)
+S
+ not  not  not ((b->a)->(a->b))
+S
+ not ( not ((b=(a=(a=b)))=(b=a))=a)
+S
+(( not b->b)= not a)
+S
+(( not ((b=c)->b)=b)->c)
+S
+ not (b->((d=d)->(d=(b=d))))
+S
+( not a-> not  not ((a=b)->(a->a)))
+S
+(b=(a=(a->a)))
+S
+((a->((b=b)-> not (b->(a=a))))->b)
+S
+(b= not (((a=(a=(b=a)))->a)=a))
+S
+((c=a)=( not (b->c)->((a=c)->(b->b))))
+S
+ not ( not ( not (c->d)=(c=b))->d)
+S
+(( not  not b-> not b)->(((b=b)->b)=b))
+S
+(a=(c=(c->b)))
+S
+ not ((a=a)-> not (b=b))
+S
+((a=(a=b))=(b->a))
+S
+( not (b->b)->(a=(b=(b->b))))
+S
+((c-> not (c=(a=(c->a))))=( not a->c))
+S
+( not  not (b->b)=((b=a)=b))
+S
+ not (c->((c->c)->((a=a)->c)))
+S
+ not  not (( not a= not b)-> not b)
+S
+((b=b)-> not  not b)
+S
+ not ((a=a)= not a)
+S
+ not  not  not (a-> not (a=(b=(a=b))))
+S
+(a= not  not ((a= not (a->b))=a))
+S
+( not a->(b->b))
+S
+(b= not  not a)
+S
+ not  not (a->c)
+S
+((b=b)= not ((b->c)= not ((c=a)=b)))
+S
+ not ( not a=((b->b)=b))
+S
+( not (b=b)->b)
+S
+((a=((b->b)->b))= not  not a)
+S
+ not (((a=(a= not b))=a)-> not a)
+S
+ not ((b->a)=b)
+S
+ not ( not a->(a=a))
+S
+ not  not  not  not  not  not a
+S
+ not ((a=a)->e)
+S
+ not (g=(f=f))
+S
+( not b= not (a=(a= not c)))
+S
+(a=(b=(b->b)))
+S
+(c=( not c=(b=a)))
+S
+((( not c->a)=a)=(b=c))
+S
+ not ( not (b= not b)= not b)
+S
+( not (b->(a->(a=a)))->b)
+S
+( not c= not (( not d->b)= not c))
+S
+((c->(b=b))->( not  not  not  not c=b))
+S
+(a->((b->a)->(((a->b)->a)->a)))
+S
+((g-> not (f->d))->((e->a)=(g=(f->g))))
+S
+( not (a->a)-> not b)
+S
+((a=a)-> not  not a)
+S
+(c-> not ( not a->a))
+S
+ not  not  not  not ((b->(f= not g))=b)
+S
+ not (c=(c=c))
+S
+(b->((a= not a)=(( not a=a)->b)))
+S
+ not ( not ((c->(a=b))->( not c=b))->b)
+S
+((b->c)=((b= not c)->(c=c)))
+S
+(((a->a)->a)=(b->( not b=a)))
+S
+((a=b)=(( not  not b=b)=(a->(a=b))))
+S
+ not  not ((e->(a=f))=( not e=d))
+S
+((c->c)->(b->b))
+S
+ not ((e=(((f->e)->b)->e))=e)
+S
+(((a=a)-> not (a->a))->((b->c)= not c))
+S
+(( not a->(b->a))->((b= not a)=(b=b)))
+S
+(c=((a->c)->((b->c)->d)))
+S
+((c->( not (a=c)=b))=(a=b))
+S
+(b= not  not a)
+S
+( not (a= not a)-> not (c=(b->b)))
+S
+ not (b= not b)
+S
+ not ( not ((b->b)=(a=a))->a)
+S
+((a-> not (( not (c->b)=a)->b))->a)
+S
+ not (a->((b->b)->b))
+S
+ not  not ( not b-> not (b=(b=b)))
+S
+ not  not (c->c)
+S
+( not a=(b= not b))
+S
+(f= not ((f=c)->(b->(b-> not (d=d)))))
+S
+(c=((a=(b->c))=( not c= not a)))
+S
+((a=b)=((b=a)= not ((a=b)->b)))
+S
+((b=c)=(c=(c=e)))
+S
+((((b=a)->(a=a))->a)=(b->(a=b)))
+S
+ not (( not b= not b)=((a->a)=b))
+S
+( not b=(b-> not (b->b)))
+S
+(((b->c)->b)-> not ((c=a)=c))
+S
+ not (c->( not b->(c=(c=(b= not a)))))
+S
+ not  not (b->(a=((a-> not b)=a)))
+S
+((c=a)->(a=a))
+S
+ not  not ((a->b)->(a->b))
+S
+(a=(a->(b->a)))
+S
+( not (c=a)= not (a=((a=b)->(b=b))))
+S
+( not (b->b)->( not (b->((b->b)=a))->a))
+S
+ not  not  not (a=a)
+S
+( not  not a->((b->((c->(a->b))->b))=a))
+S
+ not (( not a->(b->b))->a)
+S
+(((a->b)= not a)=(a->(a=a)))
+S
+ not  not  not  not c
+S
+ not  not (b=b)
+S
+ not ((c->(a=c))= not ((b=c)=a))
+S
+( not a-> not ( not (b=a)-> not (a=a)))
+S
+ not (( not b=a)->c)
+S
+( not (b->a)=((a=a)->b))
+S
+(a->((a->a)->(b->b)))
+S
+(b= not (a= not a))
+S
+(((b=a)-> not (a->a))->(b=a))
+S
+( not ((b->b)->(b->b))= not (b->(a->a)))
+S
+ not  not (c->((b=a)->b))
+S
+(( not a=b)->(b->a))
+S
+((a-> not b)-> not  not b)
+S
+( not ((b->(a->b))=b)->a)
+S
+(e= not  not ((b->c)->(f->c)))
+S
+( not  not  not c->a)
+S
+(b-> not (b=(( not  not  not b=b)->a)))
+S
+ not ( not (a->b)-> not b)
+S
+((b=a)=( not (a->b)->b))
+S
+ not (((((g=a)->(c=a))=b)=(c=g))=e)
+S
+(a=((a=a)=b))
+S
+(( not (c-> not a)->(c=b))-> not e)
+S
+((b=a)->((b=(( not  not a->a)->b))=a))
+S
+(a=(( not d=c)->(d->d)))
+S
+ not  not (a-> not a)
+S
+ not  not ( not  not b=b)
+S
+ not ((((a->c)->b)->b)= not (c=b))
+S
+(((a->a)=a)=(b->(b=a)))
+S
+((c->f)=(e->d))
+S
+((b->a)=((a->b)=a))
+S
+ not  not (b=c)
+S
+ not ((c->a)->((b=b)->b))
+S
+(g=((c=a)-> not d))
+S
+(((b=c)= not c)->c)
+S
+((( not a->b)-> not (a->a))=b)
+S
+(((b=c)=((c=b)=((a=a)->b)))=(a->b))
+S
+((a=b)-> not (a=(b=a)))
+S
+(( not ( not  not a->c)=c)-> not b)
+S
+(((b=b)=( not b->b))->(b-> not  not a))
+S
+((a->(a=b))->a)
+S
+( not (b->a)=b)
+S
+( not  not ( not a=(b=a))=a)
+S
+( not  not a->(a= not (a->b)))
+S
+ not  not ( not f=b)
+S
+((b->a)-> not b)
+S
+((a=a)= not (a=(a->a)))
+S
+((b->(b=b))->b)
+S
+(b= not (c->(b->a)))
+S
+ not (((b=b)=(b=a))->(b=b))
+S
+((b=(b=b))-> not (a=(b=(b->a))))
+S
+(b=(b->(d=b)))
+S
+(((b->a)=a)=((a->((a=a)=b))->b))
+S
+ not  not (b-> not b)
+S
+((c=b)=(b=(b=b)))
+S
+ not ((c=e)= not (b=d))
+S
+(( not g=((b->e)->d))=(c->b))
+S
+ not  not  not  not (((a=b)->(b->a))->c)
+S
+ not  not ( not  not (a->a)-> not (b=a))
+S
+ not  not  not ((c=c)=((a=(b->c))=b))
+S
+((b=((c->c)->(b->b)))= not b)
+S
+((b->(b->b))=c)
+S
+ not  not ((b=b)-> not  not  not (a->a))
+S
+ not ((a=b)-> not ((b=b)-> not b))
+S
+(b->((b->a)=a))
+S
+(a->( not  not  not b=b))
+S
+ not (b= not ((b->a)->b))
+S
+ not ( not (( not c->( not a=a))->c)=c)
+S
+( not  not a->( not a=a))
+S
+ not ( not  not (c=a)=(a-> not b))
+S
+ not  not (a=b)
+S
+ not (a->((b->(a->b))->a))
+S
+((a->g)->((a-> not (c=a))=((d->c)=c)))
+S
+ not ((f->g)=a)
+S
+ not  not (( not a->a)=(c->a))
+S
+ not (d->(d->e))
+S
+ not ( not b=(c=a))
+S
+(((a->b)->( not a->b))=a)
+S
+ not (e-> not  not c)
+S
+((a=(c=c))= not b)
+S
+ not  not  not a
+S
+( not  not  not (b->(b=b))->b)
+S
+( not b=((a=b)->b))
+S
+((( not (b->a)->a)=b)=( not a->a))
+S
+ not  not ((a->a)->a)
+S
+( not ((a->b)->(b=a))=((b= not a)=a))
+S
+( not a-> not a)
+S
+((b->(b->b))=( not b->c))
+S
+(c=( not (b= not b)->a))
+S
+ not ( not (b->c)= not ((c-> not a)=c))
+S
+(((c->a)= not b)->c)
+S
+(f->( not (g->d)=((e=f)= not b)))
+S
+(((( not g=(c->a))->c)=(g=f))=g)
+S
+(( not a-> not b)=(((b=a)->b)-> not b))
+S
+( not g->( not  not a->( not a->(a->f))))
+S
+ not (((b->c)->a)->(c->c))
+S
+ not (a=(b=a))
+S
+( not a=( not b->b))
+S
+( not (g=f)-> not (f= not (a->b)))
+S
+ not (a->(b->a))
+S
+( not  not (a=b)=(b->(a->a)))
+S
+(a->(b= not  not (b->b)))
+S
+((a=a)=((b=a)=((a=b)->(b->b))))
+S
+(((b->b)= not ( not a=((a->b)=b)))->a)
+S
+((b=a)->((a->b)=b))
+S
+(((b=a)->a)=(a->b))
+S
+ not (b->(b->((a->a)-> not (a->a))))
+S
+ not ((a-> not  not a)=a)
+S
+(((d->d)=b)->c)
+S
+( not  not a=a)
+S
+( not ((b->b)->a)= not (b-> not (a=b)))
+S
+ not (b=((b= not b)->(a->(a->b))))

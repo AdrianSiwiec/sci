@@ -45,10 +45,17 @@ vector<ProofNode> BuildChildNodes(const ProofNode &node, int formula_to_remove,
   vector<ProofNode> to_return;
   for (const Set &formulas : formulas_to_add) {
     Set s = node.root;
-    if (formulas.Formulas().size() == 1) {
-      s.ReplaceFormula(formula_to_remove, formulas.Formulas()[0]);
+    if (!node.phase2) {
+      if (formulas.Formulas().size() == 1) {
+        s.ReplaceFormula(formula_to_remove, formulas.Formulas()[0]);
+      } else {
+        s.RemoveFormula(formula_to_remove, false);
+        for (const Formula &formula : formulas.Formulas()) {
+          s.AddFormula(formula, false);
+        }
+        s.Normalize();
+      }
     } else {
-      s.RemoveFormula(formula_to_remove, false);
       for (const Formula &formula : formulas.Formulas()) {
         s.AddFormula(formula, false);
       }
@@ -102,15 +109,15 @@ vector<ProofNode> ApplyRule(ProofNode &node, Rule rule,
 
   for (int i = 0; i < node.root.Formulas().size(); i++) {
     if (IsSingleUseRule(rule) &&
-        WasRuleApplied(rule, make_pair(node.root.Formulas()[i], node.root),
-                       applied_rules)) {
+        WasRuleApplied(rule, node.root.Formulas()[i], applied_rules)) {
       continue;
     }
     vector<Set> result;
     if (rule != nullptr) {
       result = rule(node.root.Formulas()[i]);
     } else {
-      result = RFun(node.root.Formulas()[i], node.root.Formulas());
+      result =
+          RFun(node.root.Formulas()[i], node.root.Formulas(), !node.phase2);
     }
     if (!result.empty()) {
       vector<ProofNode> to_return;
@@ -132,8 +139,7 @@ vector<ProofNode> ApplyRule(ProofNode &node, Rule rule,
       // }
 
       if (IsSingleUseRule(rule))
-        MarkRuleAsApplied(rule, make_pair(node.root.Formulas()[i], node.root),
-                          applied_rules);
+        MarkRuleAsApplied(rule, node.root.Formulas()[i], applied_rules);
       node.formula_used = node.root.Formulas()[i];
       node.rule_used = GetRuleName(rule);
       return to_return;

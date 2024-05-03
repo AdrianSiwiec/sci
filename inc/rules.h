@@ -50,7 +50,7 @@ Rule RSym2;
 // p = f
 // ----------------
 // F(f/p) u {p = f}
-vector<Set> RFun(const Formula &f, const Set &s);
+vector<Set> RFun(const Formula &f, const Set &s, bool remove_replaced = true);
 
 // ----------------------- Equality Rules -----------------------
 bool IsSimple(const Formula &f);
@@ -138,7 +138,7 @@ bool ReplaceAll(Formula &f, const Formula &to_replace,
 int GetNewVar();
 
 bool IsSingleUseRule(Rule r);
-typedef pair<Formula, Set> FormulaSet;
+typedef Formula FormulaSet;
 bool WasRuleApplied(Rule r, const FormulaSet &f,
                     const set<pair<int, FormulaSet>> &applied_rules);
 void MarkRuleAsApplied(Rule r, const FormulaSet &f,
@@ -157,6 +157,7 @@ const vector<Rule *> Phase1Rules{// Decomposition rules
 
 const vector<Rule *> Phase2Rules{// Reduction rules
                                  RSym1, RSym2, nullptr,
+                                //  nullptr,
                                  // Termination Rules
                                  RTerEq, RTerEqNot, RTerEqImpl, RTerEqEq,
                                  RTerSpike};

@@ -5,6 +5,7 @@
 
 void Test(int i, const Formula &f) {
   bool print = i % 100 == 0;
+  // bool print = true;
   if (print)
     cout << "Testing " << i << ": " << f << flush;
   bool result = TestFormula(f);
@@ -24,7 +25,7 @@ int main() {
       variables = 4;
     if ((rand() % 10) == 0)
       variables = 7;
-    Formula f = GetRandomFormula((rand()%7)+4, variables);
+    Formula f = GetRandomFormula((rand()%4)+5, variables);
     Test(i, f);
     Test(i, Formula(op_not, {f}));
     ClearVars();

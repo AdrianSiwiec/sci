@@ -153,10 +153,9 @@ void TestExamples() {
   assert(DoSolve("¬(b↔b)≡((a∧a)↔a)", false).is_closed.value());
   assert(DoSolve("¬(¬(a≡(b≡a))→(a→(b→a)))", false).is_closed.value());
   assert(DoSolve("¬¬((b→(b≡b))≡¬((b≡b)→(b→b)))", false).is_closed.value());
+  assert(DoSolve("((f≡c)≡¬(c≡f))", false).is_closed.value() );
 
-  assert(!DoSolve(
-             "¬((b≡¬c)→((b≡d)≡(d≡¬c)))", false)
-             .is_closed.value());
+  assert(!DoSolve("¬((b≡¬c)→((b≡d)≡(d≡¬c)))", false).is_closed.value());
 }
 
 int main() {

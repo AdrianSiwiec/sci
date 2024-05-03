@@ -85,18 +85,7 @@ int main() {
   // PrintLabelNode(ln);
   // assert(ln.is_closed.value());
 
-  // TestInput("(b≡¬c), a, b, ¬c, d, -((d≡¬c)≡(b≡d)), -(d≡¬c), -(b≡d)");
-  // TestInput("¬((b≡¬c)→(a→((d≡¬c)≡(b≡d)))), (b≡¬c), a, b, ¬c, d,
-  // -((b≡¬c)→(a→((d≡¬c)≡(b≡d)))), -(a→((d≡¬c)≡(b≡d))), -((d≡¬c)≡(b≡d)),
-  // -(d≡¬c), -(b≡d)");
-
-  // assert(DoSolveLabel("¬((b≡¬c)→(a→((d≡¬c)≡(b≡d)))), (b≡¬c), a, b, ¬c, d, ¬c,
-  // b, d, -((b≡¬c)→(a→((d≡¬c)≡(b≡d)))), -(a→((d≡¬c)≡(b≡d))), -((d≡¬c)≡(b≡d)),
-  // -c, -(d≡¬c), -(b≡d), -c", true).is_closed.value());
-  TestInput("¬((b≡¬c)→((b≡d)≡(d≡¬c)))", true);
-  assert(DoSolveLabel("¬((b≡¬c)→((b≡d)≡(d≡¬c)))", true).is_closed.value());
-  // assert(DoSolveLabel("¬((b≡¬c)→(a→((b≡d)≡(d≡¬c))))",
-  // true).is_closed.value());
+  TestInput("(((c≡a)≡d)≡(d→a))", true);
 
   // cout << endl << "Enter your set of formulas (divided by ','): " << endl;
   // for (string line; getline(cin, line);) {
