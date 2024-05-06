@@ -21,6 +21,7 @@
 \usepackage{mathtools}
 \usepackage{xspace}
 
+
 \usepackage{amsthm}
 \usepackage{amssymb,amsmath,amsthm}
 \usepackage{cleveref}
@@ -59,6 +60,17 @@
 \newtheorem{definition}{Definition}[section]
 
 \newcommand*{\Ts}{T^*}
+\newcommand*{\eq}{\equiv}
+\newcommand*{\ra}{\rightarrow}
+
+\newcommand*{\FOR}{\texttt{FOR}}
+\newcommand*{\FORx}{\texttt{FOR}^X}
+\newcommand*{\IDx}{\texttt{ID}^X}
+
+\makeatletter
+\newcommand{\leqnomode}{\tagsleft@true\let\veqno\@@leqno}
+\newcommand{\reqnomode}{\tagsleft@false\let\veqno\@@eqno}
+\makeatother
 
 
 \title{Implementation of decision procedures for non-Fregean logic SCI}
@@ -73,6 +85,36 @@ Test: ążźćłóęń
 
 \section{Sentential logic and the Fregean axiom}
 \section{SCI}
+TODO: Just some free notes here for now, so that I don't forget later.
+
+
+Whenever we wite $\varphi \not \eq \psi$ we mean $\lnot(\varphi \eq \psi)$
+
+\begin{definition}[Size of formula]
+    Given a formula $\varphi$, let us define:
+    $$
+        s(\varphi) = \begin{cases}
+            1,                          & \text{if } \varphi = p,                                                                                                                    \\
+            c(\psi) + 1,                & \text{if $\exists \psi \in \FOR$, such that } \varphi = \lnot \psi,                                                                        \\
+            c(\psi) + c(\vartheta) + 1, & \text{if $\exists \psi, \vartheta \in \FOR$, such that } \varphi = \psi \equiv \vartheta,\text{ or } \varphi = \psi \rightarrow \vartheta.
+        \end{cases}
+    $$
+\end{definition}
+\begin{definition}[Complexity of a set of formulas]
+    Given a set of formulas $\Phi$, let us define:
+    $$
+        c(\Phi) = \sum_{\phi \in \Phi} 3^{s(\phi)}
+    $$
+\end{definition}
+
+Let us assume that we are given a full ordering of formulas $\prec$, such that:
+\begin{itemize}
+    \item if $\varphi \not = \psi$, then $\varphi \prec \psi$ or $\psi \prec \varphi$,
+    \item if $s(\varphi) < s(\psi)$, then $\varphi \prec \psi$,
+    \item if $\varphi \prec \psi$, then $\varphi \eq \psi \prec \psi \eq \varphi$.
+\end{itemize}
+
+
 \subsection{...}
 \subsection{Axiomatization of SCI}
 \section{Satisfiability in SCI}
@@ -80,15 +122,260 @@ Test: ążźćłóęń
 \subsection{Decision procedures}
 \subsubsection{$T$ decision procedure}
 \subsubsection{$\Ts$ decision procedure}
+
+
+\leqnomode
+\begin{figure}
+    \begin{subfigure}{\textwidth}
+        \centering
+        \begin{subfigure}{0.3\textwidth}
+            \begin{equation}
+                \tag{$\lnot$}
+                \frac{
+                    \Phi \cup \{ \lnot \lnot \varphi \}}%
+                { \Phi \cup \{\varphi\} }
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.3\textwidth}
+            \begin{equation}
+                \tag{$\rightarrow$}
+                \frac{
+                    \Phi \cup \{ \varphi \rightarrow \psi \}}%
+                { \Phi \cup \{ \lnot \varphi \} | \Phi \cup \{ \psi \} }
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.3\textwidth}
+            \begin{equation}
+                \tag{$\lnot \rightarrow$}
+                \frac{
+                    \Phi \cup \{\lnot ( \varphi \rightarrow \psi ) \}}%
+                { \Phi \cup \{ \varphi, \lnot \psi \} }
+            \end{equation}
+        \end{subfigure}
+        \caption{Decomposition rules}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+        \centering
+        \begin{subfigure}{0.4\textwidth}
+            \begin{equation}
+                \tag{$\texttt{sym}_1^1$}
+                \frac{
+                    \Phi \cup \{ \varphi \equiv \psi \} }%
+                { \Phi \cup \{\psi \equiv \varphi\} }
+                \text{ if $\varphi$ > $\psi$}
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.4\textwidth}
+            \begin{equation}
+                \tag{$\texttt{sym}_2^1$}
+                \frac{
+                    \Phi \cup \{ \varphi \not \equiv \psi \}}%
+                { \Phi \cup \{\psi \not \equiv \varphi\} }
+                \text{ if $\varphi$ > $\psi$}
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.5\textwidth}
+            \begin{equation}
+                \tag{$\texttt{fun}^1$}
+                \frac{
+                    \Phi \cup \Phi(\varphi) \cup \{ p \equiv \varphi \} }%
+                { \Phi \cup \Phi(\varphi / p) \cup \{p \equiv \varphi\} }
+                \text{ if $p$ < $\varphi$}
+            \end{equation}
+        \end{subfigure}
+        \caption{Reduction rules}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+        \centering
+        \begin{subfigure}{0.4\textwidth}
+            \begin{equation}
+                \tag{$\not \equiv_1$}
+                \frac{
+                    \Phi \cup \{ p \not \equiv \psi \} }%
+                { \Phi \cup \{ p \not \equiv \alpha, \alpha \equiv \psi \} }
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.4\textwidth}
+            \begin{equation}
+                \tag{$\not \eq_2$}
+                \frac{
+                    \Phi \cup \{ \varphi \not \eq \psi \} }%
+                { \Phi \cup \{ \alpha \eq \varphi, \beta \eq \psi, \alpha \not \eq \beta \} }
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.4\textwidth}
+            \begin{equation}
+                \tag{$\eq_\lnot$}
+                \frac{
+                    \Phi \cup \{ p \eq \lnot \psi  \} }%
+                { \Phi \cup \{ p \eq \lnot \alpha, \alpha \eq \psi \} }
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.5\textwidth}
+            \begin{equation}
+                \tag{$ \eq_\ra $}
+                \frac{
+                    \Phi \cup \{ p \eq (\varphi \ra \psi) \} }%
+                { \Phi \cup \{ p \eq (\alpha \ra \beta), \alpha \eq \varphi, \beta \eq \psi \} }
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.4\textwidth}
+            \begin{equation}
+                \tag{$ \eq_\ra^l $}
+                \frac{
+                    \Phi \cup \{ p \eq (q \ra \psi) \} }%
+                { \Phi \cup \{ p \eq (q \ra \alpha), \alpha \eq \psi  \} }
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.4\textwidth}
+            \begin{equation}
+                \tag{$ \eq_\ra^r $}
+                \frac{
+                    \Phi \cup \{ p \eq (\varphi \ra q) \} }%
+                { \Phi \cup \{ p \eq (\alpha \ra q), \alpha \eq \varphi  \} }
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.4\textwidth}
+            \begin{equation}
+                \tag{$ \eq_\eq^l $}
+                \frac{
+                    \Phi \cup \{ p \eq (q \eq \psi) \} }%
+                { \Phi \cup \{ p \eq (q \eq \alpha), \alpha \eq \psi  \} }
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.4\textwidth}
+            \begin{equation}
+                \tag{$ \eq_\eq^r$}
+                \frac{
+                    \Phi \cup \{ p \eq (\varphi \eq q) \} }%
+                { \Phi \cup \{ p \eq (\alpha \eq q), \alpha \eq \varphi \} }
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.45\textwidth}
+            \begin{equation}
+                \tag{$ \eq_\eq $}
+                \frac{
+                    \Phi \cup \{ p \eq (\varphi \eq \psi) \} }%
+                { \Phi \cup \{ p \eq (\alpha \eq \beta), \alpha \eq \varphi, \beta \eq \psi \} }
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.4\textwidth}
+            \begin{equation}
+                \tag{$ \eq$}
+                \frac{
+                    \Phi \cup \{ \varphi \eq \psi \} }%
+                { \Phi \cup \{ \alpha \eq \beta, \alpha \eq \varphi, \beta \eq \psi \} }
+            \end{equation}
+        \end{subfigure}
+        \caption{Identity rules. Note: in all identity rules the highlighted formula is not simple (i.e. $\varphi$ and $\psi$ are not variables)}
+    \end{subfigure}
+    \caption{Deduction rules of the first phase of $\Ts$.}
+    \label{fig:rules1}
+\end{figure}
+
+\begin{figure}
+    \begin{subfigure}{\textwidth}
+        \centering
+        \begin{subfigure}{0.4\textwidth}
+            \begin{equation}
+                \tag{$\texttt{sym}_1^2$}
+                \frac{
+                    \Phi \cup \{ \varphi \equiv \psi \} }%
+                { \Phi \cup \{\psi \equiv \varphi, \varphi \eq \psi \} }
+                \text{ if $\varphi$ > $\psi$}
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.4\textwidth}
+            \begin{equation}
+                \tag{$\texttt{sym}_2^2$}
+                \frac{
+                    \Phi \cup \{ \varphi \not \equiv \psi \}}%
+                { \Phi \cup \{\psi \not \equiv \varphi, \varphi \not \eq \psi\} }
+                \text{ if $\varphi$ > $\psi$}
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.55\textwidth}
+            \begin{equation}
+                \tag{$\texttt{fun}^2$}
+                \frac{
+                    \Phi \cup \Phi(\varphi) \cup \{ p \equiv \varphi \} }%
+                { \Phi \cup \Phi(\varphi / p) \cup \Phi(\varphi) \cup \{p \equiv \varphi\} }
+                \text{ if $p$ < $\varphi$}
+            \end{equation}
+        \end{subfigure}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+        \begin{subfigure}{0.48\textwidth}
+            \begin{equation}
+                \tag{$ \eq_\top $}
+                \frac{
+                    \Phi \cup \{ p \eq q \} }%
+                { \Phi \cup \{ p, q, p\eq q \} | \Phi \cup \{ \lnot p, \lnot q, p\eq q \} }
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.48\textwidth}
+            \begin{equation}
+                \tag{$ \eq_\top^\lnot $}
+                \frac{
+                    \Phi \cup \{ p \eq \lnot q \} }%
+                { \Phi \cup \{ p, \lnot q, p \eq \lnot q \} | \Phi \cup \{ \lnot p, q, p\eq \lnot q \} }
+            \end{equation}
+        \end{subfigure}
+        \begin{equation}
+            \tag{$ \eq_\top^\ra $}
+            \frac{
+                \Phi \cup \{ p \eq (q \ra r) \} }%
+            { \Phi \cup \{ p, \lnot q, \theta \} | \Phi \cup \{ p, r, \theta \} | \Phi \cup \{ \lnot p, q, \lnot r, \theta \}}
+            \text{, where } \theta = (p \eq (q \ra r))
+        \end{equation}
+        \begin{equation}
+            \tag{$ \eq_\top^\eq $}
+            \frac{
+                \Phi \cup \{ p \eq (q \eq r) \} }%
+            { \Phi \cup \Phi_1 |
+                \Phi \cup \Phi_2 |
+                \Phi \cup \Phi_3 |
+                \Phi \cup \Phi_4 |
+                \Phi \cup \Phi_5 |
+                \Phi \cup \Phi_6
+            }
+            \text{, where }
+        \end{equation}
+        \[
+            \begin{aligned}
+                \Phi_1 & = \{p, q, r, q \eq r, p \eq (q \eq r) \}                       \\
+                \Phi_2 & = \{p, \lnot q, \lnot r, q \eq r, p \eq (q \eq r) \}           \\
+                \Phi_3 & = \{\lnot p, q, r, q \not \eq r, p \eq (q \eq r) \}            \\
+                \Phi_4 & = \{\lnot p, q, \lnot r, q \not \eq r, p \eq (q \eq r) \}      \\
+                \Phi_5 & = \{\lnot p,\lnot q, r, q \not \eq r, p \eq (q \eq r) \}       \\
+                \Phi_6 & = \{\lnot p, \lnot q,\lnot r, q \not \eq r, p \eq (q \eq r) \} \\
+            \end{aligned}
+        \]
+        \begin{equation}
+            \tag{$\eq_\bot$}
+            \frac{
+                \Phi \cup \{ p \not \eq q \} }%
+            { \Phi \cup \{p,q,\theta\} |
+                \Phi \cup \{p,\lnot q,\theta\} |
+                \Phi \cup \{\lnot p,q,\theta\} |
+                \Phi \cup \{\lnot p,\lnot q,\theta\}
+            }
+            \text{, where } \theta = (p \not \eq q)
+        \end{equation}
+    \end{subfigure}
+    \caption{Deduction rules of the second phase of $\Ts$.}
+    \label{fig:rules2}
+\end{figure}
+
+The $\Ts$ decision procedure has two main groups of deduction rules, see figures \ref{fig:rules1} and \ref{fig:rules2}.
+
+The rules are
+
 TODO: differences compared to \enquote{Dedukcyjne Dylematy} (DD):
 \begin{itemize}
-    \item Rule $sym$ is replaced by $sym_1$ and $sym_2$.
-    \item Make a clear distinction of two phases: decomposition-reduction phase and closure phase. The decomposition-reduction phase only uses decomposition, reduction and equality rules, the closure phase only the closure rules and the reduction rules.
-    \item Make it clear that when applying rule to $\Phi \cup \{\varphi\}$ the $\varphi$ is removed from the conclusion, unless otherwise noted (i.e. in closure rules).
-    \item No need to say: \enquote{w wyniku zastosowania reguły co najmniej jedna z konkluzji zawiera formułę,
-    która nie występuje w $X \cup \{\varphi\}$}. In decomposition-reduction phase simply apply all the rules as long as you can. In claosure phase apply closure rule only once to any given formula.
+    \item Phase 1 rules replace formulas, phase 2 rules only add formulas.
+    \item No need to say: \enquote{w wyniku zastosowania reguły co najmniej jedna z konkluzji zawiera formułę, która nie występuje w $X \cup \{\varphi\}$}. In the first phase simply apply all the rules as long as you can. In second phase apply closure rules only once to any given formula.
     \item There are TWO $fun$ rules: one for each phase. Phase 1 fun rule replaces formulas, phase 2 fun rule only adds formulas (leaves the original unchaged as well). If $fun$ is replacing in phase 2 then e.g. after rule $\equiv_T^\lnot$ the rule $fun$ is applied removing one of the conclusion formulas. Besides, the examples in DD seem to assume the $fun$ works this way anyways.
-    \item Sym rules (all rules) in phase 2 only add formulas, don't remove.
 \end{itemize}
 
 \subsubsection{Correctness and completeness of $\Ts$}
@@ -97,13 +384,13 @@ TODO: differences compared to \enquote{Dedukcyjne Dylematy} (DD):
 \end{theorem}
 
 \begin{proof}
-We want to show that if $\Ts$ says the formula is closed, it is indeed closed. TODO:
-\begin{enumerate}
-    \item All the rules of $\Ts$ are strongly correct. TODO at least the non-obvious ones.
-    \item We're given a closed tree.
-    \item Going up the tree, on every step we have a closed set of formulas, because every rule is strongly correct.
-    \item The root is closed.
-\end{enumerate}
+    TODO: this is just a sketch, rewrite. We want to show that if $\Ts$ says the formula is closed, it is indeed closed.
+    \begin{enumerate}
+        \item All the rules of $\Ts$ are strongly correct. TODO at least the non-obvious ones.
+        \item We're given a closed tree.
+        \item Going up the tree, on every step we have a closed set of formulas, because every rule is strongly correct.
+        \item The root is closed.
+    \end{enumerate}
 \end{proof}
 
 \begin{theorem}
@@ -113,84 +400,111 @@ We want to show that if $\Ts$ says the formula is closed, it is indeed closed. T
 We want to show, that if the formula is closed, the tree produced by $\Ts$ is closed, or by contraposition, that if the tree produced by $\Ts$ is open, the given formula is open.
 
 
-First, let us show that first the decomposition-reduction phase finishes and then that the closure phase finishes.
+First, let us show that the first phase finishes.
 
 \begin{theorem}
-    Decomposition-reduction phase of $\Ts$ finishes and produces finite trees.
+    The first phase of $\Ts$ finishes and produces finite trees.
 \end{theorem}
 \begin{proof}
-
-    First, to show that the decomposition-reduction phase finishes, let us define:
-
-    \begin{definition}[Size of formula]
-        Given a formula $\varphi$, let us define:
-        $$
-        s(\varphi) = \begin{cases}
-            1, &\text{if } \varphi = p,\\
-            c(\psi) + 1, &\text{if } \varphi = \lnot \psi,\\
-            c(\psi) + c(\vartheta) + 1, &\text{if } \varphi = \psi \equiv \vartheta,\text{ or } \varphi = \psi \rightarrow \vartheta.
-        \end{cases}
-        $$
-    \end{definition}
-    \begin{definition}[Complexity of a set of formulas]
-        Given a set of formulas $\Phi$, let us define:
-        $$
-            c(\Phi) = \sum_{\phi \in \Phi} 3^{s(\phi)}
-        $$
-    \end{definition}
+    Let us first notice that all decomposition and identity rules of the first phase reduce the complexity of the formulas.
 
     \begin{lemma}
-        \label{l_c}
+        \label{l:c}
         If rule $R$ is a decomposition rule or an identity rule, $\Phi$ is its premise and $\Phi_1, ... \Phi_n$ are its conclusions, then $c(\Phi) > c(\Phi_i)$, for $1 \leq i \leq n$.
     \end{lemma}
     \begin{proof}
         TODO: Przerachować. Chyba zdaje się działać, ewentualnie trochę podkręcić $s$ lub $c$.
     \end{proof}
     \begin{lemma}
-        \label{l_c2}
+        \label{l:c2}
         If rule $R$ is a reduction rule $\Phi$ is its premise and $\Phi_1$ is its conclusion, then $c(\Phi) \geq c(\Phi_1)$.
     \end{lemma}
     \begin{proof}
-        Trivial.
+        Trivial. All the reduction rule replace a formula with another formula that is smaller in our given order $\prec$, so they will never increase the complexity function.
     \end{proof}
     \begin{lemma}
-        \label{l_c3}
-        The reduction rules cannot be applied indefinitely without lowering the $c$ function.
+        \label{l:c3}
+        The reduction rules cannot be applied indefinitely without lowering the complexity function.
     \end{lemma}
     \begin{proof}
-        TODO: proste.
+        TODO: przepisać. To jest trywialne.
+
+        Based on lemma \cref{l:c2}, applying the reduction rule will never increase the complexity function. If applying the rule will give conclusions with the same complexity, the conclusion will contain some formulas that are lower in $\prec$ than the appropriate formulas in the premise, while all the other formulas are equal.
     \end{proof}
 
-    As a consequence of lemmas \ref{l_c}, \ref{l_c2} and \ref{l_c3} it is clear that, for each node of the produced tree, after a finite number of rules applied, either a closed node or a node with lower complexity will be reached. Since the complexity of the node is always positive and finite the produced tree will be finite.
+    As a consequence of lemmas \ref{l:c}, \ref{l:c2} and \ref{l:c3} it is clear that, for each node of the produced tree, after a finite number of rules applied, either a closed node or a node with lower complexity will be reached. Since the complexity of the node is always positive and finite it is impossible that the complexity will be lowered indefinitely, so the first phase of the $\Ts$ procedure will finish.
 
 \end{proof}
 
 \begin{theorem}
-    All leaves produced by the decomposition-reduction phase are either closed or contain only simple formulas.
+    All leaves produced by the first phase are either closed or contain only simple formulas.
 \end{theorem}
 \begin{proof}
-    Simple. Assume there is a non-simple formula in an open leaf. One of decomposition, reduction or equality rules would apply (TODO, simple, because some will match and we don't have any additional conditions on applying rules). Contradiction.
+    Simple. Assume there is a non-simple formula in an open leaf. One of decomposition, reduction or equality rules would apply to it, which is a contradiction with the fact that the first phase finished.
 \end{proof}
 
 \begin{theorem}
-    Open leaf of a $\Ts$ tree satisfies the following conditions:
-    TODO: rewrite from DD.
-    \begin{enumerate}
-        \item X1. Shown by theorem above.
-        \item X2
-        \item X3
-        \item X4
-        \item X5
-        \item X6
-        \item X7
-        \item X8
-    \end{enumerate}
+    Given a set of simple formulas, phase 2 finishes.
 \end{theorem}
+\begin{proof}
+    TODO: trywialne. Wszystkie formuły z $\eq$ w nazwie wykonają się co najwyżej raz, po każdej z nich $\texttt{sym}*$ i $\texttt{fun}$ też co najwyżej raz. 
+\end{proof}
+
+Let us call a tree that is produced by the $\Ts$ procedure a $\Ts$ tree.
+
+\begin{theorem}
+    Open leaf $X$ of a $\Ts$ tree satisfies the following conditions:
+    \begin{itemize}
+        \item [(X1)] $X$ is a set of simple formulas.
+        \item [(X2)] If $\varphi \in \FOR^X$ then $\varphi$ is either a simple formula or is equal to $p \ra q$, for some variables $p, q$.
+        \item [(X3)] If $\varphi \eq \psi \in \FOR^X$, then $\varphi \leq \psi$ or $\psi \eq \varphi \in \FOR^X$.
+        \item [(X4)] If $\varphi \not \eq \psi \in \FOR^X$, then $\varphi < \psi$ or $\psi \not \eq \varphi \in \FOR^X$.
+        \item [(X5)] If $p \eq q \in X$, then $p, q \in X$, or $\lnot p, \lnot q \in X$.
+        \item [(X6)] If $p \eq \lnot q \in X$, then $p, \lnot q \in X$, or $\lnot p, q \in X$.
+        \item [(X7)] If $p \eq (q \ra r) \in X$, then $p, \lnot q \in X$, or $p, r \in X$, or $\lnot p, q, \lnot r \in X$.
+        \item [(X8)] If $p \eq (q \eq r) \in X$, then $\Phi_i \subseteq X$, for $i \in \{1, ..., 6\}$, where $\Phi_i$ are defined in figure \ref{fig:rules2}.
+    \end{itemize}
+\end{theorem}
+\begin{proof}
+        (X1) Phase 1 ends with nodes containing only simple formulas. Phase 2 doesn't add any non-simple formulas.
+
+        (X2), ... (X8) Trivial, directly following phase 2 rules.
+\end{proof}
+
+\begin{lemma}[Lemat 5 z DD]
+    Let $X$ be an open leaf of a $\Ts$ tree and let $\lnot \varphi \in \FOR^X$. Then:
+    $$
+    \varphi \in X \cup \IDx \text{ iff } \lnot \varphi \not \in X \cup \IDx.
+    $$
+\end{lemma}
+\begin{proof}
+    Because of $X2$, if $\lnot \varphi \in \FORx$, then $\varphi = p$ or $\varphi = (p \eq q)$ for some variables $p, q$.
+
+    \begin{itemize}
+        \item [1°] $\varphi = p$. ... (Jak w DD.)
+        \item [2°] $\varphi = (p \eq q)$. \\
+            Since $\lnot \varphi = p \not \eq q \in \FORx$, we have that $p \not \eq q \in X$, because $p \not \eq q$ cannot be a subformula of a simple formula. From $p \not \eq q \in X$ it follows that $p \not = q$ and $p \eq q \not \in X$, otherwise $X$ would be an axiom set and therefore closed.
+
+            So, we have: $p \not \eq q \in X$ (so, $\lnot \varphi \in X \subseteq X \cup \IDx$). We need to show that $\varphi \not \in X \cup \IDx$, i.e. $p \eq q \not \in X \cup \IDx$. We have that $p \eq q \not \in X$, so all we need to show is that $p \eq q \not \in \IDx$.
+            
+            Let as assume otherwise, that $p \eq q \in \IDx$.
+            
+            Since $p \eq q \not \in X$, we have that $p \eq q \not \in \IDx_0$. $p \eq q \not \in \IDx_n$ for $n > 0$ based on the definition of $\IDx_n$. So, for the $p \eq q$ to be in $\IDx$ we need to have formulas $\theta_1, ..., \theta_k$, for some $k \geq 1$, such that: $p \eq \theta_1 \in X$, or $\theta_1 \eq p \in X$, ..., $\theta_k \eq q$, or $q \eq \theta_k$.
+            \begin{itemize}
+                \item [2.1°] $k = 1$.\\
+                TODO: przepisać żeby było jaśniej.\\
+                We have that $p \eq \theta_1 \in X$, or $\theta_1 \eq p \in X$ and $\theta_1 \eq q \in X$, or $q \eq \theta_1 \in X$. One of the formulas in $\{p, q, \theta_1\}$ will be smallest in the ordering $\prec$. If the formula $p$ is the smallest, the $\texttt{fun}$ rule would produce $q \eq p \in X$ (or $p \eq q \in X$) from $q \eq \theta_1 \in X$ (or $\theta_1 \eq q \in X$) by replacing $\theta_1$ by $p$. In any case, $p \eq q$ would be in $X$ (possibly after $\texttt{sym}^2_1$). Thus $X$ would be an axiom set ($p\not \eq q, p \eq q \in X$), a contradiction. A contradiction happens in a similar way if the formula $q$ is the smallest of the three. If the formula $\theta_1$ is the smallest one, from $p \not \eq q \in X$ will be produced either $\theta_1 \not \eq q \in X$ or $p \not \eq \theta_1 \in X$ (by $\texttt{fun}$ similarly to above), giving another contradiction.
+                \item [2.2°] $k > 1$.\\
+                ???
+            \end{itemize}
+    \end{itemize}
+\end{proof}
+
 
 \section{Implementation}
 \subsection{Data structures}
 \subsection{Optimizations}
-\section{Comparison of $T$ and $T*$ systems}
+% \section{Comparison of $T$ and $T*$ systems}
 \subsection{Size of produced proof trees}
 \subsection{Time complexity}
 \subsection{Real time}
