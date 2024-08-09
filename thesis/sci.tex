@@ -7,7 +7,6 @@
 
 
 % Set page size and margins
-% Replace `letterpaper' with `a3paper' for UK/EU standard size
 \usepackage[a4paper,top=1cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
 
 % Useful packages
@@ -60,12 +59,15 @@
 \newtheorem{definition}{Definition}[section]
 
 \newcommand*{\Ts}{T^*}
-\newcommand*{\eq}{\equiv}
+\newcommand*{\id}{\equiv}
 \newcommand*{\ra}{\rightarrow}
 
+\newcommand*{\V}{\texttt{V}}
 \newcommand*{\FOR}{\texttt{FOR}}
 \newcommand*{\FORx}{\texttt{FOR}^X}
+\newcommand*{\ID}{\texttt{ID}}
 \newcommand*{\IDx}{\texttt{ID}^X}
+\newcommand*{\SUB}{\texttt{SUB}}
 
 \makeatletter
 \newcommand{\leqnomode}{\tagsleft@true\let\veqno\@@leqno}
@@ -73,7 +75,7 @@
 \makeatother
 
 
-\title{Implementation of decision procedures for non-Fregean logic SCI}
+\title{Decision procedures for a non-Fregean logic SCI}
 \author{Adrian Siwiec}
 
 \begin{document}
@@ -85,21 +87,152 @@ Test: ążźćłóęń
 
 \section{Sentential logic and the Fregean axiom}
 \section{SCI}
-TODO: Just some free notes here for now, so that I don't forget later.
+\subsection{Basic notions}
 
+\begin{definition}[Alphabet of SCI]
+    The alphabet of SCI is as follows:
+    \begin{itemize}
+        \item $\V = \{p, q, r, ...\}$ -- the countable infinite set of atomic formulas,
+        \item $\lnot$  -- the unary operator \enquote{not},
+        \item $\ra, \id$ -- the binary operators \enquote{implication} and \enquote{identity}.
+    \end{itemize}
+\end{definition}
 
-Whenever we wite $\varphi \not \eq \psi$ we mean $\lnot(\varphi \eq \psi)$
-
-\begin{definition}[Size of formula]
-    Given a formula $\varphi$, let us define:
+\begin{definition}[Language of SCI]
+    The language of SCI is a set of formulas $\FOR$ defined with the grammar:
     $$
-        s(\varphi) = \begin{cases}
-            1,                          & \text{if } \varphi = p,                                                                                                                    \\
-            c(\psi) + 1,                & \text{if $\exists \psi \in \FOR$, such that } \varphi = \lnot \psi,                                                                        \\
-            c(\psi) + c(\vartheta) + 1, & \text{if $\exists \psi, \vartheta \in \FOR$, such that } \varphi = \psi \equiv \vartheta,\text{ or } \varphi = \psi \rightarrow \vartheta.
+        \FOR \ni \varphi ::= p  \; | \;  \lnot \varphi \; | \; (\varphi \ra \varphi) \; | \; (\varphi \id \varphi)
+    $$ where $p \in \V$ is an atomic formula.
+\end{definition}
+
+From now on whenever we write $p, q, r, ... $ we will mean the atomic formulas. We will omit brackets when obvious. We will write $\varphi \not \id \varphi$ as a shorthand for $\lnot(\varphi \id \varphi)$.
+
+The set of identities $\ID$ is a set of formulas $\varphi \id \psi$ where $\varphi, \psi \in \FOR$. Formulas $\varphi \id \varphi$ are the trivial identities.
+
+\begin{definition}[Subformulas]
+    For a formula $\varphi \in \FOR$ let us define the set of subformulas of $\varphi$ as:
+    $$
+        \SUB(\varphi) = \begin{cases}
+            \{p\},                                            & \text{if } \varphi = p \in V,                                                    \\
+            \{\varphi\} \cup \SUB(\psi),                      & \text{if } \varphi = \lnot \psi,                                                 \\
+            \{\varphi\} \cup \SUB(\psi) \cup \SUB(\vartheta), & \text{if } \varphi = \psi \ra \vartheta, \text{or } \varphi = \psi \id \vartheta \\
         \end{cases}
     $$
 \end{definition}
+
+By $\varphi(\psi / \vartheta)$ we will denote the formula $\varphi$ with all occurrences of its subformula $\psi$ substituted with $\vartheta$.
+
+\begin{definition}[Simple formulas]
+    The formula $\varphi$ is called a simple formula if it is equal to one of:
+    $$
+        p,\ \lnot p,\ p \id q,\ p \not \id q,\ p \id \lnot q,\ p \id (q \ra r),\ p \id (q \id r)
+    $$
+    for $p, q, r \in \V$.
+\end{definition}
+
+\begin{definition}[Size of formula]
+    Given a formula $\varphi$, let us define its size $s(\varphi)$:
+    $$
+        s(\varphi) = \begin{cases}
+            1,                          & \text{if } \varphi = p,                                                                      \\
+            s(\psi) + 1,                & \text{if } \varphi = \lnot \psi,                                                             \\
+            s(\psi) + s(\vartheta) + 1, & \text{if } \varphi = \psi \equiv \vartheta,\text{ or } \varphi = \psi \rightarrow \vartheta.
+        \end{cases}
+    $$
+\end{definition}
+
+TODO: przepisać tak żeby to miało sens.
+Since $\V$ is a countable set we can assume it has a full ordering $<$. Let us extend it by saying that for each $p \in \V$: $p < $ \enquote{$\lnot$} $<$ \enquote{$($} $<$ \enquote{$)$} $<$ \enquote{$\ra$} $<$ \enquote{$\id$} and then have $\prec$ be a lexicographical ordering of formulas in $\FOR$ with $<$.
+
+\begin{definition}[Axiomatization of SCI]
+    SCI is axiomatized with the following axioms:
+    \begin{itemize}
+        \item ($Ax1$) $\varphi \ra (\psi \ra \varphi)$
+        \item ($Ax2$) $(\varphi \ra (\psi \ra \chi)) \ra ((\varphi \ra \psi) \ra (\varphi \ra \chi))$
+        \item ($Ax3$) $(\lnot \varphi \ra \lnot \psi) \ra (\psi \ra \varphi)$
+        \item ($Ax4$) $\varphi \id \varphi$,
+        \item ($Ax5$) $(\varphi \id \psi) \ra (\varphi \ra \psi)$,
+        \item ($Ax6$) $(\varphi \id \psi) \ra (\lnot \varphi \id \lnot \psi)$,
+        \item ($Ax7$) $(\varphi \id \psi) \ra ((\chi \id \theta) \ra ((\varphi \ra \chi) \id (\psi \ra \theta)))$,
+        \item ($Ax8$) $(\varphi \id \psi) \ra ((\chi \id \theta) \ra ((\varphi \id \chi) \id (\psi \id \theta)))$.
+    \end{itemize}
+    The only inference rule is the \emph{modus ponens} rule:
+    $$
+        MP: \frac{
+            \varphi, \ \varphi \ra \psi}%
+        { \psi }
+    $$
+\end{definition}
+
+\begin{definition}[A theorem]
+    A formula $\varphi$ is \emph{a theorem} if there exists a finite set of formulas $\varphi_1, ..., \varphi_n$ ($n \geq 1$), such that $\varphi = \varphi_n$, and for all $i \in \{1, ..., n\}$ the formula $\varphi_i$ is either an axiom of SCI, or it is inferred from formulas $\varphi_j$, $\varphi_k$ ($j, k <i$) via the \emph{modus ponens} rule. We'll mark it as $\vdash \varphi$ and say that it is \emph{provable}.
+\end{definition}
+
+Let us give an example of a provable formula with its full proof:
+
+TODO
+
+\begin{definition}[Decidability]
+    A logic is \emph{decidable} if there exists an effective method to determine whether a given formula of this logic is a theorem.
+\end{definition}
+
+Let us now give some semantic definitions:
+
+\begin{definition}[Model]
+    An SCI model is a structure $M = (U, D, \tilde{\lnot}, \tilde{\ra}, \tilde{\id})$ where:
+    \begin{itemize}
+        \item $U \not = \emptyset$ is the \emph{universe} of $M$,
+        \item $\emptyset \not = D \subsetneq U$ is the \emph{set of designated values},
+        \item $\tilde{\lnot}: U \longrightarrow U$ is the algebraic counterpart of the operator not, such that $\forall a \in U$: $\tilde{\lnot}a \in D$ iff $a \not \in D$,
+        \item $\tilde{\ra}: U \times U \longrightarrow U$ is the algebraic counterpart of the operator of implication, such that $\forall a, b \in U$: $a \tilde{\ra} b \in D$ iff $a \not \in D$ or $b \in D$,
+        \item $\tilde{\id}: U \times U \longrightarrow U$ is the algebraic counterpart of the operator of identity, such that $\forall a, b \in U$: $a \tilde{\id} b$ iff $a = b$ (that is, iff $a$ and $b$ denote the same element of the universe $U$).
+    \end{itemize}
+\end{definition}
+
+\begin{definition}[Valuation]
+    Given a model $M = (U, D, \tilde{\lnot}, \tilde{\ra}, \tilde{\id})$, a valuation in this model is a function $V : \FOR \longrightarrow U$, such that for all $\varphi, \psi \in \FOR$:
+    \begin{itemize}
+        \item $V(\lnot \varphi) = \tilde{\lnot}V(\varphi)$
+        \item $V(\varphi \ra \psi) = V(\varphi) \tilde{\ra} V(\psi)$
+        \item $V(\varphi \id \psi) = V(\varphi) \tilde{\id} V(\psi)$
+    \end{itemize}
+    If $V(\varphi) = a$ we will call $a$ the \emph{denotation of $\varphi$}.
+\end{definition}
+
+\begin{definition}[Satisfiability of a formula]
+    Given a model $M = (U, D)(U, D, \tilde{\lnot}, \tilde{\ra}, \tilde{\id})$ and a valuation $V$, a formula $\varphi$ is \emph{satisfied in this valuation} iff its valuation belongs to $D$. If a formula $\varphi$ is satisfied we will mark it by $M, V \models \varphi$.
+\end{definition}
+
+\begin{definition}[Truth of a formula]
+    Given a model $M = (U, D)(U, D, \tilde{\lnot}, \tilde{\ra}, \tilde{\id})$, a formula is \emph{true in this model} iff it is satisfied in all valuations of this model. We'll mark it by $M \models \varphi$.
+\end{definition}
+
+\begin{definition}[Validity of a formula]
+    A formula is \emph{valid} iff it is true in all models. We'll mark it by $ \models \varphi$.
+\end{definition}
+
+Let us see some examples:
+TODO
+
+\begin{theorem}[Correctness and fullness of SCI]
+    For any formula $\varphi$ the following two are equivalent:
+    \begin{itemize}
+        \item $\varphi$ is provable,
+        \item $\varphi$ is valid.
+    \end{itemize}
+\end{theorem}
+
+The proof of the correctness and fullness theorem can be found in TODO(Suszko Bloom Th 1.9).
+
+\begin{theorem}[Dedidability of SCI]
+    SCI is decidable.
+\end{theorem}
+
+The proof of the decidability theorem can be found in TODO(Suszko Bloom Corollary 2.4)
+
+------------------------------------------------------------------
+
+
 \begin{definition}[Complexity of a set of formulas]
     Given a set of formulas $\Phi$, let us define:
     $$
@@ -111,12 +244,19 @@ Let us assume that we are given a full ordering of formulas $\prec$, such that:
 \begin{itemize}
     \item if $\varphi \not = \psi$, then $\varphi \prec \psi$ or $\psi \prec \varphi$,
     \item if $s(\varphi) < s(\psi)$, then $\varphi \prec \psi$,
-    \item if $\varphi \prec \psi$, then $\varphi \eq \psi \prec \psi \eq \varphi$.
+    \item if $\varphi \prec \psi$, then $\varphi \id \psi \prec \psi \id \varphi$.
 \end{itemize}
 
-
-\subsection{...}
 \subsection{Axiomatization of SCI}
+
+The axioms of SCI are as follows:
+
+The only inference rule is the rule $\texttt{MP}$:
+\begin{equation}
+    \tag{\texttt{MP}}
+    \frac{\varphi \ra \psi, \varphi}{\psi}
+\end{equation}
+
 \section{Satisfiability in SCI}
 \subsection{SCI is decidable}
 \subsection{Decision procedures}
@@ -199,72 +339,72 @@ Let us assume that we are given a full ordering of formulas $\prec$, such that:
             \begin{equation}
                 \tag{$\not \eq_2$}
                 \frac{
-                    \Phi \cup \{ \varphi \not \eq \psi \} }%
-                { \Phi \cup \{ \alpha \eq \varphi, \beta \eq \psi, \alpha \not \eq \beta \} }
+                    \Phi \cup \{ \varphi \not \id \psi \} }%
+                { \Phi \cup \{ \alpha \id \varphi, \beta \id \psi, \alpha \not \id \beta \} }
             \end{equation}
         \end{subfigure}
         \begin{subfigure}{0.4\textwidth}
             \begin{equation}
                 \tag{$\eq_\lnot$}
                 \frac{
-                    \Phi \cup \{ p \eq \lnot \psi  \} }%
-                { \Phi \cup \{ p \eq \lnot \alpha, \alpha \eq \psi \} }
+                    \Phi \cup \{ p \id \lnot \psi  \} }%
+                { \Phi \cup \{ p \id \lnot \alpha, \alpha \id \psi \} }
             \end{equation}
         \end{subfigure}
         \begin{subfigure}{0.5\textwidth}
             \begin{equation}
                 \tag{$ \eq_\ra $}
                 \frac{
-                    \Phi \cup \{ p \eq (\varphi \ra \psi) \} }%
-                { \Phi \cup \{ p \eq (\alpha \ra \beta), \alpha \eq \varphi, \beta \eq \psi \} }
+                    \Phi \cup \{ p \id (\varphi \ra \psi) \} }%
+                { \Phi \cup \{ p \id (\alpha \ra \beta), \alpha \id \varphi, \beta \id \psi \} }
             \end{equation}
         \end{subfigure}
         \begin{subfigure}{0.4\textwidth}
             \begin{equation}
                 \tag{$ \eq_\ra^l $}
                 \frac{
-                    \Phi \cup \{ p \eq (q \ra \psi) \} }%
-                { \Phi \cup \{ p \eq (q \ra \alpha), \alpha \eq \psi  \} }
+                    \Phi \cup \{ p \id (q \ra \psi) \} }%
+                { \Phi \cup \{ p \id (q \ra \alpha), \alpha \id \psi  \} }
             \end{equation}
         \end{subfigure}
         \begin{subfigure}{0.4\textwidth}
             \begin{equation}
                 \tag{$ \eq_\ra^r $}
                 \frac{
-                    \Phi \cup \{ p \eq (\varphi \ra q) \} }%
-                { \Phi \cup \{ p \eq (\alpha \ra q), \alpha \eq \varphi  \} }
+                    \Phi \cup \{ p \id (\varphi \ra q) \} }%
+                { \Phi \cup \{ p \id (\alpha \ra q), \alpha \id \varphi  \} }
             \end{equation}
         \end{subfigure}
         \begin{subfigure}{0.4\textwidth}
             \begin{equation}
-                \tag{$ \eq_\eq^l $}
+                \tag{$ \eq_\id^l $}
                 \frac{
-                    \Phi \cup \{ p \eq (q \eq \psi) \} }%
-                { \Phi \cup \{ p \eq (q \eq \alpha), \alpha \eq \psi  \} }
+                    \Phi \cup \{ p \id (q \id \psi) \} }%
+                { \Phi \cup \{ p \id (q \id \alpha), \alpha \id \psi  \} }
             \end{equation}
         \end{subfigure}
         \begin{subfigure}{0.4\textwidth}
             \begin{equation}
-                \tag{$ \eq_\eq^r$}
+                \tag{$ \eq_\id^r$}
                 \frac{
-                    \Phi \cup \{ p \eq (\varphi \eq q) \} }%
-                { \Phi \cup \{ p \eq (\alpha \eq q), \alpha \eq \varphi \} }
+                    \Phi \cup \{ p \id (\varphi \id q) \} }%
+                { \Phi \cup \{ p \id (\alpha \id q), \alpha \id \varphi \} }
             \end{equation}
         \end{subfigure}
         \begin{subfigure}{0.45\textwidth}
             \begin{equation}
-                \tag{$ \eq_\eq $}
+                \tag{$ \eq_\id $}
                 \frac{
-                    \Phi \cup \{ p \eq (\varphi \eq \psi) \} }%
-                { \Phi \cup \{ p \eq (\alpha \eq \beta), \alpha \eq \varphi, \beta \eq \psi \} }
+                    \Phi \cup \{ p \id (\varphi \id \psi) \} }%
+                { \Phi \cup \{ p \id (\alpha \id \beta), \alpha \id \varphi, \beta \id \psi \} }
             \end{equation}
         \end{subfigure}
         \begin{subfigure}{0.4\textwidth}
             \begin{equation}
-                \tag{$ \eq$}
+                \tag{$ \id$}
                 \frac{
-                    \Phi \cup \{ \varphi \eq \psi \} }%
-                { \Phi \cup \{ \alpha \eq \beta, \alpha \eq \varphi, \beta \eq \psi \} }
+                    \Phi \cup \{ \varphi \id \psi \} }%
+                { \Phi \cup \{ \alpha \id \beta, \alpha \id \varphi, \beta \id \psi \} }
             \end{equation}
         \end{subfigure}
         \caption{Identity rules. Note: in all identity rules the highlighted formula is not simple (i.e. $\varphi$ and $\psi$ are not variables)}
@@ -281,7 +421,7 @@ Let us assume that we are given a full ordering of formulas $\prec$, such that:
                 \tag{$\texttt{sym}_1^2$}
                 \frac{
                     \Phi \cup \{ \varphi \equiv \psi \} }%
-                { \Phi \cup \{\psi \equiv \varphi, \varphi \eq \psi \} }
+                { \Phi \cup \{\psi \equiv \varphi, \varphi \id \psi \} }
                 \text{ if $\varphi$ > $\psi$}
             \end{equation}
         \end{subfigure}
@@ -290,7 +430,7 @@ Let us assume that we are given a full ordering of formulas $\prec$, such that:
                 \tag{$\texttt{sym}_2^2$}
                 \frac{
                     \Phi \cup \{ \varphi \not \equiv \psi \}}%
-                { \Phi \cup \{\psi \not \equiv \varphi, \varphi \not \eq \psi\} }
+                { \Phi \cup \{\psi \not \equiv \varphi, \varphi \not \id \psi\} }
                 \text{ if $\varphi$ > $\psi$}
             \end{equation}
         \end{subfigure}
@@ -309,29 +449,29 @@ Let us assume that we are given a full ordering of formulas $\prec$, such that:
             \begin{equation}
                 \tag{$ \eq_\top $}
                 \frac{
-                    \Phi \cup \{ p \eq q \} }%
-                { \Phi \cup \{ p, q, p\eq q \} | \Phi \cup \{ \lnot p, \lnot q, p\eq q \} }
+                    \Phi \cup \{ p \id q \} }%
+                { \Phi \cup \{ p, q, p\id q \} | \Phi \cup \{ \lnot p, \lnot q, p\id q \} }
             \end{equation}
         \end{subfigure}
         \begin{subfigure}{0.48\textwidth}
             \begin{equation}
                 \tag{$ \eq_\top^\lnot $}
                 \frac{
-                    \Phi \cup \{ p \eq \lnot q \} }%
-                { \Phi \cup \{ p, \lnot q, p \eq \lnot q \} | \Phi \cup \{ \lnot p, q, p\eq \lnot q \} }
+                    \Phi \cup \{ p \id \lnot q \} }%
+                { \Phi \cup \{ p, \lnot q, p \id \lnot q \} | \Phi \cup \{ \lnot p, q, p\id \lnot q \} }
             \end{equation}
         \end{subfigure}
         \begin{equation}
             \tag{$ \eq_\top^\ra $}
             \frac{
-                \Phi \cup \{ p \eq (q \ra r) \} }%
+                \Phi \cup \{ p \id (q \ra r) \} }%
             { \Phi \cup \{ p, \lnot q, \theta \} | \Phi \cup \{ p, r, \theta \} | \Phi \cup \{ \lnot p, q, \lnot r, \theta \}}
-            \text{, where } \theta = (p \eq (q \ra r))
+            \text{, where } \theta = (p \id (q \ra r))
         \end{equation}
         \begin{equation}
-            \tag{$ \eq_\top^\eq $}
+            \tag{$ \eq_\top^\id $}
             \frac{
-                \Phi \cup \{ p \eq (q \eq r) \} }%
+                \Phi \cup \{ p \id (q \id r) \} }%
             { \Phi \cup \Phi_1 |
                 \Phi \cup \Phi_2 |
                 \Phi \cup \Phi_3 |
@@ -343,24 +483,24 @@ Let us assume that we are given a full ordering of formulas $\prec$, such that:
         \end{equation}
         \[
             \begin{aligned}
-                \Phi_1 & = \{p, q, r, q \eq r, p \eq (q \eq r) \}                       \\
-                \Phi_2 & = \{p, \lnot q, \lnot r, q \eq r, p \eq (q \eq r) \}           \\
-                \Phi_3 & = \{\lnot p, q, r, q \not \eq r, p \eq (q \eq r) \}            \\
-                \Phi_4 & = \{\lnot p, q, \lnot r, q \not \eq r, p \eq (q \eq r) \}      \\
-                \Phi_5 & = \{\lnot p,\lnot q, r, q \not \eq r, p \eq (q \eq r) \}       \\
-                \Phi_6 & = \{\lnot p, \lnot q,\lnot r, q \not \eq r, p \eq (q \eq r) \} \\
+                \Phi_1 & = \{p, q, r, q \id r, p \id (q \id r) \}                       \\
+                \Phi_2 & = \{p, \lnot q, \lnot r, q \id r, p \id (q \id r) \}           \\
+                \Phi_3 & = \{\lnot p, q, r, q \not \id r, p \id (q \id r) \}            \\
+                \Phi_4 & = \{\lnot p, q, \lnot r, q \not \id r, p \id (q \id r) \}      \\
+                \Phi_5 & = \{\lnot p,\lnot q, r, q \not \id r, p \id (q \id r) \}       \\
+                \Phi_6 & = \{\lnot p, \lnot q,\lnot r, q \not \id r, p \id (q \id r) \} \\
             \end{aligned}
         \]
         \begin{equation}
             \tag{$\eq_\bot$}
             \frac{
-                \Phi \cup \{ p \not \eq q \} }%
+                \Phi \cup \{ p \not \id q \} }%
             { \Phi \cup \{p,q,\theta\} |
                 \Phi \cup \{p,\lnot q,\theta\} |
                 \Phi \cup \{\lnot p,q,\theta\} |
                 \Phi \cup \{\lnot p,\lnot q,\theta\}
             }
-            \text{, where } \theta = (p \not \eq q)
+            \text{, where } \theta = (p \not \id q)
         \end{equation}
     \end{subfigure}
     \caption{Deduction rules of the second phase of $\Ts$.}
@@ -447,7 +587,7 @@ First, let us show that the first phase finishes.
     Given a set of simple formulas, phase 2 finishes.
 \end{theorem}
 \begin{proof}
-    TODO: trywialne. Wszystkie formuły z $\eq$ w nazwie wykonają się co najwyżej raz, po każdej z nich $\texttt{sym}*$ i $\texttt{fun}$ też co najwyżej raz. 
+    TODO: trywialne. Wszystkie formuły z $\id$ w nazwie wykonają się co najwyżej raz, po każdej z nich $\texttt{sym}*$ i $\texttt{fun}$ też co najwyżej raz.
 \end{proof}
 
 Let us call a tree that is produced by the $\Ts$ procedure a $\Ts$ tree.
@@ -457,46 +597,46 @@ Let us call a tree that is produced by the $\Ts$ procedure a $\Ts$ tree.
     \begin{itemize}
         \item [(X1)] $X$ is a set of simple formulas.
         \item [(X2)] If $\varphi \in \FOR^X$ then $\varphi$ is either a simple formula or is equal to $p \ra q$, for some variables $p, q$.
-        \item [(X3)] If $\varphi \eq \psi \in \FOR^X$, then $\varphi \leq \psi$ or $\psi \eq \varphi \in \FOR^X$.
-        \item [(X4)] If $\varphi \not \eq \psi \in \FOR^X$, then $\varphi < \psi$ or $\psi \not \eq \varphi \in \FOR^X$.
-        \item [(X5)] If $p \eq q \in X$, then $p, q \in X$, or $\lnot p, \lnot q \in X$.
-        \item [(X6)] If $p \eq \lnot q \in X$, then $p, \lnot q \in X$, or $\lnot p, q \in X$.
-        \item [(X7)] If $p \eq (q \ra r) \in X$, then $p, \lnot q \in X$, or $p, r \in X$, or $\lnot p, q, \lnot r \in X$.
-        \item [(X8)] If $p \eq (q \eq r) \in X$, then $\Phi_i \subseteq X$, for $i \in \{1, ..., 6\}$, where $\Phi_i$ are defined in figure \ref{fig:rules2}.
+        \item [(X3)] If $\varphi \id \psi \in \FOR^X$, then $\varphi \leq \psi$ or $\psi \id \varphi \in \FOR^X$.
+        \item [(X4)] If $\varphi \not \id \psi \in \FOR^X$, then $\varphi < \psi$ or $\psi \not \id \varphi \in \FOR^X$.
+        \item [(X5)] If $p \id q \in X$, then $p, q \in X$, or $\lnot p, \lnot q \in X$.
+        \item [(X6)] If $p \id \lnot q \in X$, then $p, \lnot q \in X$, or $\lnot p, q \in X$.
+        \item [(X7)] If $p \id (q \ra r) \in X$, then $p, \lnot q \in X$, or $p, r \in X$, or $\lnot p, q, \lnot r \in X$.
+        \item [(X8)] If $p \id (q \id r) \in X$, then $\Phi_i \subseteq X$, for $i \in \{1, ..., 6\}$, where $\Phi_i$ are defined in figure \ref{fig:rules2}.
     \end{itemize}
 \end{theorem}
 \begin{proof}
-        (X1) Phase 1 ends with nodes containing only simple formulas. Phase 2 doesn't add any non-simple formulas.
+    (X1) Phase 1 ends with nodes containing only simple formulas. Phase 2 doesn't add any non-simple formulas.
 
-        (X2), ... (X8) Trivial, directly following phase 2 rules.
+    (X2), ... (X8) Trivial, directly following phase 2 rules.
 \end{proof}
 
 \begin{lemma}[Lemat 5 z DD]
     Let $X$ be an open leaf of a $\Ts$ tree and let $\lnot \varphi \in \FOR^X$. Then:
     $$
-    \varphi \in X \cup \IDx \text{ iff } \lnot \varphi \not \in X \cup \IDx.
+        \varphi \in X \cup \IDx \text{ iff } \lnot \varphi \not \in X \cup \IDx.
     $$
 \end{lemma}
 \begin{proof}
-    Because of $X2$, if $\lnot \varphi \in \FORx$, then $\varphi = p$ or $\varphi = (p \eq q)$ for some variables $p, q$.
+    Because of $X2$, if $\lnot \varphi \in \FORx$, then $\varphi = p$ or $\varphi = (p \id q)$ for some variables $p, q$.
 
     \begin{itemize}
         \item [1°] $\varphi = p$. ... (Jak w DD.)
-        \item [2°] $\varphi = (p \eq q)$. \\
-            Since $\lnot \varphi = p \not \eq q \in \FORx$, we have that $p \not \eq q \in X$, because $p \not \eq q$ cannot be a subformula of a simple formula. From $p \not \eq q \in X$ it follows that $p \not = q$ and $p \eq q \not \in X$, otherwise $X$ would be an axiom set and therefore closed.
+        \item [2°] $\varphi = (p \id q)$. \\
+              Since $\lnot \varphi = p \not \id q \in \FORx$, we have that $p \not \id q \in X$, because $p \not \id q$ cannot be a subformula of a simple formula. From $p \not \id q \in X$ it follows that $p \not = q$ and $p \id q \not \in X$, otherwise $X$ would be an axiom set and therefore closed.
 
-            So, we have: $p \not \eq q \in X$ (so, $\lnot \varphi \in X \subseteq X \cup \IDx$). We need to show that $\varphi \not \in X \cup \IDx$, i.e. $p \eq q \not \in X \cup \IDx$. We have that $p \eq q \not \in X$, so all we need to show is that $p \eq q \not \in \IDx$.
-            
-            Let as assume otherwise, that $p \eq q \in \IDx$.
-            
-            Since $p \eq q \not \in X$, we have that $p \eq q \not \in \IDx_0$. $p \eq q \not \in \IDx_n$ for $n > 0$ based on the definition of $\IDx_n$. So, for the $p \eq q$ to be in $\IDx$ we need to have formulas $\theta_1, ..., \theta_k$, for some $k \geq 1$, such that: $p \eq \theta_1 \in X$, or $\theta_1 \eq p \in X$, ..., $\theta_k \eq q$, or $q \eq \theta_k$.
-            \begin{itemize}
-                \item [2.1°] $k = 1$.\\
-                TODO: przepisać żeby było jaśniej.\\
-                We have that $p \eq \theta_1 \in X$, or $\theta_1 \eq p \in X$ and $\theta_1 \eq q \in X$, or $q \eq \theta_1 \in X$. One of the formulas in $\{p, q, \theta_1\}$ will be smallest in the ordering $\prec$. If the formula $p$ is the smallest, the $\texttt{fun}$ rule would produce $q \eq p \in X$ (or $p \eq q \in X$) from $q \eq \theta_1 \in X$ (or $\theta_1 \eq q \in X$) by replacing $\theta_1$ by $p$. In any case, $p \eq q$ would be in $X$ (possibly after $\texttt{sym}^2_1$). Thus $X$ would be an axiom set ($p\not \eq q, p \eq q \in X$), a contradiction. A contradiction happens in a similar way if the formula $q$ is the smallest of the three. If the formula $\theta_1$ is the smallest one, from $p \not \eq q \in X$ will be produced either $\theta_1 \not \eq q \in X$ or $p \not \eq \theta_1 \in X$ (by $\texttt{fun}$ similarly to above), giving another contradiction.
-                \item [2.2°] $k > 1$.\\
-                ???
-            \end{itemize}
+              So, we have: $p \not \id q \in X$ (so, $\lnot \varphi \in X \subseteq X \cup \IDx$). We need to show that $\varphi \not \in X \cup \IDx$, i.e. $p \id q \not \in X \cup \IDx$. We have that $p \id q \not \in X$, so all we need to show is that $p \id q \not \in \IDx$.
+
+              Let as assume otherwise, that $p \id q \in \IDx$.
+
+              Since $p \id q \not \in X$, we have that $p \id q \not \in \IDx_0$. $p \id q \not \in \IDx_n$ for $n > 0$ based on the definition of $\IDx_n$. So, for the $p \id q$ to be in $\IDx$ we need to have formulas $\theta_1, ..., \theta_k$, for some $k \geq 1$, such that: $p \id \theta_1 \in X$, or $\theta_1 \id p \in X$, ..., $\theta_k \id q$, or $q \id \theta_k$.
+              \begin{itemize}
+                  \item [2.1°] $k = 1$.\\
+                        TODO: przepisać żeby było jaśniej.\\
+                        We have that $p \id \theta_1 \in X$, or $\theta_1 \id p \in X$ and $\theta_1 \id q \in X$, or $q \id \theta_1 \in X$. One of the formulas in $\{p, q, \theta_1\}$ will be smallest in the ordering $\prec$. If the formula $p$ is the smallest, the $\texttt{fun}$ rule would produce $q \id p \in X$ (or $p \id q \in X$) from $q \id \theta_1 \in X$ (or $\theta_1 \id q \in X$) by replacing $\theta_1$ by $p$. In any case, $p \id q$ would be in $X$ (possibly after $\texttt{sym}^2_1$). Thus $X$ would be an axiom set ($p\not \id q, p \id q \in X$), a contradiction. A contradiction happens in a similar way if the formula $q$ is the smallest of the three. If the formula $\theta_1$ is the smallest one, from $p \not \id q \in X$ will be produced either $\theta_1 \not \id q \in X$ or $p \not \id \theta_1 \in X$ (by $\texttt{fun}$ similarly to above), giving another contradiction.
+                  \item [2.2°] $k > 1$.\\
+                        ???
+              \end{itemize}
     \end{itemize}
 \end{proof}
 
