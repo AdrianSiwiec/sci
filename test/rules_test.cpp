@@ -60,7 +60,7 @@ void testGetNewVar() {
   int var = GetNewVar();
   assert(var == 4);
   assert(int_to_variable[var] == "v4");
-  assert(variable_to_int["v4"] = 4);
+  assert(variable_to_int["v4"] == 4);
 }
 
 void testIsSimple() {

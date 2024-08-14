@@ -1,3 +1,10 @@
+1208/*
+1308/*
+1408/*
+hilbert_in*
+hilbert_out*
+
+
 obj/*
 site/main.wasm
 .vscode/settings.json

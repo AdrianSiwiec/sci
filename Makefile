@@ -8,8 +8,8 @@ TESTDIR=test
 CXX=g++
 CXXINC=-I ./$(INCDIR)/
 # CXXFLAGS= -std=c++17 $(CXXINC) -g -rdynamic -Werror=return-type -Werror -Wall -Wno-sign-compare 
-# CXXFLAGS=-O3 -std=c++17 $(CXXINC) -g -rdynamic -Werror=return-type -Werror -Wall -Wno-sign-compare 
-CXXFLAGS=-Og -std=c++17 $(CXXINC) -g -rdynamic -Werror=return-type -Werror -Wall -Wno-sign-compare -pg -g
+CXXFLAGS=-O3 -std=c++17 $(CXXINC) -g -rdynamic -Werror=return-type -Wall -Wno-sign-compare 
+# CXXFLAGS=-Og -std=c++17 $(CXXINC) -g -rdynamic -Werror=return-type -Werror -Wall -Wno-sign-compare -pg -g
 
 INCFILES=$(wildcard $(INCDIR)/*.h)
 SRCFILES=$(wildcard $(SRCDIR)/*.cpp)
@@ -24,6 +24,7 @@ RUNTIMEFILES=$(patsubst %.cpp, $(OBJDIR)/%.e, $(wildcard $(SRCDIR)/*.cpp))
 unitTest: $(UNITTESTFILES)
 main: $(UNITTESTFILES)
 infiTest: $(UNITTESTFILES)
+hilbertSolver: $(UNITTESTFILES)
 
 $(OBJDIR)/%.o: %.cpp
 	@mkdir -p $(dir $@)
@@ -54,6 +55,9 @@ main:
 
 infiTest:
 	./obj/test/infiTest.e
+
+hilbertSolver:
+	./obj/test/hilbert_solver.e <hilbert_in >hilbert_out
 
 site:
 	./site/build_site.sh
