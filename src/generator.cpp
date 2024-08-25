@@ -7,20 +7,23 @@ int GetRandom(int start, int end) {
 }
 int GetRandom(int end) { return GetRandom(0, end); }
 
-Formula GetRandomFormula(int subformulas, int variables_size, const vector<Formula>& interesting) {
+Formula GetRandomFormula(int subformulas, int variables_size,
+                         const vector<Formula> &interesting) {
   assert(subformulas > 0);
-  if((subformulas == 2 || subformulas == 3) && ((rand() % 10) == 0))
-  {
-      return interesting[rand() % interesting.size()];
+  if ((subformulas == 2 || subformulas == 3) && ((rand() % 100) == 0)) {
+    return interesting[rand() % interesting.size()];
   }
   if (subformulas == 1) {
     // return Formula(string(1, 'a' + (rand() % variables_size)));
-    int r = rand() % 10;
+    int r = rand() % 20;
     if (r == 0) {
       return FId(Formula(0), FNot(Formula(0)));
     } else if (r == 1) {
       return FId(FNot(Formula(0)), Formula(0));
-      return FNot(Formula(0));
+    } else if (r == 2) {
+      return FNot(FId(Formula(0), FNot(Formula(0))));
+    } else if (r == 3) {
+      return FNot(FId(FNot(Formula(0)), Formula(0)));
     } else if (r % 2) {
       return Formula(0);
     } else {
