@@ -9,14 +9,14 @@ auto axioms = DoParseFormulas(
     "phi -> (psi -> phi),"
     "(phi -> (psi -> chi)) -> ((phi -> psi) -> (phi -> chi)),"
     "(-phi -> -psi) -> (psi -> phi),"
-    "phi = phi,"
-    "(phi = psi) -> (phi -> psi),"
-    "(phi = psi) -> (-phi = -psi),"
-    "(phi = psi) -> ((chi = theta) -> ((phi -> chi) = (psi -> theta))),"
-    "(phi = psi) -> ((chi = theta) -> ((phi = chi) = (psi = theta))),"
-    "phi -> phi,"
-    "(psi = chi) -> ((phi -> psi) = (phi -> chi))," // 7, 4
-    "(psi = chi) -> ((phi = psi) = (phi = chi))",   // 8, 4
+    "phi -> phi,",
+    // "phi = phi,"
+    // "(phi = psi) -> (phi -> psi),"
+    // "(phi = psi) -> (-phi = -psi),"
+    // "(phi = psi) -> ((chi = theta) -> ((phi -> chi) = (psi -> theta))),"
+    // "(phi = psi) -> ((chi = theta) -> ((phi = chi) = (psi = theta))),"
+    // "(psi = chi) -> ((phi -> psi) = (phi -> chi))," // 7, 4
+    // "(psi = chi) -> ((phi = psi) = (phi = chi))",   // 8, 4
     0);
 int vars_needed[] = {2, 3, 2, 1, 2, 2, 4, 4, 1, 3, 3, 2};
 
@@ -54,85 +54,96 @@ bool isAx3(const Formula &f) {
          f.Subformula(0).Subformula(1).Subformula() ==
              f.Subformula(1).Subformula(0);
 }
+// bool isAx4(const Formula &f) {
+//   return f.IsOp(Operator::op_id) && f.Subformula(0) == f.Subformula(1);
+// }
+// bool isAx5(const Formula &f) {
+//   return f.IsOp(Operator::op_impl) && f.Subformula(0).IsOp(Operator::op_id)
+//   &&
+//          f.Subformula(1).IsOp(Operator::op_impl) &&
+//          f.Subformula(0).Subformula(0) == f.Subformula(1).Subformula(0) &&
+//          f.Subformula(0).Subformula(1) == f.Subformula(1).Subformula(1);
+// }
+// // "(phi = psi) -> (-phi = -psi),"
+// bool isAx6(const Formula &f) {
+//   return f.IsOp(Operator::op_impl) && f.Subformula(0).IsOp(Operator::op_id)
+//   &&
+//          f.Subformula(1).IsOp(Operator::op_id) &&
+//          f.Subformula(1).Subformula(0).IsOp(Operator::op_not) &&
+//          f.Subformula(1).Subformula(1).IsOp(Operator::op_not) &&
+//          f.Subformula(1).Subformula(0).Subformula() ==
+//              f.Subformula(0).Subformula(0) &&
+//          f.Subformula(1).Subformula(1).Subformula() ==
+//              f.Subformula(0).Subformula(1);
+// }
+// bool isAx7or8a(const Formula &f) {
+//   return f.IsOp(Operator::op_impl) && f.Subformula(0).IsOp(Operator::op_impl)
+//   &&
+//          f.Subformula(0).Subformula(0).IsOp(Operator::op_id) &&
+//          f.Subformula(0).Subformula(1).IsOp(Operator::op_id) &&
+//          f.Subformula(1).IsOp(Operator::op_id);
+// }
+// bool isAx7or8b(const Formula &f) {
+//   return f.Subformula(0).Subformula(0).Subformula(0) ==
+//              f.Subformula(1).Subformula(0).Subformula(0) &&
+//          f.Subformula(0).Subformula(0).Subformula(1) ==
+//              f.Subformula(1).Subformula(1).Subformula(0) &&
+//          f.Subformula(0).Subformula(1).Subformula(0) ==
+//              f.Subformula(1).Subformula(0).Subformula(1) &&
+//          f.Subformula(0).Subformula(1).Subformula(1) ==
+//              f.Subformula(1).Subformula(1).Subformula(1);
+// }
+// // "(phi = psi) -> ((chi = theta) -> ((phi -> chi) = (psi -> theta))),"
+// bool isAx7(const Formula &f) {
+//   return isAx7or8a(f) &&
+//          f.Subformula(1).Subformula(0).IsOp(Operator::op_impl) &&
+//          f.Subformula(1).Subformula(1).IsOp(Operator::op_impl) &&
+//          isAx7or8b(f);
+// }
+// // "(phi = psi) -> ((chi = theta) -> ((phi = chi) = (psi = theta)))",
+// bool isAx8(const Formula &f) {
+//   return isAx7or8a(f) && f.Subformula(1).Subformula(0).IsOp(Operator::op_id)
+//   &&
+//          f.Subformula(1).Subformula(1).IsOp(Operator::op_id) && isAx7or8b(f);
+// }
 bool isAx4(const Formula &f) {
-  return f.IsOp(Operator::op_id) && f.Subformula(0) == f.Subformula(1);
-}
-bool isAx5(const Formula &f) {
-  return f.IsOp(Operator::op_impl) && f.Subformula(0).IsOp(Operator::op_id) &&
-         f.Subformula(1).IsOp(Operator::op_impl) &&
-         f.Subformula(0).Subformula(0) == f.Subformula(1).Subformula(0) &&
-         f.Subformula(0).Subformula(1) == f.Subformula(1).Subformula(1);
-}
-// "(phi = psi) -> (-phi = -psi),"
-bool isAx6(const Formula &f) {
-  return f.IsOp(Operator::op_impl) && f.Subformula(0).IsOp(Operator::op_id) &&
-         f.Subformula(1).IsOp(Operator::op_id) &&
-         f.Subformula(1).Subformula(0).IsOp(Operator::op_not) &&
-         f.Subformula(1).Subformula(1).IsOp(Operator::op_not) &&
-         f.Subformula(1).Subformula(0).Subformula() ==
-             f.Subformula(0).Subformula(0) &&
-         f.Subformula(1).Subformula(1).Subformula() ==
-             f.Subformula(0).Subformula(1);
-}
-bool isAx7or8a(const Formula &f) {
-  return f.IsOp(Operator::op_impl) && f.Subformula(0).IsOp(Operator::op_impl) &&
-         f.Subformula(0).Subformula(0).IsOp(Operator::op_id) &&
-         f.Subformula(0).Subformula(1).IsOp(Operator::op_id) &&
-         f.Subformula(1).IsOp(Operator::op_id);
-}
-bool isAx7or8b(const Formula &f) {
-  return f.Subformula(0).Subformula(0).Subformula(0) ==
-             f.Subformula(1).Subformula(0).Subformula(0) &&
-         f.Subformula(0).Subformula(0).Subformula(1) ==
-             f.Subformula(1).Subformula(1).Subformula(0) &&
-         f.Subformula(0).Subformula(1).Subformula(0) ==
-             f.Subformula(1).Subformula(0).Subformula(1) &&
-         f.Subformula(0).Subformula(1).Subformula(1) ==
-             f.Subformula(1).Subformula(1).Subformula(1);
-}
-// "(phi = psi) -> ((chi = theta) -> ((phi -> chi) = (psi -> theta))),"
-bool isAx7(const Formula &f) {
-  return isAx7or8a(f) &&
-         f.Subformula(1).Subformula(0).IsOp(Operator::op_impl) &&
-         f.Subformula(1).Subformula(1).IsOp(Operator::op_impl) && isAx7or8b(f);
-}
-// "(phi = psi) -> ((chi = theta) -> ((phi = chi) = (psi = theta)))",
-bool isAx8(const Formula &f) {
-  return isAx7or8a(f) && f.Subformula(1).Subformula(0).IsOp(Operator::op_id) &&
-         f.Subformula(1).Subformula(1).IsOp(Operator::op_id) && isAx7or8b(f);
-}
-bool isAx9(const Formula &f) {
   return f.IsOp(Operator::op_impl) && f.Subformula(0) == f.Subformula(1);
 }
-bool isAx10or11(const Formula &f) {
-  return f.Subformula(0).Subformula(0) ==
-             f.Subformula(1).Subformula(0).Subformula(1) &&
-         f.Subformula(0).Subformula(1) ==
-             f.Subformula(1).Subformula(1).Subformula(1) &&
-         f.Subformula(1).Subformula(0).Subformula(0) ==
-             f.Subformula(1).Subformula(1).Subformula(0);
-}
-// "(psi = chi) -> ((phi -> psi) = (phi -> chi)),"
-bool isAx10(const Formula &f) {
-  return f.IsOp(Operator::op_impl) && f.Subformula(0).IsOp(Operator::op_id) &&
-         f.Subformula(1).IsOp(Operator::op_id) &&
-         f.Subformula(1).Subformula(0).IsOp(Operator::op_impl) &&
-         f.Subformula(1).Subformula(1).IsOp(Operator::op_impl) && isAx10or11(f);
-}
-// "(psi = chi) -> ((phi = psi) = (phi = chi))",
-bool isAx11(const Formula &f) {
-  return f.IsOp(Operator::op_impl) && f.Subformula(0).IsOp(Operator::op_id) &&
-         f.Subformula(1).IsOp(Operator::op_id) &&
-         f.Subformula(1).Subformula(0).IsOp(Operator::op_id) &&
-         f.Subformula(1).Subformula(1).IsOp(Operator::op_id) && isAx10or11(f);
-}
+// bool isAx10or11(const Formula &f) {
+//   return f.Subformula(0).Subformula(0) ==
+//              f.Subformula(1).Subformula(0).Subformula(1) &&
+//          f.Subformula(0).Subformula(1) ==
+//              f.Subformula(1).Subformula(1).Subformula(1) &&
+//          f.Subformula(1).Subformula(0).Subformula(0) ==
+//              f.Subformula(1).Subformula(1).Subformula(0);
+// }
+// // "(psi = chi) -> ((phi -> psi) = (phi -> chi)),"
+// bool isAx10(const Formula &f) {
+//   return f.IsOp(Operator::op_impl) && f.Subformula(0).IsOp(Operator::op_id)
+//   &&
+//          f.Subformula(1).IsOp(Operator::op_id) &&
+//          f.Subformula(1).Subformula(0).IsOp(Operator::op_impl) &&
+//          f.Subformula(1).Subformula(1).IsOp(Operator::op_impl) &&
+//          isAx10or11(f);
+// }
+// // "(psi = chi) -> ((phi = psi) = (phi = chi))",
+// bool isAx11(const Formula &f) {
+//   return f.IsOp(Operator::op_impl) && f.Subformula(0).IsOp(Operator::op_id)
+//   &&
+//          f.Subformula(1).IsOp(Operator::op_id) &&
+//          f.Subformula(1).Subformula(0).IsOp(Operator::op_id) &&
+//          f.Subformula(1).Subformula(1).IsOp(Operator::op_id) &&
+//          isAx10or11(f);
+// }
 
 void AddProvenFormula(const Formula &f, int a, int b, bool tryNewProofs) {
   if (proven.count(f) > 0)
     return;
 
-  if (isAx1(f) || isAx2(f) || isAx3(f) || isAx4(f) || isAx5(f) || isAx6(f) ||
-      isAx7(f) || isAx8(f) || isAx9(f) || isAx10(f) || isAx11(f))
+  if (isAx1(f) || isAx2(f) || isAx3(f) || isAx4(f)
+      // || isAx5(f) || isAx6(f) ||
+      //     isAx7(f) || isAx8(f) || isAx9(f) || isAx10(f) || isAx11(f)
+  )
     return;
 
   cout << a << ";" << b << ";" << f << endl;
@@ -191,27 +202,27 @@ void TryAxiom(int axiom, vector<Formula> values) {
       if (isAx4(f.Subformula(0))) {
         AddProvenFormula(f.Subformula(1), -axiom - 1, -4, true);
       }
-      if (isAx5(f.Subformula(0))) {
-        AddProvenFormula(f.Subformula(1), -axiom - 1, -5, true);
-      }
-      if (isAx6(f.Subformula(0))) {
-        AddProvenFormula(f.Subformula(1), -axiom - 1, -6, true);
-      }
-      if (isAx7(f.Subformula(0))) {
-        AddProvenFormula(f.Subformula(1), -axiom - 1, -7, true);
-      }
-      if (isAx8(f.Subformula(0))) {
-        AddProvenFormula(f.Subformula(1), -axiom - 1, -8, true);
-      }
-      if (isAx9(f.Subformula(0))) {
-        AddProvenFormula(f.Subformula(1), -axiom - 1, -9, true);
-      }
-      if (isAx10(f.Subformula(0))) {
-        AddProvenFormula(f.Subformula(1), -axiom - 1, -10, true);
-      }
-      if (isAx11(f.Subformula(0))) {
-        AddProvenFormula(f.Subformula(1), -axiom - 1, -11, true);
-      }
+      // if (isAx5(f.Subformula(0))) {
+      //   AddProvenFormula(f.Subformula(1), -axiom - 1, -5, true);
+      // }
+      // if (isAx6(f.Subformula(0))) {
+      //   AddProvenFormula(f.Subformula(1), -axiom - 1, -6, true);
+      // }
+      // if (isAx7(f.Subformula(0))) {
+      //   AddProvenFormula(f.Subformula(1), -axiom - 1, -7, true);
+      // }
+      // if (isAx8(f.Subformula(0))) {
+      //   AddProvenFormula(f.Subformula(1), -axiom - 1, -8, true);
+      // }
+      // if (isAx9(f.Subformula(0))) {
+      //   AddProvenFormula(f.Subformula(1), -axiom - 1, -9, true);
+      // }
+      // if (isAx10(f.Subformula(0))) {
+      //   AddProvenFormula(f.Subformula(1), -axiom - 1, -10, true);
+      // }
+      // if (isAx11(f.Subformula(0))) {
+      //   AddProvenFormula(f.Subformula(1), -axiom - 1, -11, true);
+      // }
     }
   }
 
@@ -224,26 +235,26 @@ void TryAxiom(int axiom, vector<Formula> values) {
   }
 }
 
-vector<Formula> interesting = DoParseFormulas(
-    "((p≡¬p)→((p≡p)≡(p≡¬p))),((¬p≡p)"
-    "→((p≡¬p)≡(p≡p))),((¬p≡p)→((¬p≡¬p)≡(p≡¬p))),"
-    "((p≡¬p)→((p≡¬p)≡(¬p≡¬p))),((p≡¬p)→((p→p)≡(p→¬p))),((¬p≡p)→((p→¬p)≡(p→p))),"
-    "((¬p≡p)→((¬p≡p)≡(p≡p))),((¬p≡p)→((¬p≡¬p)≡(p≡p))),((p≡¬p)→((p≡p)≡(¬p≡p))),("
-    "(p≡¬p)→((p≡p)≡(¬p≡¬p))),((¬p≡p)→((¬p→¬p)≡(p→¬p))),((¬p≡p)→((¬p→¬p)≡(p→p)))"
-    ",((p≡¬p)→((p→p)≡(¬p→¬p)))",
-    0);
+// vector<Formula> interesting = DoParseFormulas(
+//     "((p≡¬p)→((p≡p)≡(p≡¬p))),((¬p≡p)"
+//     "→((p≡¬p)≡(p≡p))),((¬p≡p)→((¬p≡¬p)≡(p≡¬p))),"
+//     "((p≡¬p)→((p≡¬p)≡(¬p≡¬p))),((p≡¬p)→((p→p)≡(p→¬p))),((¬p≡p)→((p→¬p)≡(p→p))),"
+//     "((¬p≡p)→((¬p≡p)≡(p≡p))),((¬p≡p)→((¬p≡¬p)≡(p≡p))),((p≡¬p)→((p≡p)≡(¬p≡p))),("
+//     "(p≡¬p)→((p≡p)≡(¬p≡¬p))),((¬p≡p)→((¬p→¬p)≡(p→¬p))),((¬p≡p)→((¬p→¬p)≡(p→p)))"
+//     ",((p≡¬p)→((p→p)≡(¬p→¬p)))",
+//     0);
+vector<Formula> interesting = DoParseFormulas("(p->-p), ((p->-p)->-p)", 0);
 
 void tryAddRandomAxiom() {
   // Only axioms 1, 2, 3 make sense as major of MP
   int axiom = rand() % 3;
   vector<Formula> values;
   int maxsize = 3;
-  maxsize = 3;
-  if ((rand() % 4) == 0) {
+  if ((rand() % 2) == 0) {
     maxsize = 4;
-    if ((rand() % 8) == 0) {
+    if ((rand() % 2) == 0) {
       maxsize = 5;
-      if ((rand() % 8) == 0) {
+      if ((rand() % 4) == 0) {
         maxsize = 6;
         if ((rand() % 8) == 0) {
           maxsize = 7;
@@ -270,11 +281,10 @@ int main() {
 
   cerr << "Read done, read " << proven.size() << " formulas." << endl;
 
-  Formula target = Formula("-(p=-p)");
-  Formula targe2 = Formula("-(-p=p)");
+  Formula target = Formula("(p->-p)->-p");
   while (true) {
     tryAddRandomAxiom();
-    if (proven.count(target) > 0 || proven.count(targe2) > 0) {
+    if (proven.count(target) > 0) {
       cout << "FOUND " << target << " as " << proven[target] << endl;
       exit(0);
     }
