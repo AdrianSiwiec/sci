@@ -16,9 +16,13 @@ auto axioms = DoParseFormulas(
     "(phi = psi) -> ((chi = theta) -> ((phi = chi) = (psi = theta))),"
     "phi -> phi,"
     "(psi = chi) -> ((phi -> psi) = (phi -> chi))," // 7, 4
-    "(psi = chi) -> ((phi = psi) = (phi = chi))",   // 8, 4
+    "(psi = chi) -> ((phi = psi) = (phi = chi)),"   // 8, 4
+    "((-phi = phi) -> phi),"
+    "((-phi = phi) -> -phi),"
+    "((phi = -phi) -> phi),"
+    "((phi = -phi) -> -phi),",
     0);
-int vars_needed[] = {2, 3, 2, 1, 2, 2, 4, 4, 1, 3, 3, 2};
+int vars_needed[] = {2, 3, 2, 1, 2, 2, 4, 4, 1, 3, 3, 2, 1, 1, 1, 1};
 
 map<int, Formula> proven_nrs;
 map<Formula, int> proven;
@@ -127,12 +131,45 @@ bool isAx11(const Formula &f) {
          f.Subformula(1).Subformula(1).IsOp(Operator::op_id) && isAx10or11(f);
 }
 
+// "((-phi = phi) -> phi),"
+// "((-phi = phi) -> -phi),"
+// "((phi = -phi) -> phi),"
+// "((phi = -phi) -> -phi),",
+bool isAx12t15(const Formula &f) {
+  return f.IsOp(Operator::op_impl) && f.Subformula(0).IsOp(Operator::op_id);
+}
+bool isAx12(const Formula &f) {
+  return isAx12t15(f) && f.Subformula(0).Subformula(0).IsOp(Operator::op_not) &&
+         f.Subformula(1) == f.Subformula(0).Subformula(1) &&
+         f.Subformula(1) == f.Subformula(0).Subformula(0).Subformula();
+}
+bool isAx13(const Formula &f) {
+  return isAx12t15(f) && f.Subformula(1).IsOp(Operator::op_not) &&
+         f.Subformula(0).Subformula(0).IsOp(Operator::op_not) &&
+         f.Subformula(1).Subformula() == f.Subformula(0).Subformula(1) &&
+         f.Subformula(1).Subformula() ==
+             f.Subformula(0).Subformula(0).Subformula();
+}
+bool isAx14(const Formula &f) {
+  return isAx12t15(f) && f.Subformula(0).Subformula(1).IsOp(Operator::op_not) &&
+         f.Subformula(1) == f.Subformula(0).Subformula(1).Subformula() &&
+         f.Subformula(1) == f.Subformula(0).Subformula(0);
+}
+bool isAx15(const Formula &f) {
+  return isAx12t15(f) && f.Subformula(1).IsOp(Operator::op_not) &&
+         f.Subformula(0).Subformula(1).IsOp(Operator::op_not) &&
+         f.Subformula(1).Subformula() == f.Subformula(0).Subformula(0) &&
+         f.Subformula(1).Subformula() ==
+             f.Subformula(0).Subformula(1).Subformula();
+}
+
 void AddProvenFormula(const Formula &f, int a, int b, bool tryNewProofs) {
   if (proven.count(f) > 0)
     return;
 
   if (isAx1(f) || isAx2(f) || isAx3(f) || isAx4(f) || isAx5(f) || isAx6(f) ||
-      isAx7(f) || isAx8(f) || isAx9(f) || isAx10(f) || isAx11(f))
+      isAx7(f) || isAx8(f) || isAx9(f) || isAx10(f) || isAx11(f) || isAx12(f) ||
+      isAx13(f) || isAx14(f) || isAx15(f))
     return;
 
   cout << a << ";" << b << ";" << f << endl;
@@ -212,6 +249,18 @@ void TryAxiom(int axiom, vector<Formula> values) {
       if (isAx11(f.Subformula(0))) {
         AddProvenFormula(f.Subformula(1), -axiom - 1, -11, true);
       }
+      if (isAx12(f.Subformula(0))) {
+        AddProvenFormula(f.Subformula(1), -axiom - 1, -12, true);
+      }
+      if (isAx13(f.Subformula(0))) {
+        AddProvenFormula(f.Subformula(1), -axiom - 1, -13, true);
+      }
+      if (isAx14(f.Subformula(0))) {
+        AddProvenFormula(f.Subformula(1), -axiom - 1, -14, true);
+      }
+      if (isAx15(f.Subformula(0))) {
+        AddProvenFormula(f.Subformula(1), -axiom - 1, -15, true);
+      }
     }
   }
 
@@ -224,14 +273,14 @@ void TryAxiom(int axiom, vector<Formula> values) {
   }
 }
 
-vector<Formula> interesting = DoParseFormulas(
-    "((p≡¬p)→((p≡p)≡(p≡¬p))),((¬p≡p)"
-    "→((p≡¬p)≡(p≡p))),((¬p≡p)→((¬p≡¬p)≡(p≡¬p))),"
-    "((p≡¬p)→((p≡¬p)≡(¬p≡¬p))),((p≡¬p)→((p→p)≡(p→¬p))),((¬p≡p)→((p→¬p)≡(p→p))),"
-    "((¬p≡p)→((¬p≡p)≡(p≡p))),((¬p≡p)→((¬p≡¬p)≡(p≡p))),((p≡¬p)→((p≡p)≡(¬p≡p))),("
-    "(p≡¬p)→((p≡p)≡(¬p≡¬p))),((¬p≡p)→((¬p→¬p)≡(p→¬p))),((¬p≡p)→((¬p→¬p)≡(p→p)))"
-    ",((p≡¬p)→((p→p)≡(¬p→¬p)))",
-    0);
+// vector<Formula> interesting = DoParseFormulas(
+//     "((p≡¬p)→((p≡p)≡(p≡¬p))),((¬p≡p)"
+//     "→((p≡¬p)≡(p≡p))),((¬p≡p)→((¬p≡¬p)≡(p≡¬p))),"
+//     "((p≡¬p)→((p≡¬p)≡(¬p≡¬p))),((p≡¬p)→((p→p)≡(p→¬p))),((¬p≡p)→((p→¬p)≡(p→p))),"
+//     "((¬p≡p)→((¬p≡p)≡(p≡p))),((¬p≡p)→((¬p≡¬p)≡(p≡p))),((p≡¬p)→((p≡p)≡(¬p≡p))),("
+//     "(p≡¬p)→((p≡p)≡(¬p≡¬p))),((¬p≡p)→((¬p→¬p)≡(p→¬p))),((¬p≡p)→((¬p→¬p)≡(p→p)))"
+//     ",((p≡¬p)→((p→p)≡(¬p→¬p)))",
+//     0);
 
 void tryAddRandomAxiom() {
   // Only axioms 1, 2, 3 make sense as major of MP
@@ -252,7 +301,7 @@ void tryAddRandomAxiom() {
     }
   }
   while (values.size() < vars_needed[axiom]) {
-    values.push_back(GetRandomFormula((rand() % maxsize) + 1, 1, interesting));
+    values.push_back(GetRandomFormula((rand() % maxsize) + 1, 1));
   }
   TryAxiom(axiom + 1, values);
 }
