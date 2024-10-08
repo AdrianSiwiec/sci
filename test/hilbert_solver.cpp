@@ -36,6 +36,19 @@ map<Formula, vector<int>> willProve;
 
 map<int, vector<int>> parents;
 map<int, vector<int>> children;
+map<int, int> tree_size;
+map<int, int> tree_length;
+
+int get_size(int n) {
+  if (n < 0)
+    return 0;
+  return tree_size[n];
+}
+int get_length(int n) {
+  if (n < 0)
+    return 0;
+  return tree_length[n];
+}
 
 // ------- Refinement section end --------------
 
@@ -227,6 +240,9 @@ void AddProvenFormula(const Formula &f, int a, int b, bool tryNewProofs) {
   proven[f] = i;
 
   parents[i] = {a, b};
+  tree_size[i] = get_size(a) + get_size(b) + 1;
+  tree_length[i] = max(get_length(a), get_length(b)) + 1;
+
   if (a > 0) {
     if (children.count(a) == 0)
       children[a] = {};
@@ -368,27 +384,23 @@ void tryAddRandomAxiom() {
 
 // --------------- refinement section -----------
 
-map<int, int> tree_size;
-map<int, int> tree_length;
 map<int, int> parent_count;
 
 void calculate_tree_sizes(int n) {
-  tree_size[n] = 1;
-  tree_length[n] = 1;
+  // tree_size[n] = 1;
+  // tree_length[n] = 1;
   parent_count[n] = 0;
   for (int parent : parents[n]) {
     if (parent > 0) {
       calculate_tree_sizes(parent);
-      tree_size[n] += tree_size[parent];
-      tree_length[n] = max(tree_length[n], tree_length[parent] + 1);
+      // tree_size[n] += tree_size[parent];
+      // tree_length[n] = max(tree_length[n], tree_length[parent] + 1);
       parent_count[n]++;
     }
   }
 }
 
 void print_tree(int n) {
-  tree_size.clear();
-  tree_length.clear();
   parent_count.clear();
   calculate_tree_sizes(n);
 
@@ -430,7 +442,8 @@ void print_tree(int n) {
     }
   }
 
-  cout << "# Size: " << tree_size.size() << endl;
+  cout << "# Naive Size: " << tree_size[n] << endl;
+  cout << "# Real Size: " << parent_count.size() << endl;
   cout << "# Length: " << tree_length[n] << endl;
 }
 
