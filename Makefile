@@ -57,7 +57,6 @@ infiTest:
 	./obj/test/infiTest.e
 
 hilbertSolver:
-	./obj/test/hilbert_solver.e <hilbert_in >hilbert_out
 
 site:
 	./site/build_site.sh

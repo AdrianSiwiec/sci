@@ -2,6 +2,7 @@
 #include "generator.h"
 #include "label_solver.h"
 #include "preprocessing.h"
+#include <queue>
 
 auto formula = DoParseFormulas("p", 0)[0];
 auto vars = DoParseFormulas("phi, psi, chi, theta", 0);
@@ -30,6 +31,13 @@ map<int, Formula> proven_nrs;
 map<Formula, int> proven;
 
 map<Formula, vector<int>> willProve;
+
+// ------- Refinement section --------------
+
+map<int, vector<int>> parents;
+map<int, vector<int>> children;
+
+// ------- Refinement section end --------------
 
 bool isAx1(const Formula &f) {
   return f.IsOp(Operator::op_impl) && f.Subformula(1).IsOp(Operator::op_impl) &&
@@ -209,14 +217,26 @@ void AddProvenFormula(const Formula &f, int a, int b, bool tryNewProofs) {
       || isKRZTautology(f))
     return;
 
-  cout << a << ";" << b << ";" << f << endl;
-  if (tryNewProofs) {
-    cerr << a << ";" << b << ";" << f << endl;
-  }
+  // cout << a << ";" << b << ";" << f << endl;
+  // if (tryNewProofs) {
+  //   cerr << a << ";" << b << ";" << f << endl;
+  // }
 
   int i = proven.size() + 1;
   proven_nrs.emplace(i, f);
   proven[f] = i;
+
+  parents[i] = {a, b};
+  if (a > 0) {
+    if (children.count(a) == 0)
+      children[a] = {};
+    children[a].push_back(i);
+  }
+  if (b > 0) {
+    if (children.count(b) == 0)
+      children[b] = {};
+    children[b].push_back(i);
+  }
 
   if (f.IsOp(Operator::op_impl)) {
     if (proven.count(f.Subformula(0)) > 0) {
@@ -346,26 +366,101 @@ void tryAddRandomAxiom() {
   TryAxiom(axiom + 1, values);
 }
 
+// --------------- refinement section -----------
+
+map<int, int> tree_size;
+map<int, int> tree_length;
+map<int, int> parent_count;
+
+void calculate_tree_sizes(int n) {
+  tree_size[n] = 1;
+  tree_length[n] = 1;
+  parent_count[n] = 0;
+  for (int parent : parents[n]) {
+    if (parent > 0) {
+      calculate_tree_sizes(parent);
+      tree_size[n] += tree_size[parent];
+      tree_length[n] = max(tree_length[n], tree_length[parent] + 1);
+      parent_count[n]++;
+    }
+  }
+}
+
+void print_tree(int n) {
+  tree_size.clear();
+  tree_length.clear();
+  parent_count.clear();
+  calculate_tree_sizes(n);
+
+  map<int, Formula> new_nrs;
+  map<Formula, int> new_formulas;
+
+  queue<int> leafs;
+  for (auto &p : parent_count) {
+    if (p.second == 0) {
+      leafs.push(p.first);
+    }
+  }
+
+  while (!leafs.empty()) {
+    int old_nr = leafs.front();
+    leafs.pop();
+
+    Formula f = proven_nrs.at(old_nr);
+    int nr = new_formulas.size() + 1;
+    new_formulas[f] = nr;
+    new_nrs.emplace(nr, f);
+
+    for (int parent : parents[old_nr]) {
+      if (parent < 0) {
+        cout << parent;
+      } else {
+        auto parent_formula = proven_nrs.at(parent);
+        cout << new_formulas[parent_formula];
+      }
+      cout << ";";
+    }
+    cout << f << endl;
+
+    for (int child : children[old_nr]) {
+      parent_count[child]--;
+      if (parent_count[child] == 0) {
+        leafs.push(child);
+      }
+    }
+  }
+
+  cout << "# Size: " << tree_size.size() << endl;
+  cout << "# Length: " << tree_length[n] << endl;
+}
+
 int main() {
   std::ios::sync_with_stdio(false);
 
   srand(time(0));
   for (string line; getline(cin, line);) {
+    if (line.size() > 0 && line[0] == '#') {
+      continue;
+    }
     // cout << line << endl;
     vector<string> input = SplitString(line, ";");
     Formula f = DoParseFormulas(input[2], 0)[0];
     AddProvenFormula(f, stoi(input[0]), stoi(input[1]), false);
   }
 
-  cerr << "Read done, read " << proven.size() << " formulas." << endl;
-
   Formula target = Formula("-(p=-p)");
-  Formula targe2 = Formula("-(-p=p)");
-  while (true) {
-    tryAddRandomAxiom();
-    if (proven.count(target) > 0 || proven.count(targe2) > 0) {
-      cout << "FOUND " << target << " as " << proven[target] << endl;
-      exit(0);
-    }
-  }
+
+  int target_nr = proven[target];
+  calculate_tree_sizes(target_nr);
+
+  print_tree(target_nr);
+
+  // Formula targe2 = Formula("-(-p=p)");
+  // while (true) {
+  //   tryAddRandomAxiom();
+  //   if (proven.count(target) > 0 || proven.count(targe2) > 0) {
+  //     cout << "FOUND " << target << " as " << proven[target] << endl;
+  //     exit(0);
+  //   }
+  // }
 }
