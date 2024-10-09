@@ -1,5 +1,6 @@
 #include "solver.h"
 #include "preprocessing.h"
+#include "commons.h"
 #include <chrono>
 #include <ctime>
 #include <set>
@@ -67,14 +68,6 @@ vector<ProofNode> BuildChildNodes(const ProofNode &node, int formula_to_remove,
   auto last = unique(to_return.begin(), to_return.end());
   to_return.erase(last, to_return.end());
   return to_return;
-}
-
-bool Contains(const vector<Formula> &v, const Formula &f) {
-  for (const auto &vf : v) {
-    if (vf == f)
-      return true;
-  }
-  return false;
 }
 
 bool NothingChanged(const ProofNode &previous,

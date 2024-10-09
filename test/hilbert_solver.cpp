@@ -220,24 +220,47 @@ bool isKRZTautology(const Formula &f) {
 }
 
 void AddProvenFormula(const Formula &f, int a, int b, bool tryNewProofs) {
-  if (proven.count(f) > 0)
+  if (proven.count(f) > 0 &&
+      (!tryNewProofs ||
+       tree_size[proven.at(f)] <= (get_size(a) + get_size(b) + 1))) {
     return;
+  }
 
-  if (isAx1(f) || isAx2(f) || isAx3(f) || isAx4(f) || isAx5(f) || isAx6(f) ||
-      isAx7(f) || isAx8(f) || isAx9(f) || isAx10(f) ||
-      isAx11(f)
-      // || isAx12(f) || isAx13(f) || isAx14(f) || isAx15(f)
-      || isKRZTautology(f))
-    return;
+  int i;
+  if (proven.count(f) == 0) {
+    if (isAx1(f) || isAx2(f) || isAx3(f) || isAx4(f) || isAx5(f) || isAx6(f) ||
+        isAx7(f) || isAx8(f) || isAx9(f) || isAx10(f) ||
+        isAx11(f)
+        // || isAx12(f) || isAx13(f) || isAx14(f) || isAx15(f)
+        || isKRZTautology(f))
+      return;
 
-  // cout << a << ";" << b << ";" << f << endl;
-  // if (tryNewProofs) {
-  //   cerr << a << ";" << b << ";" << f << endl;
-  // }
+    // cout << a << ";" << b << ";" << f << endl;
+    // if (tryNewProofs) {
+    //   cerr << a << ";" << b << ";" << f << endl;
+    // }
 
-  int i = proven.size() + 1;
-  proven_nrs.emplace(i, f);
-  proven[f] = i;
+    i = proven.size() + 1;
+    proven_nrs.emplace(i, f);
+    proven[f] = i;
+  } else {
+    i = proven.at(f);
+
+    // cout << "Adding " << f << " as an improvement" << endl;
+    // cout << "\tBefore its parents were " << parents[i][0] << " "
+    //      << parents[i][1] << endl;
+    // cout << "\tNow its " << a << " " << b << endl;
+
+    // Removing from old parents
+    for (int parent : parents[i]) {
+      for (int j = 0; j < children[parent].size(); j++) {
+        if (children[parent][j] == i) {
+          swap(children[parent][j], children[parent].back());
+          children[parent].pop_back();
+        }
+      }
+    }
+  }
 
   parents[i] = {a, b};
   tree_size[i] = get_size(a) + get_size(b) + 1;
@@ -260,7 +283,9 @@ void AddProvenFormula(const Formula &f, int a, int b, bool tryNewProofs) {
         AddProvenFormula(f.Subformula(1), i, proven[f.Subformula(0)], true);
       }
     } else {
-      willProve[f.Subformula(0)].push_back(i);
+      if (!Contains(willProve[f.Subformula(0)], i)) {
+        willProve[f.Subformula(0)].push_back(i);
+      }
     }
   }
 
@@ -270,7 +295,7 @@ void AddProvenFormula(const Formula &f, int a, int b, bool tryNewProofs) {
       for (int nr : nrs) {
         AddProvenFormula(proven_nrs.at(nr).Subformula(1), nr, i, true);
       }
-      willProve.erase(f);
+      // willProve.erase(f);
     }
   }
 }
@@ -284,7 +309,9 @@ void TryAxiom(int axiom, vector<Formula> values) {
   }
 
   if (f.IsOp(Operator::op_impl)) {
-    if (proven.count(f.Subformula(1)) == 0) {
+    // If we're interested in improving the tree, we want to take a look at all
+    // possible MPs all the time.
+    if (true || proven.count(f.Subformula(1)) == 0) {
       if (proven.count(f.Subformula(0)) > 0) {
         AddProvenFormula(f.Subformula(1), -axiom - 1, proven[f.Subformula(0)],
                          true);
@@ -345,7 +372,7 @@ void TryAxiom(int axiom, vector<Formula> values) {
     for (int nr : nrs) {
       AddProvenFormula(proven_nrs.at(nr).Subformula(1), nr, -axiom - 1, true);
     }
-    willProve.erase(f);
+    // willProve.erase(f);
   }
 }
 
@@ -386,15 +413,11 @@ void tryAddRandomAxiom() {
 
 map<int, int> parent_count;
 
-void calculate_tree_sizes(int n) {
-  // tree_size[n] = 1;
-  // tree_length[n] = 1;
+void calculate_parent_count(int n) {
   parent_count[n] = 0;
   for (int parent : parents[n]) {
     if (parent > 0) {
-      calculate_tree_sizes(parent);
-      // tree_size[n] += tree_size[parent];
-      // tree_length[n] = max(tree_length[n], tree_length[parent] + 1);
+      calculate_parent_count(parent);
       parent_count[n]++;
     }
   }
@@ -402,7 +425,7 @@ void calculate_tree_sizes(int n) {
 
 void print_tree(int n) {
   parent_count.clear();
-  calculate_tree_sizes(n);
+  calculate_parent_count(n);
 
   map<int, Formula> new_nrs;
   map<Formula, int> new_formulas;
@@ -411,6 +434,8 @@ void print_tree(int n) {
   for (auto &p : parent_count) {
     if (p.second == 0) {
       leafs.push(p.first);
+      // cout <<"LEAF: "<<parents[p.first][0] << " " << parents[p.first][1] <<
+      // endl;
     }
   }
 
@@ -423,12 +448,17 @@ void print_tree(int n) {
     new_formulas[f] = nr;
     new_nrs.emplace(nr, f);
 
+    // cout << "Printing old=" << old_nr << " which is now " << nr
+    //      << " which has parents: " << parents[old_nr][0] << ", "
+    //      << parents[old_nr][1] << endl;
+
     for (int parent : parents[old_nr]) {
       if (parent < 0) {
         cout << parent;
       } else {
         auto parent_formula = proven_nrs.at(parent);
-        cout << new_formulas[parent_formula];
+        // cout << "\tParent:" << parent << " formula: " << parent_formula << endl;
+        cout << new_formulas.at(parent_formula);
       }
       cout << ";";
     }
@@ -443,8 +473,11 @@ void print_tree(int n) {
   }
 
   cout << "# Naive Size: " << tree_size[n] << endl;
-  cout << "# Real Size: " << parent_count.size() << endl;
+  cout << "# Real Size: " << new_formulas.size() << endl;
   cout << "# Length: " << tree_length[n] << endl;
+  cerr << "# Naive Size: " << tree_size[n] << endl;
+  cerr << "# Real Size: " << new_formulas.size() << endl;
+  cerr << "# Length: " << tree_length[n] << endl;
 }
 
 int main() {
@@ -464,16 +497,19 @@ int main() {
   Formula target = Formula("-(p=-p)");
 
   int target_nr = proven[target];
-  calculate_tree_sizes(target_nr);
+  calculate_parent_count(target_nr);
 
   print_tree(target_nr);
+  int last_printed_real_size = parent_count.size();
+  int last_printed_naive_size = tree_size[target_nr];
 
-  // Formula targe2 = Formula("-(-p=p)");
-  // while (true) {
-  //   tryAddRandomAxiom();
-  //   if (proven.count(target) > 0 || proven.count(targe2) > 0) {
-  //     cout << "FOUND " << target << " as " << proven[target] << endl;
-  //     exit(0);
-  //   }
-  // }
+  // // Formula targe2 = Formula("-(-p=p)");
+  while (true) {
+    tryAddRandomAxiom();
+    if (last_printed_naive_size != tree_size[target_nr]) {
+      print_tree(target_nr);
+      last_printed_naive_size = tree_size[target_nr];
+      // exit(0);
+    }
+  }
 }
