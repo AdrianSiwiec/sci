@@ -31,10 +31,12 @@ map<Formula, int> proven;
 
 map<Formula, vector<int>> willProve;
 
+// "phi -> (psi -> phi),"
 bool isAx1(const Formula &f) {
   return f.IsOp(Operator::op_impl) && f.Subformula(1).IsOp(Operator::op_impl) &&
          f.Subformula(0) == f.Subformula(1).Subformula(1);
 }
+// "(phi -> (psi -> chi)) -> ((phi -> psi) -> (phi -> chi)),"
 bool isAx2(const Formula &f) {
   return f.IsOp(Operator::op_impl) && f.Subformula(0).IsOp(Operator::op_impl) &&
          f.Subformula(0).Subformula(1).IsOp(Operator::op_impl) &&
@@ -50,6 +52,7 @@ bool isAx2(const Formula &f) {
          f.Subformula(0).Subformula(1).Subformula(1) ==
              f.Subformula(1).Subformula(1).Subformula(1);
 }
+// "(-phi -> -psi) -> (psi -> phi),"
 bool isAx3(const Formula &f) {
   return f.IsOp(Operator::op_impl) && f.Subformula(0).IsOp(Operator::op_impl) &&
          f.Subformula(1).IsOp(Operator::op_impl) &&
@@ -60,9 +63,11 @@ bool isAx3(const Formula &f) {
          f.Subformula(0).Subformula(1).Subformula() ==
              f.Subformula(1).Subformula(0);
 }
+// "phi = phi,"
 bool isAx4(const Formula &f) {
   return f.IsOp(Operator::op_id) && f.Subformula(0) == f.Subformula(1);
 }
+// "(phi = psi) -> (phi -> psi),"
 bool isAx5(const Formula &f) {
   return f.IsOp(Operator::op_impl) && f.Subformula(0).IsOp(Operator::op_id) &&
          f.Subformula(1).IsOp(Operator::op_impl) &&
@@ -80,36 +85,44 @@ bool isAx6(const Formula &f) {
          f.Subformula(1).Subformula(1).Subformula() ==
              f.Subformula(0).Subformula(1);
 }
+// "(phi = psi) -> ((chi = theta) -> ((phi -> chi) = (psi -> theta))),"
+// "(phi = psi) -> ((chi = theta) -> ((phi = chi) = (psi = theta)))",
 bool isAx7or8a(const Formula &f) {
-  return f.IsOp(Operator::op_impl) && f.Subformula(0).IsOp(Operator::op_impl) &&
-         f.Subformula(0).Subformula(0).IsOp(Operator::op_id) &&
-         f.Subformula(0).Subformula(1).IsOp(Operator::op_id) &&
-         f.Subformula(1).IsOp(Operator::op_id);
+  return f.IsOp(Operator::op_impl) && f.Subformula(0).IsOp(Operator::op_id) &&
+         f.Subformula(1).IsOp(Operator::op_impl) &&
+         f.Subformula(1).Subformula(0).IsOp(Operator::op_id) &&
+         f.Subformula(1).Subformula(1).IsOp(Operator::op_id);
 }
 bool isAx7or8b(const Formula &f) {
-  return f.Subformula(0).Subformula(0).Subformula(0) ==
-             f.Subformula(1).Subformula(0).Subformula(0) &&
-         f.Subformula(0).Subformula(0).Subformula(1) ==
-             f.Subformula(1).Subformula(1).Subformula(0) &&
-         f.Subformula(0).Subformula(1).Subformula(0) ==
-             f.Subformula(1).Subformula(0).Subformula(1) &&
-         f.Subformula(0).Subformula(1).Subformula(1) ==
-             f.Subformula(1).Subformula(1).Subformula(1);
+  return f.Subformula(0).Subformula(0) ==
+             f.Subformula(1).Subformula(1).Subformula(0).Subformula(0) &&
+         f.Subformula(0).Subformula(1) ==
+             f.Subformula(1).Subformula(1).Subformula(1).Subformula(0) &&
+         f.Subformula(1).Subformula(0).Subformula(0) ==
+             f.Subformula(1).Subformula(1).Subformula(0).Subformula(1) &&
+         f.Subformula(1).Subformula(0).Subformula(1) ==
+             f.Subformula(1).Subformula(1).Subformula(1).Subformula(1);
 }
 // "(phi = psi) -> ((chi = theta) -> ((phi -> chi) = (psi -> theta))),"
 bool isAx7(const Formula &f) {
   return isAx7or8a(f) &&
-         f.Subformula(1).Subformula(0).IsOp(Operator::op_impl) &&
-         f.Subformula(1).Subformula(1).IsOp(Operator::op_impl) && isAx7or8b(f);
+         f.Subformula(1).Subformula(1).Subformula(0).IsOp(Operator::op_impl) &&
+         f.Subformula(1).Subformula(1).Subformula(1).IsOp(Operator::op_impl) &&
+         isAx7or8b(f);
 }
 // "(phi = psi) -> ((chi = theta) -> ((phi = chi) = (psi = theta)))",
 bool isAx8(const Formula &f) {
-  return isAx7or8a(f) && f.Subformula(1).Subformula(0).IsOp(Operator::op_id) &&
-         f.Subformula(1).Subformula(1).IsOp(Operator::op_id) && isAx7or8b(f);
+  return isAx7or8a(f) &&
+         f.Subformula(1).Subformula(1).Subformula(0).IsOp(Operator::op_id) &&
+         f.Subformula(1).Subformula(1).Subformula(1).IsOp(Operator::op_id) &&
+         isAx7or8b(f);
 }
+// "phi -> phi"
 bool isAx9(const Formula &f) {
   return f.IsOp(Operator::op_impl) && f.Subformula(0) == f.Subformula(1);
 }
+// "(psi = chi) -> ((phi -> psi) = (phi -> chi)),"
+// "(psi = chi) -> ((phi = psi) = (phi = chi))",
 bool isAx10or11(const Formula &f) {
   return f.Subformula(0).Subformula(0) ==
              f.Subformula(1).Subformula(0).Subformula(1) &&
