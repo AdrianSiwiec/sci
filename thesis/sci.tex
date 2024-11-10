@@ -34,6 +34,7 @@
 \usepackage{amsmath}
 \usepackage{xcolor, colortbl}
 \usepackage{csquotes}
+\usepackage[shortlabels]{enumitem}
 \definecolor{c1}{HTML}{377eb8}
 \definecolor{c2}{HTML}{ff7f00}
 \definecolor{c3}{HTML}{4daf4a}
@@ -52,11 +53,11 @@
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}[theorem]{Lemma}
+\AfterEndEnvironment{theorem}{\noindent\ignorespaces}
 
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[section]
 \AfterEndEnvironment{definition}{\noindent\ignorespaces}
-\AfterEndEnvironment{theorem}{\noindent\ignorespaces}
 
 \newcommand*{\Ts}{T^*}
 \newcommand*{\id}{\equiv}
@@ -69,6 +70,7 @@
 \newcommand*{\IDx}{\texttt{ID}^X}
 \newcommand*{\SUB}{\texttt{SUB}}
 \newcommand{\SCI}{$\mathsf{SCI}$\xspace}
+\newcommand{\PC}{$\mathsf{PC}$\xspace}
 
 \makeatletter
 \newcommand{\leqnomode}{\tagsleft@true\let\veqno\@@leqno}
@@ -149,7 +151,10 @@ extend it by saying that for each $p \in \V$: $p < \lnot <\xspace (\ < \ )\xspac
 let us define a ordering of formulas $\prec$ to be a lexicographical ordering
 with $<$.
 
-If we consider formulas that contain only the negation and implication operators, they form a classical Propositional Calculus. For simplicity, in \SCI we'll consider every tautology of the classical Propositional Calculus to be an axiom.
+If we consider formulas that contain only the negation and implication
+operators, they form a classical Propositional Calculus. For simplicity, in
+\SCI we'll consider every tautology of the classical Propositional Calculus to
+be an axiom.
 
 \begin{definition}[Axiomatization of \SCI]
     \SCI is axiomatized with the following axioms:
@@ -170,7 +175,8 @@ If we consider formulas that contain only the negation and implication operators
 \end{definition}
 
 \begin{definition}[A thesis of \SCI]
-    A formula $\varphi$ is \emph{a thesis of \SCI} if there exists a finite sequence of formulas $\varphi_1, ..., \varphi_n$ ($n \geq 1$), such that $\varphi = \varphi_n$, and for all $i \in \{1, ..., n\}$ the formula $\varphi_i$ is either an axiom of \SCI, or it is inferred from formulas $\varphi_j$, $\varphi_k$ ($j, k <i$) via the \emph{modus ponens} rule. If $\varphi$ is a thesis of \SCI we will denote by $\vdash \varphi$ and say that $\varphi$ is \emph{provable in \SCI}.
+    A formula $\varphi$ is \emph{a thesis of \SCI} if there exists a finite sequence of formulas $\varphi_1, ..., \varphi_n$ ($n \geq 1$), such that $\varphi = \varphi_n$, and for all $i \in \{1, ..., n\}$ the formula $\varphi_i$ is either an axiom of \SCI, or it is inferred from formulas $\varphi_j$, $\varphi_k$ ($j, k <i$) via the \emph{modus ponens} rule. If $\varphi$ is a thesis of \SCI we will denote it by $\vdash \varphi$, say that $\varphi$ is \emph{provable in \SCI} and call the sequence $\varphi_1, ..., \varphi_n$ the \emph{proof of $\varphi$}.
+    \label{thesis}
 \end{definition}
 
 Let us now give some semantic definitions:
@@ -182,8 +188,9 @@ Let us now give some semantic definitions:
         \item $\emptyset \not = D \subsetneq U$ is a \emph{set of designated values},
         \item $\tilde{\lnot}$ is an unary operation on $U$, such that for all $a \in U$: $\tilde{\lnot}a \in D$ if and only if $a \not \in D$,
         \item $\tilde{\ra}$ is a binary operation on $U$, such that for all $a, b \in U$: $a \tilde{\ra} b \in D$ if and only if $a \not \in D$ or $b \in D$,
-        \item $\tilde{\id}$ is a binary operation on $U$, such that for all $a, b \in U$: $a \tilde{\id} b$ if and only if $a = b$ (that is, if and only if $a$ and $b$ denote the same element of the universe $U$).
+        \item $\tilde{\id}$ is a binary operation on $U$, such that for all $a, b \in U$: $a \tilde{\id} b \in D$ if and only if $a = b$ (that is, if and only if $a$ and $b$ denote the same element of the universe $U$).
     \end{itemize}
+    \label{model}
 \end{definition}
 
 \begin{definition}[Valuation]
@@ -194,6 +201,7 @@ Let us now give some semantic definitions:
         \item $V(\varphi \id \psi) = V(\varphi) \tilde{\id} V(\psi)$
     \end{itemize}
     If $V(\varphi) = a$ we will call $a$ the \emph{denotation of $\varphi$}.
+    \label{valuation}
 \end{definition}
 
 \begin{definition}[Satisfaction of a formula]
@@ -219,7 +227,93 @@ TODO
         \item $\varphi$ is valid in \SCI.
     \end{itemize}
 \end{theorem}
-The proof of the correctness and fullness theorem can be found in \cite{suszko_bloom} (Theorem 1.9).
+Let us show an outline of the proof.
+
+\begin{proof}
+    First, let us show that every provable \SCI-formula is valid in \SCI. To show that, we want to prove that:
+    \begin{enumerate}[(a)]
+        \item Every axiom of \SCI is valid in \SCI.
+        \item By applying the \emph{modus ponens} rule to valid formulas $\varphi$ and
+              $\varphi \ra \psi$ the inferred formula $\psi$ is also valid.
+    \end{enumerate}
+
+    Let us show (a) first:
+    \begin{itemize}
+        \item First, we need to prove that every tautology of the classical Propositional
+              Calculus (\PC) is valid in \SCI.
+
+              Let $\varphi$ be a tautology of \PC. Let us take any \SCI-model $\mathcal{M}$
+              and any \SCI-valuation $\mathcal{M}, V$ in it. We want to show that
+              $\mathcal{M}, V \models \varphi$.
+
+              Given $\mathcal{M}, V$, we will construct $V'$ that will be a \PC valuation of
+              $\varphi$. We can do this, because $\varphi$ doesn't contain operator $\id$.
+
+              For every $\psi \in \SUB(\varphi)$, let us define:
+
+              $$
+                  V'(\psi) = \begin{cases}
+                      1,                           & \text{if } \psi = p \in \V \text{ and } V(p) \in D,      \\
+                      0,                           & \text{if } \psi = p \in \V \text{ and } V(p) \not \in D, \\
+                      1-V'(\chi),                  & \text{if } \psi = \lnot \chi,                            \\
+                      max(1-V'(\chi), V'(\theta)), & \text{if } \psi = \chi \ra \theta.                       \\
+                  \end{cases}
+              $$
+
+              It is easy to see that for every $\psi \in \SUB(\varphi)$, $V'(\psi) = 1$ if
+              and only if $V(\psi) \in D$.
+
+              The $V'$ function is constructed in the same way the valuation function in the
+              \PC is constructed, therefore since $\varphi$ is a tautology of \PC, we have
+              that $V'(\varphi) = 1$. So, we have that $V(\varphi) \in D$, whis is what we
+              wanted to show.
+
+        \item Second, we want to show that axioms $(Ax1) - (Ax5)$ are valid in \SCI.
+
+              \begin{itemize}
+                  \item $(Ax1)\  \varphi \id \varphi$
+
+                        Let us take any \SCI model and valuation $\mathcal{M}, V$. Based on
+                        \cref{valuation}, we have that $V(\varphi \id \varphi) = V(\varphi) \tilde{\id}
+                            V(\varphi)$. Based on definition of $\tilde{\id}$ from \ref{model}, we have
+                        that $V(\varphi) \tilde{\id} V(\varphi)$ is in $D$ if and only if $V(\varphi) =
+                            V(\varphi)$, which is trivially the case. So, we have that $\mathcal{M}, V
+                            \models \varphi \id \varphi$.
+                  \item $(Ax2)\ (\varphi \id \psi) \ra (\varphi \ra \psi)$
+
+                        Let us take any \SCI model and valuation $\mathcal{M}, V$. Based on
+                        \cref{valuation}, we have that $V((\varphi \id \psi) \ra (\varphi \ra \psi)) =
+                            V(\varphi \id \psi) \tilde{\ra} V(\varphi \ra \psi)$. There are two cases.
+
+                        \begin{enumerate}
+                            \item[1°] $V(\varphi \id \psi) \not \in D$. Then, by definition of $\tilde{\ra}$ in \ref{model}, we have that $V(\varphi \id \psi) \tilde{\ra} V(\varphi \ra \psi) \in D$, so $\mathcal{M}, V \models (\varphi \id \psi) \ra (\varphi \ra \psi)$.
+                            \item[2°] $V(\varphi \id \psi) \in D$. By \cref{valuation} it means, that $V(\varphi) \tilde{\id} V(\psi)$, which by \cref{model} means that $V(\varphi) = V(\psi)$.
+
+                                By \cref{valuation} $V(\varphi \ra \psi)$ is equal to $V(\varphi) \tilde{\ra}
+                                    V(\psi)$. By \cref{model} $V(\varphi) \tilde{\ra} V(\psi)$ is in $D$ if and
+                                only if $V(\varphi) \not \in D$ or $V(\psi) \in D$, but since $V(\varphi) =
+                                    V(\psi)$ we have that $V(\varphi) \tilde{\ra} V(\psi)$ is in $D$ if and only if
+                                $V(\varphi) \not \in D$ or $V(\varphi) \in D$, which is trivially the case.
+                        \end{enumerate}
+
+                        So, we have that $\mathcal{M}, V \models (\varphi \id \psi) \ra (\varphi \ra
+                            \psi)$.
+
+                \item Validity of axioms $(Ax3), (Ax4)$ and $(Ax5)$ can be shown in a similar way. (TODO: a może rozpisać dla jasności?)
+              \end{itemize}
+    \end{itemize}
+
+    To show (b), let take any valid formulas $\varphi$ and $\varphi \ra \psi$ and any \SCI model and valuation $\mathcal{M}, V$. From validity of $\varphi \ra \psi$, we know that $V(\varphi \ra \psi) \in D$. From \cref{valuation} we have that $D \ni V(\varphi \ra \psi) = V(\varphi) \tilde{\ra} V(\psi)$. From \cref{model}, since we know that $V(\varphi) \tilde{\ra} V(\psi)$ we know that $V(\varphi) \not \in D$, or $V(\psi) \in D$. But we have that $\varphi$ is valid, so $V(\varphi) \in D$, so it must be that $V(\psi) \in D$, so $\mathcal{M}, V \models \psi$. The same holds for any other \SCI model and valuation, so $\models \psi$, which is what we wanted to show.
+
+    Looking at \cref{thesis}, for a given provable $\varphi$, let us take its proof $\varphi_1, ..., \varphi_n = \varphi$. Every subsequent formula in this proof is either an \SCI axiom and thus, by (a), valid, or is inferred by the \emph{modus ponens} rule from valid formulas and thus, by (b) valid. So, $\varphi$ is valid.
+
+    Now, let us show that any valid \SCI-formula is also provable.
+
+    TODO
+\end{proof}
+
+The proof of the correctness and fullness theorem can be found in
+\cite{suszko_bloom} (Theorem 1.9).
 
 TODO: podać ideę dowodu
 
@@ -237,10 +331,11 @@ The proof of the decidability theorem can be found in \cite{suszko_bloom}
 
 TODO: dowód.
 
-\section{TODO}
-Let us give an example of a provable formula with its full proof:
+\section{Deduction in SCI}
 
-TODO
+\subsection{Deduction systems}
+
+TODO: Let us give an example of a provable formula with its full proof:
 
 % ------------------------------------------------------------------
 
