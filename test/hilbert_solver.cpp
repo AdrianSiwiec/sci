@@ -404,14 +404,17 @@ void tryAddRandomAxiom() {
   vector<Formula> values;
   int maxsize = 3;
   maxsize = 3;
-  if ((rand() % 4) == 0) {
+  if ((rand() % 2) == 0) {
     maxsize = 4;
-    if ((rand() % 8) == 0) {
+    if ((rand() % 2) == 0) {
       maxsize = 5;
-      if ((rand() % 8) == 0) {
+      if ((rand() % 4) == 0) {
         maxsize = 6;
-        if ((rand() % 8) == 0) {
+        if ((rand() % 4) == 0) {
           maxsize = 7;
+          if ((rand() % 8) == 0) {
+            maxsize = 15;
+          }
         }
       }
     }
@@ -470,7 +473,8 @@ void print_tree(int n) {
         cout << parent;
       } else {
         auto parent_formula = proven_nrs.at(parent);
-        // cout << "\tParent:" << parent << " formula: " << parent_formula << endl;
+        // cout << "\tParent:" << parent << " formula: " << parent_formula <<
+        // endl;
         cout << new_formulas.at(parent_formula);
       }
       cout << ";";
@@ -505,6 +509,10 @@ int main() {
     vector<string> input = SplitString(line, ";");
     Formula f = DoParseFormulas(input[2], 0)[0];
     AddProvenFormula(f, stoi(input[0]), stoi(input[1]), false);
+
+    // Sanity check -- make sure all input we have are actually tautologies
+    auto proofNode = DoSolve({FNot(f)}, false);
+    assert(proofNode.is_closed);
   }
 
   Formula target = Formula("-(p=-p)");
