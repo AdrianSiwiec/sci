@@ -7,7 +7,10 @@
 auto formula = DoParseFormulas("p", 0)[0];
 auto formula2 = DoParseFormulas("q", 0)[0];
 auto formula3 = DoParseFormulas("r", 0)[0];
-auto vars = DoParseFormulas("phi, psi, chi, theta", 0);
+auto vars = DoParseFormulas(
+    "phi, psi, chi, theta, theta_5, theta_6, theta_7, theta_8, theta_9, "
+    "theta_10, theta_11, theta_12, theta_13, theta_14, theta_15, theta_16",
+    0);
 auto axioms = DoParseFormulas(
     "phi -> (psi -> phi),"
     "(phi -> (psi -> chi)) -> ((phi -> psi) -> (phi -> chi)),"
@@ -29,6 +32,10 @@ auto axioms = DoParseFormulas(
 int vars_needed[] = {2, 3, 2, 1, 2, 2, 4, 4, 1, 3, 3, 2, 1, 1, 1, 1};
 // int vars_needed[] = {1, 2, 2, 4, 4, 3, 3};
 
+const int variables_in_target = 3;
+
+const bool REFINEMENT_MODE = true;
+
 map<int, Formula> proven_nrs;
 map<Formula, int> proven;
 
@@ -42,10 +49,19 @@ map<int, int> tree_size;
 map<int, int> tree_length;
 map<Formula, Formula> major_axiom;
 
+int formula_size(const Formula &f) {
+  if (f.IsVar())
+    return 1;
+  if (f.IsOp(Operator::op_not))
+    return 1 + formula_size(f.Subformula());
+  return 1 + formula_size(f.Subformula(0)) + formula_size(f.Subformula(1));
+}
+
 int get_size(int n) {
   if (n < 0)
     return 0;
-  return tree_size[n];
+  return tree_size[n] + formula_size(major_axiom.at(proven_nrs.at(n)));
+  // return tree_size[n];
 }
 int get_length(int n) {
   if (n < 0)
@@ -214,54 +230,48 @@ bool isKRZOnly(const Formula &f) {
   return isKRZOnly(f.Subformula(0)) && isKRZOnly(f.Subformula(1));
 }
 // Only one variable (p)
-bool isKRZTrue(const Formula &f, bool val0, bool val1, bool val2) {
+bool isKRZTrue(const Formula &f, int encoded_var, bool axiom_check) {
   if (f.IsVar()) {
-    if (f.Var() == 0)
-      return val0;
-    if (f.Var() == 1)
-      return val1;
-    if (f.Var() == 2)
-      return val2;
+    int variable = f.Var();
+
+    // Axioms are with phi, theta ets, not with p, q
+    if (axiom_check)
+      variable -= vars[0].Var();
+
+    assert(variable < 16);
+    return encoded_var & (1 << variable);
   }
   if (f.IsOp(Operator::op_not))
-    return !isKRZTrue(f.Subformula(), val0, val1, val2);
+    return !isKRZTrue(f.Subformula(), encoded_var, axiom_check);
   if (f.IsOp(Operator::op_impl))
-    return !isKRZTrue(f.Subformula(0), val0, val1, val2) ||
-           isKRZTrue(f.Subformula(1), val0, val1, val2);
+    return !isKRZTrue(f.Subformula(0), encoded_var, axiom_check) ||
+           isKRZTrue(f.Subformula(1), encoded_var, axiom_check);
   assert("Checking KRZ true for unsupported operators" == 0);
   exit(1);
 }
 
-bool isKRZTautology(const Formula &f) {
+bool isKRZTautology(const Formula &f, int variables, bool axiom_check = false) {
   if (!isKRZOnly(f))
     return false;
-  if (!isKRZTrue(f, true, true, true))
-    return false;
-  if (!isKRZTrue(f, true, true, false))
-    return false;
-  if (!isKRZTrue(f, true, false, true))
-    return false;
-  if (!isKRZTrue(f, true, false, false))
-    return false;
-  if (!isKRZTrue(f, false, true, true))
-    return false;
-  if (!isKRZTrue(f, false, true, false))
-    return false;
-  if (!isKRZTrue(f, false, false, true))
-    return false;
-  if (!isKRZTrue(f, false, false, false))
-    return false;
+  for (int encoded_var = 0; encoded_var < (1 << variables); encoded_var++) {
+    if (!isKRZTrue(f, encoded_var, axiom_check))
+      return false;
+  }
   return true;
 }
 
 void AddProvenFormula(const Formula &f, int a, int b, bool tryNewProofs,
                       const Formula &f_major_axiom) {
-  if (proven.count(f) > 0
-      // &&
-      //     (!tryNewProofs ||
-      //      tree_size[proven.at(f)] <= (get_size(a) + get_size(b) + 1))
-  ) {
-    return;
+  if (!REFINEMENT_MODE) {
+    if (proven.count(f) > 0) {
+      return;
+    }
+  } else {
+    if (proven.count(f) > 0 &&
+        (!tryNewProofs ||
+         tree_size[proven.at(f)] <= (get_size(a) + get_size(b) + 1))) {
+      return;
+    }
   }
 
   int i;
@@ -270,14 +280,16 @@ void AddProvenFormula(const Formula &f, int a, int b, bool tryNewProofs,
         isAx7(f) || isAx8(f) || isAx9(f) || isAx10(f) ||
         isAx11(f)
         // || isAx12(f) || isAx13(f) || isAx14(f) || isAx15(f)
-        || isKRZTautology(f))
+        || isKRZTautology(f, variables_in_target))
       return;
 
-    cout << a << ";" << b << ";" << f << ";                     ;"
-         << f_major_axiom << endl;
-    if (tryNewProofs) {
-      cerr << a << ";" << b << ";" << f << ";                     ;"
+    if (!REFINEMENT_MODE) {
+      cout << a << ";" << b << ";" << f << ";                     ;"
            << f_major_axiom << endl;
+      if (tryNewProofs) {
+        cerr << a << ";" << b << ";" << f << ";                     ;"
+             << f_major_axiom << endl;
+      }
     }
 
     i = proven.size() + 1;
@@ -342,11 +354,10 @@ void AddProvenFormula(const Formula &f, int a, int b, bool tryNewProofs,
   }
 }
 
-void TryAxiom(int axiom, vector<Formula> values) {
-  axiom--;
-  assert(values.size() + 1 >= vars_needed[axiom]);
-  Formula f = axioms[axiom];
-  for (int i = 0; i < vars_needed[axiom]; i++) {
+void TryAxiom(Formula f, int vars_needed, int axiom,
+              const vector<Formula> &values,
+              bool assume_minor_is_tautology = false) {
+  for (int i = 0; i < vars_needed; i++) {
     ReplaceAll(f, vars[i], values[i]);
   }
 
@@ -354,41 +365,32 @@ void TryAxiom(int axiom, vector<Formula> values) {
     // If we're interested in improving the tree, we want to take a look at all
     // possible MPs all the time.
     if (true || proven.count(f.Subformula(1)) == 0) {
-      if (proven.count(f.Subformula(0)) > 0) {
+      if (assume_minor_is_tautology) {
+        AddProvenFormula(f.Subformula(1), -axiom - 1, -888, true, f);
+      } else if (proven.count(f.Subformula(0)) > 0) {
         AddProvenFormula(f.Subformula(1), -axiom - 1, proven[f.Subformula(0)],
                          true, f);
-      }
-      if (isAx1(f.Subformula(0))) {
+      } else if (isAx1(f.Subformula(0))) {
         AddProvenFormula(f.Subformula(1), -axiom - 1, -1, true, f);
-      }
-      if (isAx2(f.Subformula(0))) {
+      } else if (isAx2(f.Subformula(0))) {
         AddProvenFormula(f.Subformula(1), -axiom - 1, -2, true, f);
-      }
-      if (isAx3(f.Subformula(0))) {
+      } else if (isAx3(f.Subformula(0))) {
         AddProvenFormula(f.Subformula(1), -axiom - 1, -3, true, f);
-      }
-      if (isAx4(f.Subformula(0))) {
+      } else if (isAx4(f.Subformula(0))) {
         AddProvenFormula(f.Subformula(1), -axiom - 1, -4, true, f);
-      }
-      if (isAx5(f.Subformula(0))) {
+      } else if (isAx5(f.Subformula(0))) {
         AddProvenFormula(f.Subformula(1), -axiom - 1, -5, true, f);
-      }
-      if (isAx6(f.Subformula(0))) {
+      } else if (isAx6(f.Subformula(0))) {
         AddProvenFormula(f.Subformula(1), -axiom - 1, -6, true, f);
-      }
-      if (isAx7(f.Subformula(0))) {
+      } else if (isAx7(f.Subformula(0))) {
         AddProvenFormula(f.Subformula(1), -axiom - 1, -7, true, f);
-      }
-      if (isAx8(f.Subformula(0))) {
+      } else if (isAx8(f.Subformula(0))) {
         AddProvenFormula(f.Subformula(1), -axiom - 1, -8, true, f);
-      }
-      if (isAx9(f.Subformula(0))) {
+      } else if (isAx9(f.Subformula(0))) {
         AddProvenFormula(f.Subformula(1), -axiom - 1, -9, true, f);
-      }
-      if (isAx10(f.Subformula(0))) {
+      } else if (isAx10(f.Subformula(0))) {
         AddProvenFormula(f.Subformula(1), -axiom - 1, -10, true, f);
-      }
-      if (isAx11(f.Subformula(0))) {
+      } else if (isAx11(f.Subformula(0))) {
         AddProvenFormula(f.Subformula(1), -axiom - 1, -11, true, f);
       }
       // if (isAx12(f.Subformula(0))) {
@@ -403,7 +405,7 @@ void TryAxiom(int axiom, vector<Formula> values) {
       // if (isAx15(f.Subformula(0))) {
       //   AddProvenFormula(f.Subformula(1), -axiom - 1, -15, true);
       // }
-      if (isKRZTautology(f.Subformula(0))) {
+      else if (isKRZTautology(f.Subformula(0), variables_in_target)) {
         AddProvenFormula(f.Subformula(1), -axiom - 1, -99, true, f);
       }
     }
@@ -419,6 +421,13 @@ void TryAxiom(int axiom, vector<Formula> values) {
   }
 }
 
+void TryAxiom(int axiom, const vector<Formula> &values) {
+  axiom--;
+  assert(values.size() + 1 >= vars_needed[axiom]);
+  Formula f = axioms[axiom];
+  TryAxiom(f, vars_needed[axiom], axiom, values);
+}
+
 // vector<Formula> interesting = DoParseFormulas(
 //     "((p≡¬p)→((p≡p)≡(p≡¬p))),((¬p≡p)"
 //     "→((p≡¬p)≡(p≡p))),((¬p≡p)→((¬p≡¬p)≡(p≡¬p))),"
@@ -429,30 +438,62 @@ void TryAxiom(int axiom, vector<Formula> values) {
 //     0);
 
 void tryAddRandomAxiom() {
-  // Only axioms 1, 2, 3 make sense as major of MP
-  int axiom = rand() % (axioms.size());
-  vector<Formula> values;
-  int maxsize = 1;
-  // maxsize = 3;
-  // if ((rand() % 4) == 0) {
-  //   maxsize = 4;
-  //   if ((rand() % 4) == 0) {
-  //     maxsize = 5;
-  //     if ((rand() % 4) == 0) {
-  //       maxsize = 6;
-  //       if ((rand() % 4) == 0) {
-  //         maxsize = 7;
-  //         // if ((rand() % 8) == 0) {
-  //         //   maxsize = 15;
-  //         // }
-  //       }
-  //     }
-  //   }
-  // }
-  while (values.size() < vars_needed[axiom]) {
-    values.push_back(GetRandomFormula((rand() % maxsize) + 1, 3));
+
+  if (rand() % 2) {
+    // Only axioms 1, 2, 3 make sense as major of MP
+    int axiom = rand() % (axioms.size());
+    vector<Formula> values;
+    int maxsize = 3;
+    maxsize = 3;
+    if ((rand() % 4) == 0) {
+      maxsize = 4;
+      if ((rand() % 4) == 0) {
+        maxsize = 5;
+        if ((rand() % 4) == 0) {
+          maxsize = 6;
+          if ((rand() % 4) == 0) {
+            maxsize = 7;
+            // if ((rand() % 8) == 0) {
+            //   maxsize = 15;
+            // }
+          }
+        }
+      }
+    }
+    while (values.size() < vars_needed[axiom]) {
+      values.push_back(
+          GetRandomFormula((rand() % maxsize) + 1, variables_in_target));
+    }
+    TryAxiom(axiom + 1, values);
+  } else {
+    int max_krz_variables = (rand() % 4) + 1;
+    int krz_size = (rand() % 4) + 2;
+    Formula potential_axiom =
+        GetRandomKRZFormula(krz_size, max_krz_variables, vars);
+    if (!potential_axiom.IsOp(Operator::op_impl))
+      return;
+
+    if (isKRZTautology(potential_axiom, max_krz_variables, true)) {
+      if (isKRZTautology(potential_axiom.Subformula(1), max_krz_variables,
+                         true)) {
+        return;
+      }
+      vector<Formula> values;
+      int maxsize = 3;
+
+      while (values.size() < max_krz_variables) {
+        values.push_back(
+            GetRandomFormula((rand() % maxsize) + 1, variables_in_target));
+      }
+
+      if (isKRZTautology(potential_axiom.Subformula(0), max_krz_variables,
+                         true)) {
+        TryAxiom(potential_axiom, max_krz_variables, 9998, values, true);
+      } else {
+        TryAxiom(potential_axiom, max_krz_variables, 998, values);
+      }
+    }
   }
-  TryAxiom(axiom + 1, values);
 }
 
 // --------------- refinement section -----------
@@ -472,7 +513,6 @@ void calculate_parent_count(int n) {
 void print_tree(int n) {
   parent_count.clear();
   calculate_parent_count(n);
-
   map<int, Formula> new_nrs;
   map<Formula, int> new_formulas;
 
@@ -509,7 +549,9 @@ void print_tree(int n) {
       }
       cout << ";";
     }
-    cout << f << endl;
+    cout << f << ";                ;"
+         << (major_axiom.count(f) > 0 ? major_axiom.at(f) : Formula(999))
+         << endl;
 
     for (int child : children[old_nr]) {
       parent_count[child]--;
@@ -544,7 +586,7 @@ int main() {
 
     // Sanity check -- make sure all input we have are actually tautologies
     auto proofNode = DoSolve({FNot(f)}, false);
-    assert(proofNode.is_closed);
+    assert(proofNode.is_closed.has_value() && proofNode.is_closed.value());
   }
 
   vector<Formula> targets = {
@@ -556,33 +598,34 @@ int main() {
       Formula("(r=q)->((q=p)->(r=p))"), Formula("(r=q)->((q=p)->(p=r))"),
   };
 
-  // INITIAL FIND
-  while (true) {
-    tryAddRandomAxiom();
-    for (const auto &target : targets) {
-      if (proven.count(target) > 0) {
-        cout << "FOUND FOUND FOUND" << endl;
-        print_tree(proven[target]);
-        exit(0);
+  if (!REFINEMENT_MODE) {
+    // INITIAL FIND
+    while (true) {
+      tryAddRandomAxiom();
+      for (const auto &target : targets) {
+        if (proven.count(target) > 0) {
+          cout << "FOUND FOUND FOUND" << endl;
+          print_tree(proven[target]);
+          exit(0);
+        }
+      }
+    }
+  } else {
+    // REFINEMENT
+    int target_nr = proven[targets[0]];
+    calculate_parent_count(target_nr);
+
+    print_tree(target_nr);
+    int last_printed_real_size = parent_count.size();
+    int last_printed_naive_size = tree_size[target_nr];
+
+    while (true) {
+      tryAddRandomAxiom();
+      if (last_printed_naive_size != tree_size[target_nr]) {
+        print_tree(target_nr);
+        last_printed_naive_size = tree_size[target_nr];
+        // exit(0);
       }
     }
   }
-
-  // // REFINEMENT
-  // int target_nr = proven[targets[0]];
-  // calculate_parent_count(target_nr);
-
-  // print_tree(target_nr);
-  // int last_printed_real_size = parent_count.size();
-  // int last_printed_naive_size = tree_size[target_nr];
-
-  // // // Formula targe2 = Formula("-(-p=p)");
-  // while (true) {
-  //   tryAddRandomAxiom();
-  //   if (last_printed_naive_size != tree_size[target_nr]) {
-  //     print_tree(target_nr);
-  //     last_printed_naive_size = tree_size[target_nr];
-  //     // exit(0);
-  //   }
-  // }
 }

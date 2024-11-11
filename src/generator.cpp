@@ -7,6 +7,23 @@ int GetRandom(int start, int end) {
 }
 int GetRandom(int end) { return GetRandom(0, end); }
 
+Formula GetRandomKRZFormula(int subformulas, int variables_size,
+                            const vector<Formula> &vars) {
+  assert(subformulas > 0);
+  if (subformulas == 1) {
+    return vars[rand() % variables_size];
+  }
+  if (rand() % 2) {
+    return FNot(GetRandomKRZFormula(subformulas - 1, variables_size, vars));
+  } else {
+    int left = GetRandom(1, subformulas);
+    int right = subformulas - left;
+    return Formula(Operator::op_impl,
+                   {GetRandomKRZFormula(left, variables_size, vars),
+                    GetRandomKRZFormula(right, variables_size, vars)});
+  }
+}
+
 Formula GetRandomFormula(int subformulas, int variables_size,
                          const vector<Formula> &interesting) {
   assert(subformulas > 0);
