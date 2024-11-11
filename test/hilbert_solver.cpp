@@ -5,6 +5,8 @@
 #include <queue>
 
 auto formula = DoParseFormulas("p", 0)[0];
+auto formula2 = DoParseFormulas("q", 0)[0];
+auto formula3 = DoParseFormulas("r", 0)[0];
 auto vars = DoParseFormulas("phi, psi, chi, theta", 0);
 auto axioms = DoParseFormulas(
     "phi -> (psi -> phi),"
@@ -211,13 +213,20 @@ bool isKRZOnly(const Formula &f) {
   return isKRZOnly(f.Subformula(0)) && isKRZOnly(f.Subformula(1));
 }
 // Only one variable (p)
-bool isKRZTrue(const Formula &f, bool val) {
-  if (f.IsVar())
-    return val;
+bool isKRZTrue(const Formula &f, bool val0, bool val1, bool val2) {
+  if (f.IsVar()) {
+    if (f.Var() == 0)
+      return val0;
+    if (f.Var() == 1)
+      return val1;
+    if (f.Var() == 2)
+      return val2;
+  }
   if (f.IsOp(Operator::op_not))
-    return !isKRZTrue(f.Subformula(), val);
+    return !isKRZTrue(f.Subformula(), val0, val1, val2);
   if (f.IsOp(Operator::op_impl))
-    return !isKRZTrue(f.Subformula(0), val) || isKRZTrue(f.Subformula(1), val);
+    return !isKRZTrue(f.Subformula(0), val0, val1, val2) ||
+           isKRZTrue(f.Subformula(1), val0, val1, val2);
   assert("Checking KRZ true for unsupported operators" == 0);
   exit(1);
 }
@@ -225,17 +234,31 @@ bool isKRZTrue(const Formula &f, bool val) {
 bool isKRZTautology(const Formula &f) {
   if (!isKRZOnly(f))
     return false;
-  if (!isKRZTrue(f, true))
+  if (!isKRZTrue(f, true, true, true))
     return false;
-  if (!isKRZTrue(f, false))
+  if (!isKRZTrue(f, true, true, false))
+    return false;
+  if (!isKRZTrue(f, true, false, true))
+    return false;
+  if (!isKRZTrue(f, true, false, false))
+    return false;
+  if (!isKRZTrue(f, false, true, true))
+    return false;
+  if (!isKRZTrue(f, false, true, false))
+    return false;
+  if (!isKRZTrue(f, false, false, true))
+    return false;
+  if (!isKRZTrue(f, false, false, false))
     return false;
   return true;
 }
 
 void AddProvenFormula(const Formula &f, int a, int b, bool tryNewProofs) {
-  if (proven.count(f) > 0 &&
-      (!tryNewProofs ||
-       tree_size[proven.at(f)] <= (get_size(a) + get_size(b) + 1))) {
+  if (proven.count(f) > 0
+      // &&
+      //     (!tryNewProofs ||
+      //      tree_size[proven.at(f)] <= (get_size(a) + get_size(b) + 1))
+  ) {
     return;
   }
 
@@ -404,23 +427,23 @@ void tryAddRandomAxiom() {
   vector<Formula> values;
   int maxsize = 3;
   maxsize = 3;
-  if ((rand() % 2) == 0) {
+  if ((rand() % 4) == 0) {
     maxsize = 4;
-    if ((rand() % 2) == 0) {
+    if ((rand() % 4) == 0) {
       maxsize = 5;
       if ((rand() % 4) == 0) {
         maxsize = 6;
         if ((rand() % 4) == 0) {
           maxsize = 7;
-          if ((rand() % 8) == 0) {
-            maxsize = 15;
-          }
+          // if ((rand() % 8) == 0) {
+          //   maxsize = 15;
+          // }
         }
       }
     }
   }
   while (values.size() < vars_needed[axiom]) {
-    values.push_back(GetRandomFormula((rand() % maxsize) + 1, 1));
+    values.push_back(GetRandomFormula((rand() % maxsize) + 1, 3));
   }
   TryAxiom(axiom + 1, values);
 }
@@ -515,9 +538,29 @@ int main() {
     assert(proofNode.is_closed);
   }
 
-  Formula target = Formula("-(p=-p)");
+  vector<Formula> targets = {
+      Formula("(p=q)->((q=r)->(p=r))"), Formula("(p=q)->((q=r)->(r=p))"),
+      Formula("(p=r)->((r=q)->(p=q))"), Formula("(p=r)->((r=q)->(q=p))"),
+      Formula("(q=p)->((p=r)->(q=r))"), Formula("(q=p)->((p=r)->(r=q))"),
+      Formula("(q=r)->((r=p)->(q=p))"), Formula("(q=r)->((r=p)->(p=q))"),
+      Formula("(r=p)->((p=q)->(r=q))"), Formula("(r=p)->((p=q)->(q=r))"),
+      Formula("(r=q)->((q=p)->(r=p))"), Formula("(r=q)->((q=p)->(p=r))"),
+  };
 
-  int target_nr = proven[target];
+  // // INITIAL FIND
+  // while (true) {
+  //   tryAddRandomAxiom();
+  //   for (const auto &target : targets) {
+  //     if (proven.count(target) > 0) {
+  //       cout << "FOUND FOUND FOUND" << endl;
+  //       print_tree(proven[target]);
+  //       exit(0);
+  //     }
+  //   }
+  // }
+
+  // REFINEMENT
+  int target_nr = proven[targets[0]];
   calculate_parent_count(target_nr);
 
   print_tree(target_nr);

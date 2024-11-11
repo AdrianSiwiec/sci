@@ -15,21 +15,50 @@ Formula GetRandomFormula(int subformulas, int variables_size,
     return interesting[rand() % interesting.size()];
   }
   if (subformulas == 1) {
-    // return Formula(string(1, 'a' + (rand() % variables_size)));
-    int r = rand() % 10;
+    int r = rand() % 8;
     if (r == 0) {
-      return FId(Formula(0), FNot(Formula(0)));
-    } else if (r == 1) {
-      return FId(FNot(Formula(0)), Formula(0));
-    } else if (r == 2) {
-      return FNot(FId(Formula(0), FNot(Formula(0))));
-    } else if (r == 3) {
-      return FNot(FId(FNot(Formula(0)), Formula(0)));
-    } else if (r % 2) {
       return Formula(0);
-    } else {
-      return FNot(Formula(0));
     }
+    if (r == 1) {
+      return Formula(1);
+    }
+    if (r == 2) {
+      return Formula(2);
+    }
+    if (r == 3) {
+      return FId(Formula(1), Formula(2));
+    }
+    if (r == 4) {
+      return FId(Formula(0), Formula(1));
+    }
+    if (r == 5) {
+      return FId(Formula(0), Formula(2));
+    }
+    if (r == 6) {
+      return FImpl(FId(Formula(1), Formula(2)), FId(Formula(0), Formula(2)));
+    }
+    if (r == 7) {
+      return FImpl(
+          FId(Formula(0), Formula(1)),
+          FImpl(FId(Formula(1), Formula(2)), FId(Formula(0), Formula(2))));
+    }
+
+    // return Formula((rand() % variables_size));
+
+    // int r = rand() % 10;
+    // if (r == 0) {
+    //   return FId(Formula(0), FNot(Formula(0)));
+    // } else if (r == 1) {
+    //   return FId(FNot(Formula(0)), Formula(0));
+    // } else if (r == 2) {
+    //   return FNot(FId(Formula(0), FNot(Formula(0))));
+    // } else if (r == 3) {
+    //   return FNot(FId(FNot(Formula(0)), Formula(0)));
+    // } else if (r % 2) {
+    //   return Formula(0);
+    // } else {
+    //   return FNot(Formula(0));
+    // }
   }
 
   Operator op = static_cast<Operator>(GetRandom(3));
