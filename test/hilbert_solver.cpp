@@ -40,6 +40,7 @@ map<int, vector<int>> parents;
 map<int, vector<int>> children;
 map<int, int> tree_size;
 map<int, int> tree_length;
+map<Formula, Formula> major_axiom;
 
 int get_size(int n) {
   if (n < 0)
@@ -253,7 +254,8 @@ bool isKRZTautology(const Formula &f) {
   return true;
 }
 
-void AddProvenFormula(const Formula &f, int a, int b, bool tryNewProofs) {
+void AddProvenFormula(const Formula &f, int a, int b, bool tryNewProofs,
+                      const Formula &f_major_axiom) {
   if (proven.count(f) > 0
       // &&
       //     (!tryNewProofs ||
@@ -271,10 +273,12 @@ void AddProvenFormula(const Formula &f, int a, int b, bool tryNewProofs) {
         || isKRZTautology(f))
       return;
 
-    // cout << a << ";" << b << ";" << f << endl;
-    // if (tryNewProofs) {
-    //   cerr << a << ";" << b << ";" << f << endl;
-    // }
+    cout << a << ";" << b << ";" << f << ";                     ;"
+         << f_major_axiom << endl;
+    if (tryNewProofs) {
+      cerr << a << ";" << b << ";" << f << ";                     ;"
+           << f_major_axiom << endl;
+    }
 
     i = proven.size() + 1;
     proven_nrs.emplace(i, f);
@@ -298,6 +302,7 @@ void AddProvenFormula(const Formula &f, int a, int b, bool tryNewProofs) {
     }
   }
 
+  major_axiom.emplace(f, f_major_axiom);
   parents[i] = {a, b};
   tree_size[i] = get_size(a) + get_size(b) + 1;
   tree_length[i] = max(get_length(a), get_length(b)) + 1;
@@ -316,7 +321,7 @@ void AddProvenFormula(const Formula &f, int a, int b, bool tryNewProofs) {
   if (f.IsOp(Operator::op_impl)) {
     if (proven.count(f.Subformula(0)) > 0) {
       if (tryNewProofs) {
-        AddProvenFormula(f.Subformula(1), i, proven[f.Subformula(0)], true);
+        AddProvenFormula(f.Subformula(1), i, proven[f.Subformula(0)], true, f);
       }
     } else {
       if (!Contains(willProve[f.Subformula(0)], i)) {
@@ -329,7 +334,8 @@ void AddProvenFormula(const Formula &f, int a, int b, bool tryNewProofs) {
     if (willProve.count(f) > 0) {
       const auto &nrs = willProve[f];
       for (int nr : nrs) {
-        AddProvenFormula(proven_nrs.at(nr).Subformula(1), nr, i, true);
+        AddProvenFormula(proven_nrs.at(nr).Subformula(1), nr, i, true,
+                         proven_nrs.at(nr));
       }
       // willProve.erase(f);
     }
@@ -350,40 +356,40 @@ void TryAxiom(int axiom, vector<Formula> values) {
     if (true || proven.count(f.Subformula(1)) == 0) {
       if (proven.count(f.Subformula(0)) > 0) {
         AddProvenFormula(f.Subformula(1), -axiom - 1, proven[f.Subformula(0)],
-                         true);
+                         true, f);
       }
       if (isAx1(f.Subformula(0))) {
-        AddProvenFormula(f.Subformula(1), -axiom - 1, -1, true);
+        AddProvenFormula(f.Subformula(1), -axiom - 1, -1, true, f);
       }
       if (isAx2(f.Subformula(0))) {
-        AddProvenFormula(f.Subformula(1), -axiom - 1, -2, true);
+        AddProvenFormula(f.Subformula(1), -axiom - 1, -2, true, f);
       }
       if (isAx3(f.Subformula(0))) {
-        AddProvenFormula(f.Subformula(1), -axiom - 1, -3, true);
+        AddProvenFormula(f.Subformula(1), -axiom - 1, -3, true, f);
       }
       if (isAx4(f.Subformula(0))) {
-        AddProvenFormula(f.Subformula(1), -axiom - 1, -4, true);
+        AddProvenFormula(f.Subformula(1), -axiom - 1, -4, true, f);
       }
       if (isAx5(f.Subformula(0))) {
-        AddProvenFormula(f.Subformula(1), -axiom - 1, -5, true);
+        AddProvenFormula(f.Subformula(1), -axiom - 1, -5, true, f);
       }
       if (isAx6(f.Subformula(0))) {
-        AddProvenFormula(f.Subformula(1), -axiom - 1, -6, true);
+        AddProvenFormula(f.Subformula(1), -axiom - 1, -6, true, f);
       }
       if (isAx7(f.Subformula(0))) {
-        AddProvenFormula(f.Subformula(1), -axiom - 1, -7, true);
+        AddProvenFormula(f.Subformula(1), -axiom - 1, -7, true, f);
       }
       if (isAx8(f.Subformula(0))) {
-        AddProvenFormula(f.Subformula(1), -axiom - 1, -8, true);
+        AddProvenFormula(f.Subformula(1), -axiom - 1, -8, true, f);
       }
       if (isAx9(f.Subformula(0))) {
-        AddProvenFormula(f.Subformula(1), -axiom - 1, -9, true);
+        AddProvenFormula(f.Subformula(1), -axiom - 1, -9, true, f);
       }
       if (isAx10(f.Subformula(0))) {
-        AddProvenFormula(f.Subformula(1), -axiom - 1, -10, true);
+        AddProvenFormula(f.Subformula(1), -axiom - 1, -10, true, f);
       }
       if (isAx11(f.Subformula(0))) {
-        AddProvenFormula(f.Subformula(1), -axiom - 1, -11, true);
+        AddProvenFormula(f.Subformula(1), -axiom - 1, -11, true, f);
       }
       // if (isAx12(f.Subformula(0))) {
       //   AddProvenFormula(f.Subformula(1), -axiom - 1, -12, true);
@@ -398,7 +404,7 @@ void TryAxiom(int axiom, vector<Formula> values) {
       //   AddProvenFormula(f.Subformula(1), -axiom - 1, -15, true);
       // }
       if (isKRZTautology(f.Subformula(0))) {
-        AddProvenFormula(f.Subformula(1), -axiom - 1, -99, true);
+        AddProvenFormula(f.Subformula(1), -axiom - 1, -99, true, f);
       }
     }
   }
@@ -406,7 +412,8 @@ void TryAxiom(int axiom, vector<Formula> values) {
   if (willProve.count(f) > 0) {
     const auto nrs = willProve[f];
     for (int nr : nrs) {
-      AddProvenFormula(proven_nrs.at(nr).Subformula(1), nr, -axiom - 1, true);
+      AddProvenFormula(proven_nrs.at(nr).Subformula(1), nr, -axiom - 1, true,
+                       proven_nrs.at(nr));
     }
     // willProve.erase(f);
   }
@@ -425,23 +432,23 @@ void tryAddRandomAxiom() {
   // Only axioms 1, 2, 3 make sense as major of MP
   int axiom = rand() % (axioms.size());
   vector<Formula> values;
-  int maxsize = 3;
-  maxsize = 3;
-  if ((rand() % 4) == 0) {
-    maxsize = 4;
-    if ((rand() % 4) == 0) {
-      maxsize = 5;
-      if ((rand() % 4) == 0) {
-        maxsize = 6;
-        if ((rand() % 4) == 0) {
-          maxsize = 7;
-          // if ((rand() % 8) == 0) {
-          //   maxsize = 15;
-          // }
-        }
-      }
-    }
-  }
+  int maxsize = 1;
+  // maxsize = 3;
+  // if ((rand() % 4) == 0) {
+  //   maxsize = 4;
+  //   if ((rand() % 4) == 0) {
+  //     maxsize = 5;
+  //     if ((rand() % 4) == 0) {
+  //       maxsize = 6;
+  //       if ((rand() % 4) == 0) {
+  //         maxsize = 7;
+  //         // if ((rand() % 8) == 0) {
+  //         //   maxsize = 15;
+  //         // }
+  //       }
+  //     }
+  //   }
+  // }
   while (values.size() < vars_needed[axiom]) {
     values.push_back(GetRandomFormula((rand() % maxsize) + 1, 3));
   }
@@ -531,7 +538,9 @@ int main() {
     // cout << line << endl;
     vector<string> input = SplitString(line, ";");
     Formula f = DoParseFormulas(input[2], 0)[0];
-    AddProvenFormula(f, stoi(input[0]), stoi(input[1]), false);
+    AddProvenFormula(f, stoi(input[0]), stoi(input[1]), false,
+                     input.size() > 3 ? DoParseFormulas(input[4], 0)[0]
+                                      : Formula(99));
 
     // Sanity check -- make sure all input we have are actually tautologies
     auto proofNode = DoSolve({FNot(f)}, false);
@@ -547,33 +556,33 @@ int main() {
       Formula("(r=q)->((q=p)->(r=p))"), Formula("(r=q)->((q=p)->(p=r))"),
   };
 
-  // // INITIAL FIND
-  // while (true) {
-  //   tryAddRandomAxiom();
-  //   for (const auto &target : targets) {
-  //     if (proven.count(target) > 0) {
-  //       cout << "FOUND FOUND FOUND" << endl;
-  //       print_tree(proven[target]);
-  //       exit(0);
-  //     }
-  //   }
-  // }
-
-  // REFINEMENT
-  int target_nr = proven[targets[0]];
-  calculate_parent_count(target_nr);
-
-  print_tree(target_nr);
-  int last_printed_real_size = parent_count.size();
-  int last_printed_naive_size = tree_size[target_nr];
-
-  // // Formula targe2 = Formula("-(-p=p)");
+  // INITIAL FIND
   while (true) {
     tryAddRandomAxiom();
-    if (last_printed_naive_size != tree_size[target_nr]) {
-      print_tree(target_nr);
-      last_printed_naive_size = tree_size[target_nr];
-      // exit(0);
+    for (const auto &target : targets) {
+      if (proven.count(target) > 0) {
+        cout << "FOUND FOUND FOUND" << endl;
+        print_tree(proven[target]);
+        exit(0);
+      }
     }
   }
+
+  // // REFINEMENT
+  // int target_nr = proven[targets[0]];
+  // calculate_parent_count(target_nr);
+
+  // print_tree(target_nr);
+  // int last_printed_real_size = parent_count.size();
+  // int last_printed_naive_size = tree_size[target_nr];
+
+  // // // Formula targe2 = Formula("-(-p=p)");
+  // while (true) {
+  //   tryAddRandomAxiom();
+  //   if (last_printed_naive_size != tree_size[target_nr]) {
+  //     print_tree(target_nr);
+  //     last_printed_naive_size = tree_size[target_nr];
+  //     // exit(0);
+  //   }
+  // }
 }
