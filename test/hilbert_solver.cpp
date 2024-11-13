@@ -453,9 +453,9 @@ void tryAddRandomAxiom() {
           maxsize = 6;
           if ((rand() % 4) == 0) {
             maxsize = 7;
-            // if ((rand() % 8) == 0) {
-            //   maxsize = 15;
-            // }
+            if ((rand() % 8) == 0) {
+              maxsize = 15;
+            }
           }
         }
       }
@@ -466,8 +466,8 @@ void tryAddRandomAxiom() {
     }
     TryAxiom(axiom + 1, values);
   } else {
-    int max_krz_variables = (rand() % 4) + 1;
-    int krz_size = (rand() % 4) + 2;
+    int max_krz_variables = (rand() % 8) + 1;
+    int krz_size = (rand() % 20) + 2;
     Formula potential_axiom =
         GetRandomKRZFormula(krz_size, max_krz_variables, vars);
     if (!potential_axiom.IsOp(Operator::op_impl))
@@ -480,6 +480,12 @@ void tryAddRandomAxiom() {
       }
       vector<Formula> values;
       int maxsize = 3;
+      if (rand() % 4) {
+        maxsize = 4;
+        if (rand() % 4) {
+          maxsize = 5;
+        }
+      }
 
       while (values.size() < max_krz_variables) {
         values.push_back(
