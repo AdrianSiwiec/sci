@@ -1,6 +1,7 @@
 #include "structs.h"
 #include "preprocessing.h"
 #include "solver.h"
+#include <sstream>
 
 ull hash_combine(ull a, ull b) {
   return a ^ (b + 0x9e3779b9 + (a << 6) + (a >> 2));
@@ -57,7 +58,7 @@ void Formula::Normalize() {
     else
       assert(this->subformulas.size() == 2);
   }
-  
+
   // if (is_var) {
   //   hash = GetHash(var + 10, {});
   // } else {

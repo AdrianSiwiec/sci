@@ -34,30 +34,39 @@ Formula GetRandomFormula(int subformulas, int variables_size,
   if (subformulas == 1) {
     int r = rand() % 8;
     if (r == 0) {
-      return Formula(0);
+      static Formula f = Formula(0);
+      return f;
     }
     if (r == 1) {
-      return Formula(1);
+      static Formula f = Formula(1);
+      return f;
     }
     if (r == 2) {
-      return Formula(2);
+      static Formula f = Formula(2);
+      return f;
     }
     if (r == 3) {
-      return FId(Formula(1), Formula(2));
+      static Formula f = FId(Formula(1), Formula(2));
+      return f;
     }
     if (r == 4) {
-      return FId(Formula(0), Formula(1));
+      static Formula f = FId(Formula(0), Formula(1));
+      return f;
     }
     if (r == 5) {
-      return FId(Formula(0), Formula(2));
+      static Formula f = FId(Formula(0), Formula(2));
+      return f;
     }
     if (r == 6) {
-      return FImpl(FId(Formula(1), Formula(2)), FId(Formula(0), Formula(2)));
+      static Formula f =
+          FImpl(FId(Formula(1), Formula(2)), FId(Formula(0), Formula(2)));
+      return f;
     }
     if (r == 7) {
-      return FImpl(
+      static Formula f = FImpl(
           FId(Formula(0), Formula(1)),
           FImpl(FId(Formula(1), Formula(2)), FId(Formula(0), Formula(2))));
+      return f;
     }
 
     // return Formula((rand() % variables_size));
