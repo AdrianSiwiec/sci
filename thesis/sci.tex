@@ -193,6 +193,9 @@ Let us now give some semantic definitions:
     \label{model}
 \end{definition}
 
+If an universe $U$ is finite, we'll call a given \SCI-model a \emph{finite}
+\SCI-model.
+
 \begin{definition}[Valuation]
     Given an \SCI-model $\mathcal{M} = (U, D, \tilde{\lnot}, \tilde{\ra}, \tilde{\id})$, a valuation in $\mathcal{M}$ is a function $V : \FOR \longrightarrow U$ that assigns a value $V(p) \in U$ for all propositional variables $p$, and such that for all $\varphi, \psi \in \FOR$:
     \begin{itemize}
@@ -220,17 +223,12 @@ Let us see some examples:
 
 TODO
 
-\begin{theorem}[Soundness and completeness of \SCI]
-    For every \SCI-formula $\varphi$, the following conditions are equivalent:
-    \begin{itemize}
-        \item $\varphi$ is provable in \SCI,
-        \item $\varphi$ is valid in \SCI.
-    \end{itemize}
+\begin{theorem}[Soundness of \SCI]
+    For every \SCI-formula $\varphi$, if $\varphi$ is provable in \SCI, then $\varphi$ is valid in \SCI.
+    \label{soundness}
 \end{theorem}
-Let us show an outline of the proof.
-
 \begin{proof}
-    First, let us show that every provable \SCI-formula is valid in \SCI. To show that, we want to prove that:
+    The proof will have two main parts:
     \begin{enumerate}[(a)]
         \item Every axiom of \SCI is valid in \SCI.
         \item By applying the \emph{modus ponens} rule to valid formulas $\varphi$ and
@@ -299,29 +297,185 @@ Let us show an outline of the proof.
                         So, we have that $\mathcal{M}, V \models (\varphi \id \psi) \ra (\varphi \ra
                             \psi)$.
 
-                \item Validity of axioms $(Ax3), (Ax4)$ and $(Ax5)$ can be shown in a similar way. (TODO: a może rozpisać dla jasności?)
+                  \item Validity of axioms $(Ax3), (Ax4)$ and $(Ax5)$ can be shown in a similar way.
+                        (TODO: a może rozpisać dla jasności?)
               \end{itemize}
     \end{itemize}
 
-    To show (b), let take any valid formulas $\varphi$ and $\varphi \ra \psi$ and any \SCI model and valuation $\mathcal{M}, V$. From validity of $\varphi \ra \psi$, we know that $V(\varphi \ra \psi) \in D$. From \cref{valuation} we have that $D \ni V(\varphi \ra \psi) = V(\varphi) \tilde{\ra} V(\psi)$. From \cref{model}, since we know that $V(\varphi) \tilde{\ra} V(\psi)$ we know that $V(\varphi) \not \in D$, or $V(\psi) \in D$. But we have that $\varphi$ is valid, so $V(\varphi) \in D$, so it must be that $V(\psi) \in D$, so $\mathcal{M}, V \models \psi$. The same holds for any other \SCI model and valuation, so $\models \psi$, which is what we wanted to show.
+    To show (b), let take any valid formulas $\varphi$ and $\varphi \ra \psi$ and
+    any \SCI model and valuation $\mathcal{M}, V$. From validity of $\varphi \ra
+        \psi$, we know that $V(\varphi \ra \psi) \in D$. From \cref{valuation} we have
+    that $D \ni V(\varphi \ra \psi) = V(\varphi) \tilde{\ra} V(\psi)$. From
+    \cref{model}, since we know that $V(\varphi) \tilde{\ra} V(\psi)$ we know that
+    $V(\varphi) \not \in D$, or $V(\psi) \in D$. But we have that $\varphi$ is
+    valid, so $V(\varphi) \in D$, so it must be that $V(\psi) \in D$, so
+    $\mathcal{M}, V \models \psi$. The same holds for any other \SCI model and
+    valuation, so $\models \psi$, which is what we wanted to show.
 
-    Looking at \cref{thesis}, for a given provable $\varphi$, let us take its proof $\varphi_1, ..., \varphi_n = \varphi$. Every subsequent formula in this proof is either an \SCI axiom and thus, by (a), valid, or is inferred by the \emph{modus ponens} rule from valid formulas and thus, by (b) valid. So, $\varphi$ is valid.
-
-    Now, let us show that any valid \SCI-formula is also provable.
-
-    TODO
+    Now, looking at \cref{thesis}, for a given provable $\varphi$, let us take its
+    proof $\varphi_1, ..., \varphi_n = \varphi$. Every subsequent formula in this
+    proof is either an \SCI axiom and thus, by (a), valid, or is inferred by the
+    \emph{modus ponens} rule from valid formulas and thus, by (b) valid. So,
+    $\varphi$ is valid.
 \end{proof}
 
-The proof of the correctness and fullness theorem can be found in
-\cite{suszko_bloom} (Theorem 1.9).
+\begin{theorem}[Completeness of \SCI]
+    For every \SCI-formula $\varphi$, if $\varphi$ is valid in \SCI, then $\varphi$ is provable in \SCI.
+\end{theorem}
+\begin{proof}
+    To show that every valid \SCI-formula is \SCI-provable is, by contraposition, to show that every non-\SCI-provable formula is non-\SCI-valid.
 
-TODO: podać ideę dowodu
+    To do this, we will construct a \SCI-model and a valuation in which every
+    \SCI-provable formula is satisfied (this model will be similar in style to the
+    Herbrandt model). Then, it will be shown that for every formula that is not
+    \SCI-provable, this model and this valuation will be a witness of its
+    non-\SCI-validity, thus proving completeness of \SCI
+
+    {\color{red}Czy to jest w ogóle poprawne odtworzenie intuicji dowodu z wykładu? Na wykładzie co prawda dla każdego niesprzecznego zbioru formuł $X$ konstruowaliśmy model, w którym były prawdziwe wszystkie formuły $X \vdash \varphi$, ale dla samego dowodu pełności i tak stawialiśmy na koniec (chyba?) $X = \emptyset$, wiec uprościłem.}
+
+    First, let us define a relation $R$ on \SCI-formulas: $$ \varphi R \psi \text{
+            if and only if} \vdash \varphi \id \psi $$
+
+    Note that for clarity we're using infix notation for relations. We want to show
+    that $R$ is an equivalence relation.
+    \begin{enumerate}[(a)]
+        \item $R$ is reflexive. It is trivially from axiom $(Ax1)$.
+        \item $R$ is symmetrical, that is for all $\varphi, \psi \in \FOR, \varphi R \psi$ if and only if $\psi R \varphi$.
+
+              As we have shown in example TODO, we can prove that for all $\varphi, \psi$,
+              $\vdash (\varphi \id \psi) \ra (\psi \id \varphi)$. If $\varphi R \psi$, then
+              $\vdash \varphi \id \psi$, so by \emph{modus ponens} we can infer $\vdash \psi
+                  \id \varphi$, so $\psi R \varphi$. In the same way we can show that if $\psi R
+                  \varphi$ then $\varphi R \psi$, so $R$ is symmetrical.
+        \item $R$ is transitive, that is for all $\varphi, \psi, \vartheta \in \FOR$, if $\varphi R \psi$ and $\psi R \vartheta$ then $\varphi R \vartheta$.
+
+              As we have shown in example TODO, we can prove that for all $\varphi, \psi,
+                  \vartheta \in \FOR$, $\vdash (\varphi \id \psi) \ra ((\psi \id \vartheta) \ra
+                  (\varphi \id \vartheta))$. Let us assume that $\varphi R \psi$ and $\psi R
+                  \vartheta$. This gives us that $\vdash \varphi \id \psi$ and $\vdash \psi \id
+                  \vartheta$. Applying \emph{modus ponens} twice we get $\vdash \varphi \id
+                  \vartheta$, so $\varphi R \vartheta$.
+    \end{enumerate}
+
+    So, $R$ is an equivalence relation. Let us now show that it is a congruence,
+    that is:
+    \begin{enumerate}[(a)]
+        \item For all $\varphi, \psi \in \FOR$, if $\varphi R \psi$, then $\lnot \varphi R
+                  \lnot \psi$. This is trivially true from axiom $(Ax3)$.
+        \item For all $\varphi, \psi, \vartheta, \chi \in \FOR$, if $\varphi R \psi$ and
+              $\vartheta R \chi$, then $\varphi \ra \vartheta R \psi \ra \chi$. This is
+              easily proven from $(Ax4)$.
+        \item For all $\varphi, \psi, \vartheta, \chi \in \FOR$, if $\varphi R \psi$ and
+              $\vartheta R \chi$, then $\varphi \id \vartheta R \psi \id \chi$. This is
+              easily proven from $(Ax5)$.
+    \end{enumerate}
+
+    Now that we know that $R$ is a congruent equivalence relation, we can define a
+    structure: $\mathcal{M} = (U, D, \tilde{\lnot}, \tilde{\ra}, \tilde{\id})$,
+    such that:
+    \begin{itemize}
+        \item $U = \{ |\varphi|_R : \varphi \in \FOR \}$ (by $|\varphi|_R$ we mean an equivalence class of $R$ of which $\varphi$ is a member),
+        \item $D = \{ |\varphi|_R : \varphi \in \FOR, \vdash \varphi\}$
+        \item $\tilde{\lnot}$ is an unary function on equivalence classes of $R$, such that $\tilde{\lnot}|\varphi|_R = |\lnot \varphi|_R$
+        \item $\tilde{\ra}$ is a binary function on equivalence classes of $R$, such that $|\varphi|_R \tilde{\ra} |\psi|_R = |\varphi \ra \psi|_R$
+        \item $\tilde{\id}$ is a binary function on equivalence classes of $R$, such that $|\varphi|_R \tilde{\id} |\psi|_R = |\varphi \id \psi|_R$
+    \end{itemize}
+
+    Let us add some comments:
+    \begin{itemize}
+        \item For any \SCI-formulas $\varphi, \psi$, such that $\varphi \id \psi$, $\vdash
+                  \varphi$ if and only if $\vdash \psi$. This follows from $(Ax2)$. Because of
+              that, $|\varphi|_R = |\psi|_R$ and so $D$ is well defined.
+        \item From congruence of $R$, we know that for any $\varphi, \psi \in \FOR$ if
+              $|\varphi|_R = |\psi|_R$, then $|\lnot \varphi|_R = |\lnot \psi|_R$, so
+              $\tilde{\lnot}$ is a well defined function.
+        \item Similarly, form the congruence of $R$ we can see that $\tilde{\ra}$ and
+              $\tilde{\id}$ are well defined functions.
+    \end{itemize}
+
+    Now we will want to show that $\mathcal{M}$ is an \SCI-model. From the
+    \cref{model} we want to show that:
+    \begin{itemize}
+        \item $U \not = \emptyset$ -- this is trivial,
+        \item $\emptyset \not = D$ -- this is true, because for example $\vdash p \id p$
+        \item $D \subsetneq U$ --  $D \subseteq U$ is trivial from the definition of $D$. $D \not = U$, because there are formulas which are not valid (e.g. $\lnot(p \id p)$), which from \cref{soundness} are not provable.
+        \item For all $a \in U: \tilde{\lnot} a \in D$ if and only if $a \not \in D$
+
+              {\color{red} Czy to nie jest fałsz? Weźmy $a=|p\id q|$.
+
+                      Chcemy pokazać: $\tilde{\lnot}|p \id q| \in D$ iff $|p \id q| \not \in D$.
+
+                      Prawa strona: Prawdziwa, bo $\not \vdash |p \id q|$
+
+                      Lewa strona: $\tilde{\lnot}|p \id q| \xLeftrightarrow{\text{def.}
+                              \tilde{\lnot}}$ $|\lnot(p \id q)|$. Ale: $\not \vdash \lnot(p \id q)$, więc
+                      $|\lnot(p \id q)| \not \in D$, więc lewa nieprawdziwa.}
+        \item For all $a, b \in U: a \tilde{\ra}b \in D$ if and only if $a \not \in D$ or $b
+                  \in D$.
+
+              TODO.
+        \item For all $a, b \in U: a \tilde{\id}b \in D$ if and only if $a = b$.
+
+              TODO.
+    \end{itemize}
+\end{proof}
 
 \begin{definition}[Decidability]
-    A logic is \emph{decidable} if there exists an effective method to determine whether a given formula of this logic is a theorem.
+    A logic is \emph{decidable} if there exists an effective method, that is, an algorithm that will always terminate, to determine whether any formula of this logic is a theorem.
 \end{definition}
 
-TODO: definicja rozstrzygalności
+We will want to show that \SCI is decidable. To do this, first let us show the
+following:
+
+\begin{theorem}[Finite model property of \SCI]
+    For any $\varphi \in \FOR$, if there exists $\mathcal{M},V$, such that $\mathcal{M},V \models \varphi$, then exists a finite \SCI-model $\mathcal{M'},V'$, such that $\mathcal{M'},V'\models \varphi$.
+\end{theorem}
+\begin{proof}
+    We are given $\mathcal{M}, V$ and $\varphi \in FOR$, such that $\mathcal{M}, v \models \varphi$. Let us define $\mathcal{M'} = (U', F', \tilde{\lnot}', \tilde{\ra}')$ and $V'$:
+    \begin{itemize}
+        \item $U' = \{v(\psi) : \psi \in \SUB(\varphi)\} \cup \{1, 0\}$ -- let us create $1, 0$, such that $1, 0 \not \in U$,
+        \item $D' = \{v(\psi) : \psi \in \SUB(\varphi), v(\psi) \in D\} \cup \{1\}$,
+        \item $
+                  \tilde{\lnot}'a = \begin{cases}
+                      \tilde{\lnot}a , & \text{if } a = v(\psi) \text{ and } \lnot \psi \in \SUB(\varphi) \\
+                      0,               & \text{otherwise, if } a \in D' \cup \{1\},            \\
+                      1,               & \text{otherwise,}                                                \\
+                  \end{cases}
+              $
+        \item $
+                  a\tilde{\ra}'b = \begin{cases}
+                      a\tilde{\ra}b , & \text{if } a = v(\psi), b = v(\vartheta) \text{ and } \psi \ra \vartheta \in \SUB(\varphi) \\
+                      1,              & \text{otherwise, if } a \not \in D \text{, or } b \in D,                                   \\
+                      0,              & \text{otherwise,}                                                                          \\
+                  \end{cases}
+              $
+        \item $
+                  a\tilde{\id}'b = \begin{cases}
+                      a\tilde{\id}b , & \text{if } a = v(\psi), b = v(\vartheta) \text{ and } \psi \id \vartheta \in \SUB(\varphi) \\
+                      1,              & \text{otherwise, if } a = b,                                                               \\
+                      0,              & \text{otherwise.}                                                                          \\
+                  \end{cases}
+              $
+    \end{itemize}
+
+    We need to show that $\mathcal{M'}$ is an \SCI-model. Following the
+    \cref{model}:
+    \begin{itemize}
+        \item $\emptyset \not = U' \supsetneq D' \not = \emptyset$ -- trivially from $0, 1 \in U', 1 \in D'$.
+        \item $\tilde{\lnot}'a \in D'$ if and only if $a \not \in D'$ -- there are cases:
+              \begin{enumerate}
+                  \item[1°] There exists $\psi$, such that $a = v(\psi)$ and $\lnot \psi \in \SUB(\varphi)$. Then from the definition of $\tilde{\lnot}'$ we have $\tilde{\lnot}'a \in D' \iff \tilde{\lnot}a \in D$, from the definition of $\tilde{\lnot}$ we have $\tilde{\lnot}a \in D \iff a \not \in D$ and from the definition of $D'$ (because $a=v(\psi) \in \SUB(\varphi)$) we have $a \not \in D \iff a \not \in D'$.
+                  \item[2°] Otherwise, and $a \in D \cup \{1\}$. If $a = 1$, then of course $a \in D'$ and $\tilde{\lnot}'a = 0 \not \in D$. But there is another case: $a \in D' \setminus \{1\}$
+                  \item[3°] Otherwise. We know that $a \in D \cup \{1\}$. If $a = 1$, then of course $a \in D'$ and $\tilde{\lnot}'a = 0 \not \in D$. If $a \in D'$, then $\tilde{\lnot}'a = 0 \not \in D'$.
+              \end{enumerate}
+        \item $a \tilde{\ra}'b \in D'$ if and only if $a \not \in D'$ or $b \in D'$ -- there are cases:
+              \begin{enumerate}
+                  \item[1°] There exists $\psi$ and $\vartheta$ such that $a = v(\psi), b=v(\vartheta)$ and $\psi \ra \vartheta \in \SUB(\varphi)$. Then from the definition of $\tilde{\ra}'$ we have that $a \tilde{\ra}'b \in D' \iff a \tilde{\ra} b \in D$, from the definition of $\tilde{\ra}$ we have that $a \tilde{\ra} b \in D$ if and only if $a \not \in D$ or $b \in D$, which from the definition of $D'$ is if and only if $a \not \in D'$ or $b \in D'$.
+                  \item[2°] There are no such $\psi$ and $\vartheta$ and $a \not \in D$. Then, from the definition of $\tilde{\ra}'$ we have that $a \tilde{\ra}' b = 1 \in D'$ and from the definition of $D'$ we have that $a \not \in D'$.
+                  \item[3°] There are no such $\psi$ and $\vartheta$ and $b \in D$. Then again, from the definition of $\tilde{\ra}'$ we have that $a \tilde{\ra}' b = 1 \in D'$ and from the definition of $D'$ we have that $b \in D'$.
+              \end{enumerate}
+    \end{itemize}
+\end{proof}
 
 \begin{theorem}[Decidability of \SCI]
     \SCI is decidable.
