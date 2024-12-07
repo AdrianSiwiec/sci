@@ -17,6 +17,7 @@
 % \usepackage{pxfonts}
 % \usepackage{newtxmath}
 \usepackage{mathtools}
+\usepackage{wasysym}
 \usepackage{xspace}
 
 \usepackage{amsthm}
@@ -59,6 +60,10 @@
 \newtheorem{definition}{Definition}[section]
 \AfterEndEnvironment{definition}{\noindent\ignorespaces}
 
+\theoremstyle{definition}
+\newtheorem{example}{Example}[section]
+\AfterEndEnvironment{example}{\noindent\ignorespaces}
+
 \newcommand*{\Ts}{T^*}
 \newcommand*{\id}{\equiv}
 \newcommand*{\ra}{\rightarrow}
@@ -71,6 +76,7 @@
 \newcommand*{\SUB}{\texttt{SUB}}
 \newcommand{\SCI}{$\mathsf{SCI}$\xspace}
 \newcommand{\PC}{$\mathsf{PC}$\xspace}
+\newcommand{\M}{\mathcal{M}\xspace}
 
 \makeatletter
 \newcommand{\leqnomode}{\tagsleft@true\let\veqno\@@leqno}
@@ -91,7 +97,7 @@ Test: ążźćłóęń
 \section{\SCI}
 \subsection{Basic notions}
 
-\begin{definition}[Vovabulary of \SCI]
+\begin{definition}[Vocabulary of \SCI]
     The vocabulary of \SCI consists of symbols from the following pairwise disjoint sets:
     \begin{itemize}
         \item $\V = \{p, q, r, ...\}$ -- a countable infinite set of propositional variables,
@@ -157,6 +163,7 @@ operators, they form a classical Propositional Calculus. For simplicity, in
 be an axiom.
 
 \begin{definition}[Axiomatization of \SCI]
+    \label{axiomatization}
     \SCI is axiomatized with the following axioms:
     \begin{itemize}
         \item Any tautology of the classical Propositional Calculus
@@ -193,8 +200,8 @@ Let us now give some semantic definitions:
     \label{model}
 \end{definition}
 
-If an universe $U$ is finite, we'll call a given \SCI-model a \emph{finite}
-\SCI-model.
+If an universe $U$ is finite, we'll call a given \SCI-model a \emph{finite
+    \SCI-model}.
 
 \begin{definition}[Valuation]
     Given an \SCI-model $\mathcal{M} = (U, D, \tilde{\lnot}, \tilde{\ra}, \tilde{\id})$, a valuation in $\mathcal{M}$ is a function $V : \FOR \longrightarrow U$ that assigns a value $V(p) \in U$ for all propositional variables $p$, and such that for all $\varphi, \psi \in \FOR$:
@@ -331,7 +338,13 @@ TODO
     \SCI-provable, this model and this valuation will be a witness of its
     non-\SCI-validity, thus proving completeness of \SCI
 
-    {\color{red}Czy to jest w ogóle poprawne odtworzenie intuicji dowodu z wykładu? Na wykładzie co prawda dla każdego niesprzecznego zbioru formuł $X$ konstruowaliśmy model, w którym były prawdziwe wszystkie formuły $X \vdash \varphi$, ale dla samego dowodu pełności i tak stawialiśmy na koniec (chyba?) $X = \emptyset$, wiec uprościłem.}
+    {\color{red}Wydaje mi się, że pomieszałem coś w notatkach z tego dowodu. Na wykładzie co prawda dla każdego niesprzecznego zbioru formuł $X$ konstruowaliśmy model, w którym były prawdziwe wszystkie formuły $X \vdash \varphi$, ale dla samego dowodu pełności i tak stawialiśmy na koniec (chyba?) $X = \emptyset$, wiec uprościłem.
+
+        Próbowałem to porównać z [Suszko, Bloom 1972], ale tam ten dowód jest bardzo
+        lakonicznie opisany.
+
+        A może bierze się niedowodliwą formułę i dla niej konkretnie buduje model (lub
+        wartościowanie), które ją inwaliduje?}
 
     First, let us define a relation $R$ on \SCI-formulas: $$ \varphi R \psi \text{
             if and only if} \vdash \varphi \id \psi $$
@@ -339,7 +352,7 @@ TODO
     Note that for clarity we're using infix notation for relations. We want to show
     that $R$ is an equivalence relation.
     \begin{enumerate}[(a)]
-        \item $R$ is reflexive. It is trivially from axiom $(Ax1)$.
+        \item $R$ is reflexive. It is trivially true from axiom $(Ax1)$.
         \item $R$ is symmetrical, that is for all $\varphi, \psi \in \FOR, \varphi R \psi$ if and only if $\psi R \varphi$.
 
               As we have shown in example TODO, we can prove that for all $\varphi, \psi$,
@@ -418,79 +431,244 @@ TODO
 
               TODO.
     \end{itemize}
+
+    So, $\mathcal{M}$ is a \SCI-model. Now, let us define a valuation $V$ for all
+    $\varphi \in \FOR$: $$ V(\varphi) = |\varphi|_R $$
+
+    We need to show that $V$ is indeed a valuation:
+    \begin{itemize}
+        \item TODO (chyba proste wszystko)
+    \end{itemize}
+
+    Now, for the final proof of completeness let us take a non-provable formula
+    $\varphi$. Since $\not \vdash \varphi$ we have that $|\varphi|_R \not \in D$,
+    so $V(\varphi) \not \in D$. So, we have found a model and a valuation
+    $\mathcal{M},V$, such that $\mathcal{M},V \not \models \varphi$, so $\varphi$
+    is not valid.
+
+        {\color{red} W notatkach mam:
+            \enquote{
+                \begin{itemize}
+                    \item Mamy dane $X, \varphi$: $X \not \vdash \varphi$
+                    \item budujemy model $\M^X, V^X$, t.że $X \vdash \psi \Rightarrow |\psi|_{R_X} \in
+                              D^X$
+                    \item Ale oczywiście skoro $X \not \vdash \varphi$ to $|\varphi|_{R_X} \not \in D^X$,
+                          więc $X \not \models \varphi$
+                \end{itemize}}\\
+            Więc $X$ nic tutaj nie pomaga, stawiając $X = \emptyset$ dostaję to co jest u góry.
+        }
+
 \end{proof}
 
 \begin{definition}[Decidability]
     A logic is \emph{decidable} if there exists an effective method, that is, an algorithm that will always terminate, to determine whether any formula of this logic is a theorem.
 \end{definition}
-
+%
 We will want to show that \SCI is decidable. To do this, first let us show the
 following:
-
 \begin{theorem}[Finite model property of \SCI]
-    For any $\varphi \in \FOR$, if there exists $\mathcal{M},V$, such that $\mathcal{M},V \models \varphi$, then exists a finite \SCI-model $\mathcal{M'},V'$, such that $\mathcal{M'},V'\models \varphi$.
+    \label{finite_model}
+    For any $\varphi \in \FOR$, if there exists $\mathcal{M},V$, such that $\mathcal{M},V \models \varphi$, then there exists a finite \SCI-model $\mathcal{M'},V'$, such that $\mathcal{M'},V'\models \varphi$.
 \end{theorem}
 \begin{proof}
-    We are given $\mathcal{M}, V$ and $\varphi \in FOR$, such that $\mathcal{M}, v \models \varphi$. Let us define $\mathcal{M'} = (U', F', \tilde{\lnot}', \tilde{\ra}')$ and $V'$:
+    We are given $\mathcal{M}, V$ and $\varphi \in FOR$, such that $\mathcal{M}, v \models \varphi$. Let us define $\mathcal{M'} = (U', D', \tilde{\lnot}', \tilde{\ra}')$ and $V'$:
     \begin{itemize}
         \item $U' = \{v(\psi) : \psi \in \SUB(\varphi)\} \cup \{1, 0\}$ -- let us create $1, 0$, such that $1, 0 \not \in U$,
-        \item $D' = \{v(\psi) : \psi \in \SUB(\varphi), v(\psi) \in D\} \cup \{1\}$,
+
+        \item $D' = \{V(\psi) : \psi \in \SUB(\varphi), V(\psi) \in D\} \cup \{1\}$
         \item $
                   \tilde{\lnot}'a = \begin{cases}
-                      \tilde{\lnot}a , & \text{if } a = v(\psi) \text{ and } \lnot \psi \in \SUB(\varphi) \\
-                      0,               & \text{otherwise, if } a \in D' \cup \{1\},            \\
-                      1,               & \text{otherwise,}                                                \\
+                      \tilde{\lnot}a , & \text{if exists } \psi \text{ such that } a = V(\psi) \text{ and } \lnot \psi \in \SUB(\varphi) \\
+                      0,               & \text{otherwise, if } a \in D'                                                                  \\
+                      1,               & \text{otherwise, if } a \not \in D'                                                             \\
                   \end{cases}
               $
         \item $
                   a\tilde{\ra}'b = \begin{cases}
-                      a\tilde{\ra}b , & \text{if } a = v(\psi), b = v(\vartheta) \text{ and } \psi \ra \vartheta \in \SUB(\varphi) \\
-                      1,              & \text{otherwise, if } a \not \in D \text{, or } b \in D,                                   \\
-                      0,              & \text{otherwise,}                                                                          \\
+                      a\tilde{\ra}b , & \text{if exist } \psi, \vartheta \text{ such that } a = V(\psi), b = V(\vartheta) \text{ and } \psi \ra \vartheta \in \SUB(\varphi) \\
+                      1,              & \text{otherwise, if } a \not \in D' \text{ or } b \in D'                                                                            \\
+                      0,              & \text{otherwise, if } a \in D' \text{ and } b \not \in D'                                                                           \\
                   \end{cases}
               $
         \item $
-                  a\tilde{\id}'b = \begin{cases}
+                  a\tilde{\id}'b = TODO \begin{cases}
                       a\tilde{\id}b , & \text{if } a = v(\psi), b = v(\vartheta) \text{ and } \psi \id \vartheta \in \SUB(\varphi) \\
                       1,              & \text{otherwise, if } a = b,                                                               \\
                       0,              & \text{otherwise.}                                                                          \\
                   \end{cases}
               $
+        \item $V'(\psi) = \begin{cases}
+                      V(\psi) , & \text{if } \psi \in \SUB(\varphi)                                      \\
+                      1,        & \text{if } \psi \not \in \SUB(\varphi) \text{ and } V(\psi) \in D      \\
+                      0,        & \text{if } \psi \not \in \SUB(\varphi) \text{ and } V(\psi) \not \in D \\
+                  \end{cases}$
     \end{itemize}
 
-    We need to show that $\mathcal{M'}$ is an \SCI-model. Following the
-    \cref{model}:
+    We need to show that $\mathcal{M'}$ is an \SCI-model, $V'$ is a valuation and
+    that $V'(\varphi) = V(\varphi)$:
     \begin{itemize}
         \item $\emptyset \not = U' \supsetneq D' \not = \emptyset$ -- trivially from $0, 1 \in U', 1 \in D'$.
         \item $\tilde{\lnot}'a \in D'$ if and only if $a \not \in D'$ -- there are cases:
               \begin{enumerate}
-                  \item[1°] There exists $\psi$, such that $a = v(\psi)$ and $\lnot \psi \in \SUB(\varphi)$. Then from the definition of $\tilde{\lnot}'$ we have $\tilde{\lnot}'a \in D' \iff \tilde{\lnot}a \in D$, from the definition of $\tilde{\lnot}$ we have $\tilde{\lnot}a \in D \iff a \not \in D$ and from the definition of $D'$ (because $a=v(\psi) \in \SUB(\varphi)$) we have $a \not \in D \iff a \not \in D'$.
-                  \item[2°] Otherwise, and $a \in D \cup \{1\}$. If $a = 1$, then of course $a \in D'$ and $\tilde{\lnot}'a = 0 \not \in D$. But there is another case: $a \in D' \setminus \{1\}$
-                  \item[3°] Otherwise. We know that $a \in D \cup \{1\}$. If $a = 1$, then of course $a \in D'$ and $\tilde{\lnot}'a = 0 \not \in D$. If $a \in D'$, then $\tilde{\lnot}'a = 0 \not \in D'$.
+                  \item[1°] There exists $\psi$, such that $a = V(\psi)$ and $\lnot \psi \in \SUB(\varphi)$. Then from the definition of $\tilde{\lnot}'$ we have $\tilde{\lnot}'a = V'(\lnot \psi)$, from the definition of $V'$ we have that $V'(\lnot \psi) = V(\lnot \psi)$ and since $V$ is a valuation we have that $V(\lnot \psi) = \tilde{\lnot}V(\psi)$. But we assumed that $a = V(\psi)$, so we have that $\tilde{\lnot}'a = \tilde{\lnot}a$. Then since $\mathcal{M}$ is a model, we know that $\tilde{\lnot}a \in D$ if and only if $a \not \in D$, and since $\lnot\psi \in \SUB(\varphi)$, we have $\tilde{\lnot}'a \in D'$ if and only if $a \not \in D'$.
+                  \item[2°] Otherwise, and $a \in D'$. Then $\tilde{\lnot}'a = 0 \not \in D'$.
+                  \item[3°] Otherwise, and $a \not \in D'$. Then $\tilde{\lnot}'a = 1 \in D'$.
+              \end{enumerate}
+        \item For all $\psi \in \FOR$, $V'(\lnot \psi) = \tilde{\lnot}'V'(\psi)$ -- there are
+              cases:
+              \begin{enumerate}
+                  \item[1°] $\lnot \psi \in \SUB(\varphi)$. Then from the definition of $\tilde{\lnot}'$ we have that $\tilde{\lnot}'V'(\psi) = V'(\lnot \psi)$.
+                  \item[2°] $\lnot \psi \not \in \SUB(\varphi)$.
+
+                          {\color{red} Kontrprzykład:
+                              \begin{itemize}
+                                  \item weźmy $\psi$: $\lnot \psi \not \in \SUB(\varphi)$
+                                  \item Z definicji $V'$: $V'(\lnot \psi) = 1 $ lub $0$, w zeleżności czy $V(\psi) \in
+                                            D$.
+                                  \item Niech $V'(\psi) = b$
+                                  \item Niech istnieje $\chi$, takie że: $\lnot \chi \in \SUB(\varphi)$, $V'(\chi) =
+                                            b$, $V'(\lnot \chi) = c \not \in \{1, 0\}$
+                                  \item wtedy, z definicji $\tilde{\lnot}'V'(\psi) = \tilde{\lnot}'b = c \not \in \{1,
+                                            0\}.$ Sprzeczność.
+                              \end{itemize}
+
+                              Konkretny kontrprzykład:
+                              \begin{itemize}
+                                  \item $\varphi = \lnot(p \id \lnot p)$
+                                  \item $U = \{a, b\}$
+                                  \item $D = \{b\}$
+                                  \item $V(p) = V(p \id \lnot p) = a$
+                                  \item $V(\lnot p) = V(\lnot(p \id \lnot p)) = b$
+                                  \item Konstruujemy $\M',V'$ jak wyżej
+                                  \item $\psi := \lnot(p \id \lnot p)$
+                                  \item $V'(\lnot \psi) = 0$, bo $\lnot \psi \not \in \SUB(\varphi)$
+                                  \item $V'(\psi) = a$
+                                  \item $\tilde{\lnot}'a = \tilde{\lnot}a = b$, bo istnieje $\chi = p$ t.że $a=V(\chi)$ i $\lnot \chi \in \SUB(\varphi)$
+                                  \item więc $\tilde{\lnot}'V'(\psi) = b \not = 0$ -- sprzeczność.
+                              \end{itemize}
+
+                              Trzeba chyba skomplikować definicję $V'(\psi)$ rozbijając $\psi$. Np. jeśli
+                              $\exists \chi: \lnot \chi = \psi, \chi \in \SUB(\varphi)$ to $V'(\psi) =
+                                  \tilde{\lnot}'V'(\chi)$. Wtedy $V'$ przestaje mieć tą ładną właściwość, że
+                              $\psi \not \in \SUB(\varphi) \Rightarrow V'(\psi) \in \{1, 0\}$, np. w
+                              przykładzie u góry $V'(\lnot \lnot (p \id \lnot p))$ będzie równe $a$. Ale nie
+                              ma to wpływu na liczność modelu i wydaje mi się że będzie się wszystko zgadzać.
+                          }
               \end{enumerate}
         \item $a \tilde{\ra}'b \in D'$ if and only if $a \not \in D'$ or $b \in D'$ -- there are cases:
               \begin{enumerate}
-                  \item[1°] There exists $\psi$ and $\vartheta$ such that $a = v(\psi), b=v(\vartheta)$ and $\psi \ra \vartheta \in \SUB(\varphi)$. Then from the definition of $\tilde{\ra}'$ we have that $a \tilde{\ra}'b \in D' \iff a \tilde{\ra} b \in D$, from the definition of $\tilde{\ra}$ we have that $a \tilde{\ra} b \in D$ if and only if $a \not \in D$ or $b \in D$, which from the definition of $D'$ is if and only if $a \not \in D'$ or $b \in D'$.
-                  \item[2°] There are no such $\psi$ and $\vartheta$ and $a \not \in D$. Then, from the definition of $\tilde{\ra}'$ we have that $a \tilde{\ra}' b = 1 \in D'$ and from the definition of $D'$ we have that $a \not \in D'$.
-                  \item[3°] There are no such $\psi$ and $\vartheta$ and $b \in D$. Then again, from the definition of $\tilde{\ra}'$ we have that $a \tilde{\ra}' b = 1 \in D'$ and from the definition of $D'$ we have that $b \in D'$.
+                  \item[1°] TODO There exists $\psi$ and $\vartheta$ such that $a = v(\psi), b=v(\vartheta)$ and $\psi \ra \vartheta \in \SUB(\varphi)$. Then from the definition of $\tilde{\ra}'$ we have that $a \tilde{\ra}'b \in D' \iff a \tilde{\ra} b \in D$, from the definition of $\tilde{\ra}$ we have that $a \tilde{\ra} b \in D$ if and only if $a \not \in D$ or $b \in D$, which from the definition of $D'$ is if and only if $a \not \in D'$ or $b \in D'$.
+                  \item[2°] TODO There are no such $\psi$ and $\vartheta$ and $a \not \in D$. Then, from the definition of $\tilde{\ra}'$ we have that $a \tilde{\ra}' b = 1 \in D'$ and from the definition of $D'$ we have that $a \not \in D'$.
+                  \item[3°] TODO There are no such $\psi$ and $\vartheta$ and $b \in D$. Then again, from the definition of $\tilde{\ra}'$ we have that $a \tilde{\ra}' b = 1 \in D'$ and from the definition of $D'$ we have that $b \in D'$.
               \end{enumerate}
     \end{itemize}
 \end{proof}
 
 \begin{theorem}[Decidability of \SCI]
+    \label{decidability}
     \SCI is decidable.
 \end{theorem}
-The proof of the decidability theorem can be found in \cite{suszko_bloom}
-(Corollary 2.4).
+\begin{proof}
+    Let us take any \SCI-formula $\varphi$, we want to know if $\varphi$ is a \SCI-theorem. From fullness and completeness of \SCI we know that $\varphi$ is a theorem if and only if $\lnot \varphi$ has no \SCI-model and valuation $\M, V$, such that $\M, V \models \lnot \varphi$. But from \cref{finite_model} we know that if there is $\M, V$, such that $\M, V \models \lnot \varphi$, then there is a finite model $\M'$ and $V'$ such that $\M', V' \models \lnot \varphi$. Furthermore, from the proof of \cref{finite_model} we can see that $|U'| \leq |\SUB(\varphi)|$ ($|X|$ here meaning the size of a set $X$).
 
-TODO: dowód.
+    For any finite model $\M'$ we can construct an isomorphic model $\M''$ with
+    $U'' = \{1, 2, ..., |U'|\}$ by setting any bijection $f : U' \rightarrow U''$
+    and then setting the rest of the model and $V''$ accordingly. So, we know that
+    if there is $\M, V$ such that $\M, V \models \lnot \varphi$, then and only then
+    there is a $\M'', V''$, such that $\M'', V'' \models \lnot \varphi$ and $U'' =
+        \{1, 2, ..., |\SUB(\lnot \varphi)|\}$, and there is a finite amount of such
+    finite models.
 
-\section{Deduction in SCI}
+    We can have a procedure to set $D''$ to be any of $2^{|\SUB(\lnot \varphi)|}$
+    subsets of $U''$, then for any $a \in U''$ to set $\tilde{\lnot}a$ to be any
+    element of $U''$, then for any $a, b \in U''$ to set $a \tilde{\ra} b$ to be
+    any element of $U''$, then for any $a, b \in U''$ to set $a \tilde{\id} b$ to
+    be any element of $U''$ and then to set every variable of $\lnot \varphi$ to be
+    any element of $U''$ and finally to check, whether such constructed $\M'', V''$
+    is a \SCI-model and a correct valuation. If it happens to be the case, then we
+    have found a \SCI-model invalidating $\varphi$. If after checking every such
+    combination we have not found any \SCI-model invalidating $\varphi$, we know
+    that $\varphi$ is valid, and so that it is a theorem.
+
+    If we set $n = s(\varphi)$, then this procedure will take $O({n^2} ^ {n^2})$
+    operations, so it is very far from practical, but it is nevetheless finite, so
+    we have a finite procedure to decide whether $\varphi$ is a \SCI-theorem.
+
+\end{proof}
+
+\section{Deduction in \SCI}
 
 \subsection{Deduction systems}
 
-TODO: Let us give an example of a provable formula with its full proof:
+The axiomatization of \SCI we presented in \cref{axiomatization} is an example
+of a Hilbert-style deductive system. Such systems consist of a set of axioms
+and inference rules (often \emph{modus ponens} is the only inference rule) that
+can be used to deduce theses, as explained in \cref{thesis}.
 
+Hilbert-style systems are historically first and most fundamental deductive
+systems. For every thesis of such systems, there is a sequence of formulas all
+the way back to the axioms, from which a resulting thesis is inferred. But
+trying to prove some specific formula can be very challenging as it requires
+creative usages of the axioms so that the given formula is inferred at the end.
+Those proof systems give no clue how to do that.
+
+The same is true for the deduction system presented in
+\cref{axiomatization,thesis}. What is more, from \cref{decidability} we know
+that \SCI is decidable, but so far we have no practical decision procedure to
+determine whether a given formula is a tautology.
+
+Let us show some examples to illustrate these points:
+
+\begin{example}
+    Let us show a full proof of a formula: $(p \id q) \ra (q \id p)$
+
+    \begin{enumerate}
+        \item $p \id p$ \hfill $(Ax1)$
+        \item $(p \id q) \ra ((p \id p) \ra ((p \id p) \id (q \id p)))$ \hfill $(Ax5)$
+        \item $((p \id p) \id (q \id p)) \ra ((p \id p) \ra (q \id p))$ \hfill $(Ax2)$
+        \item $(p \id p) \ra (((p \id q) \ra ((p \id p) \ra ((p \id p) \id (q \id p)))) \ra ((((p \id p) \id (q \id p)) \ra ((p \id p) \ra (q \id p))) \ra ((p \id q) \ra (q \id p))))$
+              \begin{flushright}
+                  \PC axiom $\varphi \ra ((\psi \ra (\varphi \ra \vartheta)) \ra ((\vartheta \ra (\varphi \ra \chi)) \ra (\psi \ra \chi)))$
+                  \\
+                  with $\varphi = p \id p$\\$\psi = p \id q$\\$\vartheta = q \id p$\\$\chi = (p \id p) \id (q \id p)$.
+              \end{flushright}
+        \item $((p \id q) \ra ((p \id p) \ra ((p \id p) \id (q \id p)))) \ra ((((p \id p) \id (q \id p)) \ra ((p \id p) \ra (q \id p))) \ra ((p \id q) \ra (q \id p)))$ \hfill MP(1, 4)
+        \item $(((p \id p) \id (q \id p)) \ra ((p \id p) \ra (q \id p))) \ra ((p \id q) \ra (q \id p))$ \hfill MP(2, 5)
+        \item $(p \id q) \ra (q \id p)$ \hfill MP(3, 6)
+    \end{enumerate}
+
+\end{example}
+As can be seen, althouth the finished proof isn't very long, it would be very
+difficult to come up with the precise axioms to use.
+
+\begin{example}
+    Let us take a formula $p \id q$. We could be deducing many theses from our axioms, but at no point will we deduce it, nor $\lnot(p \id q)$, because those formulas aren't tautologies. But we cannot arrive at this conclusion using just our Hilbert-style system.
+\end{example}
+
+\begin{example}
+    Let us show a full proof of a formula $(q \id r) \ra ((p \id q) \ra (p \id r))$.
+
+    \begin{enumerate}
+        \item $(((p \id q) \id (p \id r)) \ra ((p \id q) \ra (p \id r))) \ra ((q \id r) \ra (((p \id q) \id (p \id r)) \ra ((p \id q) \ra (p \id r)))) $
+              \begin{flushright} \PC axiom $\varphi \ra (\psi \ra \varphi)$ \\
+                  with $\varphi = ((p \id q) \id (p \id r)) \ra ((p \id q) \ra (p \id r))$\\
+                  $\psi = q \id r$
+              \end{flushright}
+        \item $((p \id q) \id (p \id r)) \ra ((p \id q) \ra (p \id r))  $ \hfill $(Ax2)$
+        \item $(q \id r) \ra (((p \id q) \id (p \id r)) \ra ((p \id q) \ra (p \id r)))$ \hfill MP(2, 1)
+        \item $((q \id r) \ra (((p \id q) \id (p \id r)) \ra ((p \id q) \ra (p \id r)))) \ra (((q \id r) \ra ((p \id q) \id (p \id r))) \ra ((q \id r) \ra ((p \id q) \ra (p \id r)))) $ \begin{flushright}
+                  \PC axiom $(\varphi \ra (\psi \ra \vartheta)) \ra ((\varphi \ra \psi) \ra (\varphi \ra \vartheta))$ \\
+                  with $\varphi = q \id r$ \\
+                  $\psi = (p \id q) \id (p \id r)$ \\
+                  $\vartheta = (p \id q) \ra (p \id r)$
+              \end{flushright}
+        \item $((q \id r) \ra ((p \id q) \id (p \id r))) \ra ((q \id r) \ra ((p \id q) \ra (p \id r))) $ \hfill MP(3, 4)
+        \item $p \id p $ \hfill $(Ax1)$
+        \item $(p \id p) \ra ((q \id r) \ra ((p \id q) \id (p \id r)))$ \hfill $(Ax5)$
+        \item $(q \id r) \ra ((p \id q) \id (p \id r))$ \hfill MP(6, 7)
+        \item $(q \id r) \ra ((p \id q) \ra (p \id r))$ \hfill MP(8, 5)
+    \end{enumerate}
+\end{example}
 % ------------------------------------------------------------------
 
 % \begin{definition}[Complexity of a set of formulas]
