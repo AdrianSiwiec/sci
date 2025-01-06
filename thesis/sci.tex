@@ -36,6 +36,7 @@
 \usepackage{xcolor, colortbl}
 \usepackage{csquotes}
 \usepackage[shortlabels]{enumitem}
+\usepackage{booktabs}
 \definecolor{c1}{HTML}{377eb8}
 \definecolor{c2}{HTML}{ff7f00}
 \definecolor{c3}{HTML}{4daf4a}
@@ -64,6 +65,10 @@
 \newtheorem{example}{Example}[section]
 \AfterEndEnvironment{example}{\noindent\ignorespaces}
 
+\theoremstyle{definition}
+\newtheorem{remark}{Remark}[section]
+\AfterEndEnvironment{remark}{\noindent\ignorespaces}
+
 \newcommand*{\Ts}{T^*}
 \newcommand*{\id}{\equiv}
 \newcommand*{\ra}{\rightarrow}
@@ -77,6 +82,10 @@
 \newcommand{\SCI}{$\mathsf{SCI}$\xspace}
 \newcommand{\PC}{$\mathsf{PC}$\xspace}
 \newcommand{\M}{\mathcal{M}\xspace}
+\newcommand{\MP}{\mathsf{MP}}
+\newcommand{\TSCI}{$\mathsf{T_{SCI}}$\xspace}
+\newcommand{\DTSCI}{$\mathsf{DT_{SCI}}$\xspace}
+\newcommand{\TsSCI}{$\mathsf{T^*_{SCI}}$\xspace}
 
 \makeatletter
 \newcommand{\leqnomode}{\tagsleft@true\let\veqno\@@leqno}
@@ -154,11 +163,11 @@ occurrences of its subformula $\psi$ substituted with $\vartheta$.
 \end{definition}
 $\V$ is a countable set. Let us take any full ordering of it and mark it as $<$. Let us then
 extend it by saying that for each $p \in \V$: $p < \lnot <\xspace (\ < \ )\xspace<\ \ra\ <\ \id$. Now,
-let us define a ordering of formulas $\prec$ to be a lexicographical ordering
+let us define an ordering of formulas $\prec$ to be a lexicographical ordering
 with $<$.
 
 If we consider formulas that contain only the negation and implication
-operators, they form a classical Propositional Calculus. For simplicity, in
+operators, they form the classical Propositional Calculus. For simplicity, in
 \SCI we'll consider every tautology of the classical Propositional Calculus to
 be an axiom.
 
@@ -185,7 +194,12 @@ be an axiom.
     A formula $\varphi$ is \emph{a thesis of \SCI} if there exists a finite sequence of formulas $\varphi_1, ..., \varphi_n$ ($n \geq 1$), such that $\varphi = \varphi_n$, and for all $i \in \{1, ..., n\}$ the formula $\varphi_i$ is either an axiom of \SCI, or it is inferred from formulas $\varphi_j$, $\varphi_k$ ($j, k <i$) via the \emph{modus ponens} rule. If $\varphi$ is a thesis of \SCI we will denote it by $\vdash \varphi$, say that $\varphi$ is \emph{provable in \SCI} and call the sequence $\varphi_1, ..., \varphi_n$ the \emph{proof of $\varphi$}.
     \label{thesis}
 \end{definition}
-
+%
+\begin{remark}
+    \label{remark_proof_varphi}
+    If we have a proof of some formula $\varphi$ and take a variable $p$ appearing in this formula, we can easily obtain a proof of any formula $\varphi(p/\psi)$. To do it, we simply take the proof of $\varphi$ and replace $p$ with $\psi$ in every formula of the proof. We can do it with axioms, because the resulting formula is still an instance of the same given axiom and all the \emph{modus ponens} inferences are still correct.
+\end{remark}
+%
 Let us now give some semantic definitions:
 
 \begin{definition}[\SCI-model]
@@ -195,11 +209,11 @@ Let us now give some semantic definitions:
         \item $\emptyset \not = D \subsetneq U$ is a \emph{set of designated values},
         \item $\tilde{\lnot}$ is an unary operation on $U$, such that for all $a \in U$: $\tilde{\lnot}a \in D$ if and only if $a \not \in D$,
         \item $\tilde{\ra}$ is a binary operation on $U$, such that for all $a, b \in U$: $a \tilde{\ra} b \in D$ if and only if $a \not \in D$ or $b \in D$,
-        \item $\tilde{\id}$ is a binary operation on $U$, such that for all $a, b \in U$: $a \tilde{\id} b \in D$ if and only if $a = b$ (that is, if and only if $a$ and $b$ denote the same element of the universe $U$).
+        \item $\tilde{\id}$ is a binary operation on $U$, such that for all $a, b \in U$: $a \tilde{\id} b \in D$ if and only if $a = b$.
     \end{itemize}
     \label{model}
 \end{definition}
-
+%
 If an universe $U$ is finite, we'll call a given \SCI-model a \emph{finite
     \SCI-model}.
 
@@ -225,10 +239,6 @@ If an universe $U$ is finite, we'll call a given \SCI-model a \emph{finite
 \begin{definition}[Validity of a formula]
     A formula is \emph{valid in \SCI} (or \emph{\SCI-valid}) if and only if it is true in all models. If a formula $\varphi$ is \SCI-valid we will denote it by $ \models \varphi$.
 \end{definition}
-
-Let us see some examples:
-
-TODO
 
 \begin{theorem}[Soundness of \SCI]
     For every \SCI-formula $\varphi$, if $\varphi$ is provable in \SCI, then $\varphi$ is valid in \SCI.
@@ -270,7 +280,7 @@ TODO
 
               The $V'$ function is constructed in the same way the valuation function in the
               \PC is constructed, therefore since $\varphi$ is a tautology of \PC, we have
-              that $V'(\varphi) = 1$. So, we have that $V(\varphi) \in D$, whis is what we
+              that $V'(\varphi) = 1$. So, we have that $V(\varphi) \in D$, what is what we
               wanted to show.
 
         \item Second, we want to show that axioms $(Ax1) - (Ax5)$ are valid in \SCI.
@@ -305,7 +315,7 @@ TODO
                             \psi)$.
 
                   \item Validity of axioms $(Ax3), (Ax4)$ and $(Ax5)$ can be shown in a similar way.
-                        (TODO: a może rozpisać dla jasności?)
+                            {\color{red}(TODO: a może rozpisać dla jasności?)}
               \end{itemize}
     \end{itemize}
 
@@ -322,7 +332,7 @@ TODO
     Now, looking at \cref{thesis}, for a given provable $\varphi$, let us take its
     proof $\varphi_1, ..., \varphi_n = \varphi$. Every subsequent formula in this
     proof is either an \SCI axiom and thus, by (a), valid, or is inferred by the
-    \emph{modus ponens} rule from valid formulas and thus, by (b) valid. So,
+    \emph{modus ponens} rule from valid formulas and thus, by (b), valid. So,
     $\varphi$ is valid.
 \end{proof}
 
@@ -332,13 +342,17 @@ TODO
 \begin{proof}
     To show that every valid \SCI-formula is \SCI-provable is, by contraposition, to show that every non-\SCI-provable formula is non-\SCI-valid.
 
-    To do this, we will construct a \SCI-model and a valuation in which every
-    \SCI-provable formula is satisfied (this model will be similar in style to the
-    Herbrandt model). Then, it will be shown that for every formula that is not
-    \SCI-provable, this model and this valuation will be a witness of its
-    non-\SCI-validity, thus proving completeness of \SCI
+    To do this, we will construct a \SCI-model and a valuation in which all, and
+    only, \SCI-provable formulas are satisfied. Then, it will be shown that for
+    every formula that is not \SCI-provable, this model and this valuation will be
+    a witness of its non-\SCI-validity, thus proving completeness of \SCI
 
-    {\color{red}Wydaje mi się, że pomieszałem coś w notatkach z tego dowodu. Na wykładzie co prawda dla każdego niesprzecznego zbioru formuł $X$ konstruowaliśmy model, w którym były prawdziwe wszystkie formuły $X \vdash \varphi$, ale dla samego dowodu pełności i tak stawialiśmy na koniec (chyba?) $X = \emptyset$, wiec uprościłem.
+    {\color{red}Wydaje mi się, że pomieszałem coś w notatkach z tego dowodu. Tak jak to napisałem to chyba nie może działać.
+
+        Na wykładzie co prawda dla każdego niesprzecznego zbioru formuł $X$
+        konstruowaliśmy model, w którym były prawdziwe wszystkie formuły $X \vdash
+            \varphi$, ale dla samego dowodu pełności i tak stawialiśmy na koniec (chyba?)
+        $X = \emptyset$, wiec uprościłem.
 
         Próbowałem to porównać z [Suszko, Bloom 1972], ale tam ten dowód jest bardzo
         lakonicznie opisany.
@@ -348,31 +362,31 @@ TODO
 
     First, let us define a relation $R$ on \SCI-formulas: $$ \varphi R \psi \text{
             if and only if} \vdash \varphi \id \psi $$
-
+    %
     Note that for clarity we're using infix notation for relations. We want to show
     that $R$ is an equivalence relation.
-    \begin{enumerate}[(a)]
+    \begin{itemize}[]
         \item $R$ is reflexive. It is trivially true from axiom $(Ax1)$.
         \item $R$ is symmetrical, that is for all $\varphi, \psi \in \FOR, \varphi R \psi$ if and only if $\psi R \varphi$.
 
-              As we have shown in example TODO, we can prove that for all $\varphi, \psi$,
-              $\vdash (\varphi \id \psi) \ra (\psi \id \varphi)$. If $\varphi R \psi$, then
-              $\vdash \varphi \id \psi$, so by \emph{modus ponens} we can infer $\vdash \psi
-                  \id \varphi$, so $\psi R \varphi$. In the same way we can show that if $\psi R
-                  \varphi$ then $\varphi R \psi$, so $R$ is symmetrical.
+              From \cref{ex_pqqp} below and \cref{remark_proof_varphi} we can prove that for
+              all $\varphi, \psi$, $\vdash (\varphi \id \psi) \ra (\psi \id \varphi)$. If
+              $\varphi R \psi$, then $\vdash \varphi \id \psi$, so by \emph{modus ponens} we
+              can infer $\vdash \psi \id \varphi$, so $\psi R \varphi$. In the same way we
+              can show that if $\psi R \varphi$ then $\varphi R \psi$, so $R$ is symmetrical.
         \item $R$ is transitive, that is for all $\varphi, \psi, \vartheta \in \FOR$, if $\varphi R \psi$ and $\psi R \vartheta$ then $\varphi R \vartheta$.
 
-              As we have shown in example TODO, we can prove that for all $\varphi, \psi,
-                  \vartheta \in \FOR$, $\vdash (\varphi \id \psi) \ra ((\psi \id \vartheta) \ra
-                  (\varphi \id \vartheta))$. Let us assume that $\varphi R \psi$ and $\psi R
-                  \vartheta$. This gives us that $\vdash \varphi \id \psi$ and $\vdash \psi \id
-                  \vartheta$. Applying \emph{modus ponens} twice we get $\vdash \varphi \id
-                  \vartheta$, so $\varphi R \vartheta$.
-    \end{enumerate}
-
+              From \cref{ex_pqr} below and \cref{remark_proof_varphi}, we can prove that for
+              all $\varphi, \psi, \vartheta \in \FOR$, $\vdash (\psi \id \vartheta) \ra
+                  ((\varphi \id \psi) \ra (\varphi \id \vartheta))$. Let us assume that $\varphi
+                  R \psi$ and $\psi R \vartheta$. This gives us that $\vdash \varphi \id \psi$
+              and $\vdash \psi \id \vartheta$. Applying \emph{modus ponens} twice we get
+              $\vdash \varphi \id \vartheta$, so $\varphi R \vartheta$.
+    \end{itemize}
+    %
     So, $R$ is an equivalence relation. Let us now show that it is a congruence,
     that is:
-    \begin{enumerate}[(a)]
+    \begin{itemize}[]
         \item For all $\varphi, \psi \in \FOR$, if $\varphi R \psi$, then $\lnot \varphi R
                   \lnot \psi$. This is trivially true from axiom $(Ax3)$.
         \item For all $\varphi, \psi, \vartheta, \chi \in \FOR$, if $\varphi R \psi$ and
@@ -381,19 +395,19 @@ TODO
         \item For all $\varphi, \psi, \vartheta, \chi \in \FOR$, if $\varphi R \psi$ and
               $\vartheta R \chi$, then $\varphi \id \vartheta R \psi \id \chi$. This is
               easily proven from $(Ax5)$.
-    \end{enumerate}
-
+    \end{itemize}
+    %
     Now that we know that $R$ is a congruent equivalence relation, we can define a
     structure: $\mathcal{M} = (U, D, \tilde{\lnot}, \tilde{\ra}, \tilde{\id})$,
     such that:
     \begin{itemize}
         \item $U = \{ |\varphi|_R : \varphi \in \FOR \}$ (by $|\varphi|_R$ we mean an equivalence class of $R$ of which $\varphi$ is a member),
         \item $D = \{ |\varphi|_R : \varphi \in \FOR, \vdash \varphi\}$
-        \item $\tilde{\lnot}$ is an unary function on equivalence classes of $R$, such that $\tilde{\lnot}|\varphi|_R = |\lnot \varphi|_R$
-        \item $\tilde{\ra}$ is a binary function on equivalence classes of $R$, such that $|\varphi|_R \tilde{\ra} |\psi|_R = |\varphi \ra \psi|_R$
-        \item $\tilde{\id}$ is a binary function on equivalence classes of $R$, such that $|\varphi|_R \tilde{\id} |\psi|_R = |\varphi \id \psi|_R$
+        \item $\tilde{\lnot}$ is an unary function on equivalence classes of $R$, such that $\tilde{\lnot}|\varphi|_R \stackrel{def}{=} |\lnot \varphi|_R$
+        \item $\tilde{\ra}$ is a binary function on equivalence classes of $R$, such that $|\varphi|_R \tilde{\ra} |\psi|_R \stackrel{def}{=} |\varphi \ra \psi|_R$
+        \item $\tilde{\id}$ is a binary function on equivalence classes of $R$, such that $|\varphi|_R \tilde{\id} |\psi|_R \stackrel{def}{=} |\varphi \id \psi|_R$
     \end{itemize}
-
+    %
     Let us add some comments:
     \begin{itemize}
         \item For any \SCI-formulas $\varphi, \psi$, such that $\varphi \id \psi$, $\vdash
@@ -405,12 +419,12 @@ TODO
         \item Similarly, form the congruence of $R$ we can see that $\tilde{\ra}$ and
               $\tilde{\id}$ are well defined functions.
     \end{itemize}
-
+    %
     Now we will want to show that $\mathcal{M}$ is an \SCI-model. From the
     \cref{model} we want to show that:
     \begin{itemize}
-        \item $U \not = \emptyset$ -- this is trivial,
-        \item $\emptyset \not = D$ -- this is true, because for example $\vdash p \id p$
+        \item $U \not = \emptyset$ -- this is trivial, $|p|_R \in U$
+        \item $\emptyset \not = D$ -- this is true, because for example $\vdash p \id p$, so $|p \id p|_R \in D$
         \item $D \subsetneq U$ --  $D \subseteq U$ is trivial from the definition of $D$. $D \not = U$, because there are formulas which are not valid (e.g. $\lnot(p \id p)$), which from \cref{soundness} are not provable.
         \item For all $a \in U: \tilde{\lnot} a \in D$ if and only if $a \not \in D$
 
@@ -431,15 +445,15 @@ TODO
 
               TODO.
     \end{itemize}
-
+    %
     So, $\mathcal{M}$ is a \SCI-model. Now, let us define a valuation $V$ for all
     $\varphi \in \FOR$: $$ V(\varphi) = |\varphi|_R $$
-
+    %
     We need to show that $V$ is indeed a valuation:
     \begin{itemize}
         \item TODO (chyba proste wszystko)
     \end{itemize}
-
+    %
     Now, for the final proof of completeness let us take a non-provable formula
     $\varphi$. Since $\not \vdash \varphi$ we have that $|\varphi|_R \not \in D$,
     so $V(\varphi) \not \in D$. So, we have found a model and a valuation
@@ -471,9 +485,9 @@ following:
     For any $\varphi \in \FOR$, if there exists $\mathcal{M},V$, such that $\mathcal{M},V \models \varphi$, then there exists a finite \SCI-model $\mathcal{M'},V'$, such that $\mathcal{M'},V'\models \varphi$.
 \end{theorem}
 \begin{proof}
-    We are given $\mathcal{M}, V$ and $\varphi \in FOR$, such that $\mathcal{M}, v \models \varphi$. Let us define $\mathcal{M'} = (U', D', \tilde{\lnot}', \tilde{\ra}')$ and $V'$:
+    We are given $\mathcal{M}, V$ and $\varphi \in \FOR$, such that $\mathcal{M}, v \models \varphi$. Let us define $\mathcal{M'} = (U', D', \tilde{\lnot}', \tilde{\ra}')$ and $V'$:
     \begin{itemize}
-        \item $U' = \{v(\psi) : \psi \in \SUB(\varphi)\} \cup \{1, 0\}$ -- let us create $1, 0$, such that $1, 0 \not \in U$,
+        \item $U' = \{V(\psi) : \psi \in \SUB(\varphi)\} \cup \{1, 0\}$ -- let us create $1, 0$, such that $1, 0 \not \in U$,
 
         \item $D' = \{V(\psi) : \psi \in \SUB(\varphi), V(\psi) \in D\} \cup \{1\}$
         \item $
@@ -503,14 +517,20 @@ following:
                       0,        & \text{if } \psi \not \in \SUB(\varphi) \text{ and } V(\psi) \not \in D \\
                   \end{cases}$
     \end{itemize}
-
+    %
     We need to show that $\mathcal{M'}$ is an \SCI-model, $V'$ is a valuation and
     that $V'(\varphi) = V(\varphi)$:
     \begin{itemize}
-        \item $\emptyset \not = U' \supsetneq D' \not = \emptyset$ -- trivially from $0, 1 \in U', 1 \in D'$.
+        \item $\emptyset \not = U' \supsetneq D' \not = \emptyset$ -- trivially from $0, 1 \in U', 1 \in D'$, $0 \not \in D'$.
         \item $\tilde{\lnot}'a \in D'$ if and only if $a \not \in D'$ -- there are cases:
               \begin{enumerate}
-                  \item[1°] There exists $\psi$, such that $a = V(\psi)$ and $\lnot \psi \in \SUB(\varphi)$. Then from the definition of $\tilde{\lnot}'$ we have $\tilde{\lnot}'a = V'(\lnot \psi)$, from the definition of $V'$ we have that $V'(\lnot \psi) = V(\lnot \psi)$ and since $V$ is a valuation we have that $V(\lnot \psi) = \tilde{\lnot}V(\psi)$. But we assumed that $a = V(\psi)$, so we have that $\tilde{\lnot}'a = \tilde{\lnot}a$. Then since $\mathcal{M}$ is a model, we know that $\tilde{\lnot}a \in D$ if and only if $a \not \in D$, and since $\lnot\psi \in \SUB(\varphi)$, we have $\tilde{\lnot}'a \in D'$ if and only if $a \not \in D'$.
+                  \item[1°] There exists $\psi$, such that $a = V(\psi)$ and $\lnot \psi \in \SUB(\varphi)$. Then from the definition of $\tilde{\lnot}'$ we have $\tilde{\lnot}'a = \tilde{\lnot}a$.
+
+                      Since $\mathcal{M}$ is a model we know that $\tilde{\lnot}a \in D$ if and only
+                      if $a \not \in D$, and since $\lnot\psi \in \SUB(\varphi)$, from the definition
+                      of $D'$, we have $\tilde{\lnot}a \in D'$ if and only if $a \not \in D'$ and
+                      finally, since $\tilde{\lnot}'a = \tilde{\lnot}a$ we have that $\tilde{\lnot}'a
+                          \in D'$ if and only if $a \not \in D'$.
                   \item[2°] Otherwise, and $a \in D'$. Then $\tilde{\lnot}'a = 0 \not \in D'$.
                   \item[3°] Otherwise, and $a \not \in D'$. Then $\tilde{\lnot}'a = 1 \in D'$.
               \end{enumerate}
@@ -523,7 +543,7 @@ following:
                           {\color{red} Kontrprzykład:
                               \begin{itemize}
                                   \item weźmy $\psi$: $\lnot \psi \not \in \SUB(\varphi)$
-                                  \item Z definicji $V'$: $V'(\lnot \psi) = 1 $ lub $0$, w zeleżności czy $V(\psi) \in
+                                  \item Z definicji $V'$: $V'(\lnot \psi) = 1 $ lub $0$, w zależności czy $V(\psi) \in
                                             D$.
                                   \item Niech $V'(\psi) = b$
                                   \item Niech istnieje $\chi$, takie że: $\lnot \chi \in \SUB(\varphi)$, $V'(\chi) =
@@ -534,11 +554,11 @@ following:
 
                               Konkretny kontrprzykład:
                               \begin{itemize}
-                                  \item $\varphi = \lnot(p \id \lnot p)$
-                                  \item $U = \{a, b\}$
-                                  \item $D = \{b\}$
-                                  \item $V(p) = V(p \id \lnot p) = a$
-                                  \item $V(\lnot p) = V(\lnot(p \id \lnot p)) = b$
+                                  \item $\varphi := \lnot(p \id \lnot p)$
+                                  \item $U := \{a, b\}$
+                                  \item $D := \{b\}$
+                                  \item $V(p) := V(p \id \lnot p) := a$
+                                  \item $V(\lnot p) := V(\lnot(p \id \lnot p)) := b$
                                   \item Konstruujemy $\M',V'$ jak wyżej
                                   \item $\psi := \lnot(p \id \lnot p)$
                                   \item $V'(\lnot \psi) = 0$, bo $\lnot \psi \not \in \SUB(\varphi)$
@@ -553,7 +573,8 @@ following:
                               $\psi \not \in \SUB(\varphi) \Rightarrow V'(\psi) \in \{1, 0\}$, np. w
                               przykładzie u góry $V'(\lnot \lnot (p \id \lnot p))$ będzie równe $a$. Ale nie
                               ma to wpływu na liczność modelu i wydaje mi się że będzie się wszystko zgadzać.
-                          }
+
+                              A może da się jakoś prościej? }
               \end{enumerate}
         \item $a \tilde{\ra}'b \in D'$ if and only if $a \not \in D'$ or $b \in D'$ -- there are cases:
               \begin{enumerate}
@@ -561,6 +582,7 @@ following:
                   \item[2°] TODO There are no such $\psi$ and $\vartheta$ and $a \not \in D$. Then, from the definition of $\tilde{\ra}'$ we have that $a \tilde{\ra}' b = 1 \in D'$ and from the definition of $D'$ we have that $a \not \in D'$.
                   \item[3°] TODO There are no such $\psi$ and $\vartheta$ and $b \in D$. Then again, from the definition of $\tilde{\ra}'$ we have that $a \tilde{\ra}' b = 1 \in D'$ and from the definition of $D'$ we have that $b \in D'$.
               \end{enumerate}
+        \item ... TODO
     \end{itemize}
 \end{proof}
 
@@ -569,15 +591,15 @@ following:
     \SCI is decidable.
 \end{theorem}
 \begin{proof}
-    Let us take any \SCI-formula $\varphi$, we want to know if $\varphi$ is a \SCI-theorem. From fullness and completeness of \SCI we know that $\varphi$ is a theorem if and only if $\lnot \varphi$ has no \SCI-model and valuation $\M, V$, such that $\M, V \models \lnot \varphi$. But from \cref{finite_model} we know that if there is $\M, V$, such that $\M, V \models \lnot \varphi$, then there is a finite model $\M'$ and $V'$ such that $\M', V' \models \lnot \varphi$. Furthermore, from the proof of \cref{finite_model} we can see that $|U'| \leq |\SUB(\varphi)|$ ($|X|$ here meaning the size of a set $X$).
+    Let us take any \SCI-formula $\varphi$. We want to know if $\varphi$ is a \SCI-theorem. From fullness and completeness of \SCI we know that $\varphi$ is a theorem if and only if $\lnot \varphi$ has no \SCI-model and valuation $\M, V$, such that $\M, V \models \lnot \varphi$. But from \cref{finite_model} we know that if there is $\M, V$, such that $\M, V \models \lnot \varphi$, then there is a finite model $\M'$ and $V'$ such that $\M', V' \models \lnot \varphi$. Furthermore, from the proof of \cref{finite_model} we can see that $|U'| \leq |\SUB(\varphi)|$ ($|X|$ here meaning the size of a set $X$).
 
-    For any finite model $\M'$ we can construct an isomorphic model $\M''$ with
-    $U'' = \{1, 2, ..., |U'|\}$ by setting any bijection $f : U' \rightarrow U''$
-    and then setting the rest of the model and $V''$ accordingly. So, we know that
-    if there is $\M, V$ such that $\M, V \models \lnot \varphi$, then and only then
-    there is a $\M'', V''$, such that $\M'', V'' \models \lnot \varphi$ and $U'' =
-        \{1, 2, ..., |\SUB(\lnot \varphi)|\}$, and there is a finite amount of such
-    finite models.
+    For any finite \SCI-model $\M'$ and \SCI-valuation $V'$ we can construct an
+    isomorphic model $\M''$ with $U'' = \{1, 2, ..., |U'|\}$ by setting any
+    bijection $f : U' \rightarrow U''$ and then setting the rest of the model and
+    $V''$ accordingly. So, we know that if there is $\M, V$ such that $\M, V
+        \models \lnot \varphi$, then and only then there is a $\M'', V''$, such that
+    $\M'', V'' \models \lnot \varphi$ and $U'' = \{1, 2, ..., |\SUB(\lnot
+        \varphi)|\}$. There is a finite amount of such finite models.
 
     We can have a procedure to set $D''$ to be any of $2^{|\SUB(\lnot \varphi)|}$
     subsets of $U''$, then for any $a \in U''$ to set $\tilde{\lnot}a$ to be any
@@ -590,8 +612,8 @@ following:
     combination we have not found any \SCI-model invalidating $\varphi$, we know
     that $\varphi$ is valid, and so that it is a theorem.
 
-    If we set $n = s(\varphi)$, then this procedure will take $O({n^2} ^ {n^2})$
-    operations, so it is very far from practical, but it is nevetheless finite, so
+    If we set $n = s(\varphi)$, then this procedure will take $O({n} ^ {2^n})$
+    operations, so it is very far from practical, but it is nevertheless finite, so
     we have a finite procedure to decide whether $\varphi$ is a \SCI-theorem.
 
 \end{proof}
@@ -613,13 +635,16 @@ creative usages of the axioms so that the given formula is inferred at the end.
 Those proof systems give no clue how to do that.
 
 The same is true for the deduction system presented in
-\cref{axiomatization,thesis}. What is more, from \cref{decidability} we know
-that \SCI is decidable, but so far we have no practical decision procedure to
-determine whether a given formula is a tautology.
+\cref{axiomatization,thesis}. From \cref{decidability} we know that \SCI is
+decidable, but the Hilbert-style deductive system gives no procedure to
+determine whether a given formula is a tautology. From \cref{decidability} we
+know there is a finite procedure to do that, but we are still missing a
+procedure that could be used in practice.
 
 Let us show some examples to illustrate these points:
 
 \begin{example}
+    \label{ex_pqqp}
     Let us show a full proof of a formula: $(p \id q) \ra (q \id p)$
 
     \begin{enumerate}
@@ -632,20 +657,22 @@ Let us show some examples to illustrate these points:
                   \\
                   with $\varphi = p \id p$\\$\psi = p \id q$\\$\vartheta = q \id p$\\$\chi = (p \id p) \id (q \id p)$.
               \end{flushright}
-        \item $((p \id q) \ra ((p \id p) \ra ((p \id p) \id (q \id p)))) \ra ((((p \id p) \id (q \id p)) \ra ((p \id p) \ra (q \id p))) \ra ((p \id q) \ra (q \id p)))$ \hfill MP(1, 4)
-        \item $(((p \id p) \id (q \id p)) \ra ((p \id p) \ra (q \id p))) \ra ((p \id q) \ra (q \id p))$ \hfill MP(2, 5)
-        \item $(p \id q) \ra (q \id p)$ \hfill MP(3, 6)
+        \item $((p \id q) \ra ((p \id p) \ra ((p \id p) \id (q \id p)))) \ra ((((p \id p) \id (q \id p)) \ra ((p \id p) \ra (q \id p))) \ra ((p \id q) \ra (q \id p)))$ \hfill $\MP(1, 4)$
+        \item $(((p \id p) \id (q \id p)) \ra ((p \id p) \ra (q \id p))) \ra ((p \id q) \ra (q \id p))$ \hfill $\MP(2, 5)$
+        \item $(p \id q) \ra (q \id p)$ \hfill $\MP(3, 6)$
     \end{enumerate}
 
 \end{example}
-As can be seen, althouth the finished proof isn't very long, it would be very
+%
+As can be seen, although the finished proof isn't very long, it would be very
 difficult to come up with the precise axioms to use.
 
 \begin{example}
-    Let us take a formula $p \id q$. We could be deducing many theses from our axioms, but at no point will we deduce it, nor $\lnot(p \id q)$, because those formulas aren't tautologies. But we cannot arrive at this conclusion using just our Hilbert-style system.
+    Let us take a formula $p \id q$. We could be deducing many theses from our axioms, but at no point will we deduce it, nor $p \not \id q$, because those formulas aren't tautologies. But we cannot arrive at this conclusion using just our Hilbert-style system.
 \end{example}
 
 \begin{example}
+    \label{ex_pqr}
     Let us show a full proof of a formula $(q \id r) \ra ((p \id q) \ra (p \id r))$.
 
     \begin{enumerate}
@@ -655,20 +682,296 @@ difficult to come up with the precise axioms to use.
                   $\psi = q \id r$
               \end{flushright}
         \item $((p \id q) \id (p \id r)) \ra ((p \id q) \ra (p \id r))  $ \hfill $(Ax2)$
-        \item $(q \id r) \ra (((p \id q) \id (p \id r)) \ra ((p \id q) \ra (p \id r)))$ \hfill MP(2, 1)
+        \item $(q \id r) \ra (((p \id q) \id (p \id r)) \ra ((p \id q) \ra (p \id r)))$ \hfill $\MP(2, 1)$
         \item $((q \id r) \ra (((p \id q) \id (p \id r)) \ra ((p \id q) \ra (p \id r)))) \ra (((q \id r) \ra ((p \id q) \id (p \id r))) \ra ((q \id r) \ra ((p \id q) \ra (p \id r)))) $ \begin{flushright}
                   \PC axiom $(\varphi \ra (\psi \ra \vartheta)) \ra ((\varphi \ra \psi) \ra (\varphi \ra \vartheta))$ \\
                   with $\varphi = q \id r$ \\
                   $\psi = (p \id q) \id (p \id r)$ \\
                   $\vartheta = (p \id q) \ra (p \id r)$
               \end{flushright}
-        \item $((q \id r) \ra ((p \id q) \id (p \id r))) \ra ((q \id r) \ra ((p \id q) \ra (p \id r))) $ \hfill MP(3, 4)
+        \item $((q \id r) \ra ((p \id q) \id (p \id r))) \ra ((q \id r) \ra ((p \id q) \ra (p \id r))) $ \hfill $\MP(3, 4)$
         \item $p \id p $ \hfill $(Ax1)$
         \item $(p \id p) \ra ((q \id r) \ra ((p \id q) \id (p \id r)))$ \hfill $(Ax5)$
-        \item $(q \id r) \ra ((p \id q) \id (p \id r))$ \hfill MP(6, 7)
-        \item $(q \id r) \ra ((p \id q) \ra (p \id r))$ \hfill MP(8, 5)
+        \item $(q \id r) \ra ((p \id q) \id (p \id r))$ \hfill $\MP(6, 7)$
+        \item $(q \id r) \ra ((p \id q) \ra (p \id r))$ \hfill $\MP(8, 5)$
     \end{enumerate}
 \end{example}
+
+In 1974 Michaels presented a differet proof system for \SCI, in the style of
+Gentzen's sequent calculus \cite{michaels}. It was refined by Wasilewska and
+presented in 1976 as a decision procedure \cite{wasilewska}. Although the
+procedure presented there ws proved to terminate for every input formula, it
+was too complicated and, if implemented, would have too big time comlexity to
+be practical. In 2018 Chlebowski further modified and discussed the sequent
+calculus system, but his result was not a decision procedure.
+
+In 2007 Golińska-Pilarek presented a proof system in the style of
+Rasiowa-Sikorski dual tableau \cite{jgp_2007} it was expanded and refined in
+\cite{jgp_book} and \cite{jgp_2019}, but it was not yet a terminating decision
+procedure.
+
+An important difference between both the above proof systems and the Hilbert
+style system showed before is that the former start with the formula we want to
+prove or disprove and at each step offer a finite amount of possible rules to
+apply. Even though they were not a decision procedures, they could be helpful
+when manually proving some formulas. Finally, they were important steps at
+arriving at the full decision procedure of \SCI.
+
+The a full decision procedure \TSCI was presented in 2021 by Golińska-Pilarek,
+Huuskonen and Zawidzki \cite{jgp_t_procedure}. Also in 2021 the dual tableau
+system mentioned above was modified by the same authors to become a terminating
+decision procedure \DTSCI \cite{jgp_dt_procedure}.
+
+Let us now take a brief look at both \TSCI and \DTSCI, starting with the latter
+as it is easier to present.
+
+\subsection{\DTSCI}
+
+TODO
+
+\subsection{\TSCI}
+
+\leqnomode
+\begin{figure}
+    \begin{subfigure}{\textwidth}
+        \centering
+        \begin{subfigure}{0.3\textwidth}
+            \begin{equation}
+                \tag{$\lnot^+$}
+                \frac{
+                    w^+: \lnot \varphi}%
+                { v^-: \varphi }
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.3\textwidth}
+            \begin{equation}
+                \tag{$\lnot^-$}
+                \frac{
+                    w^-: \lnot \varphi}%
+                { v^+: \varphi }
+            \end{equation}
+        \end{subfigure}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+        \centering
+        \begin{subfigure}{0.5\textwidth}
+            \begin{equation}
+                \tag{$\ra^+$}
+                \frac{
+                    w^+: \varphi \ra \psi }%
+                {\begin{split}
+                        v^-: \varphi \\
+                        u^-: \psi
+                    \end{split}
+                    \ \vline\
+                    \begin{split}
+                        v^-: \varphi \\
+                        u^+: \psi
+                    \end{split}
+                    \ \vline\
+                    \begin{split}
+                        v^+: \varphi \\
+                        u^+: \psi
+                    \end{split}
+                }
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.4\textwidth}
+            \begin{equation}
+                \tag{$\ra^-$}
+                \frac{
+                    w^-: \varphi \ra \psi}%
+                {\begin{split}
+                        v^+: \varphi \\
+                        u^-: \psi
+                    \end{split} }
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.4\textwidth}
+            \begin{equation}
+                \tag{$\id^+$}
+                \frac{
+                    w^+: \varphi \id \psi }%
+                { \begin{split}
+                        v^+: \varphi \\
+                        u^+: \psi \\
+                        v^+= u^+
+                    \end{split}
+                    \ \vline\
+                    \begin{split}
+                        v^-: \varphi \\
+                        u^-: \psi \\
+                        v^-= u^-
+                    \end{split}
+                }
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.5\textwidth}
+            \begin{equation}
+                \tag{$\id^-$}
+                \frac{
+                    w^-: \varphi \id \psi }%
+                { \begin{split}
+                        v^+: \varphi \\
+                        u^+: \psi \\
+                        v^+ \not= u^+
+                    \end{split}
+                    \ \vline\
+                    \begin{split}
+                        v^+: \varphi \\
+                        u^-: \psi
+                    \end{split}
+                    \ \vline\
+                    \begin{split}
+                        v^-: \varphi \\
+                        u^+: \psi
+                    \end{split}
+                    \ \vline\
+                    \begin{split}
+                        v^-: \varphi \\
+                        u^-: \psi \\
+                        v^-\not= u^-
+                    \end{split}
+                }
+            \end{equation}
+        \end{subfigure}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+        \begin{subfigure}{0.24\textwidth}
+            \begin{equation}
+                \tag{$\id^\lnot$}
+                \frac{
+                    \begin{split}
+                        \varphi \approx \psi \\
+                        u: \lnot \varphi \\
+                        y: \lnot \psi
+                    \end{split}
+                }%
+                {u = y}
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.24\textwidth}
+            \begin{equation}
+                \tag{$\id^\ra$}
+                \frac{
+                    \begin{split}
+                        \varphi \approx \psi \\
+                        \chi \approx \vartheta \\
+                        x: \varphi \ra \chi \\
+                        z: \psi \ra \vartheta
+                    \end{split}
+                }%
+                {x = z}
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.24\textwidth}
+            \begin{equation}
+                \tag{$\id^\id$}
+                \frac{
+                    \begin{split}
+                        \varphi \approx \psi \\
+                        \chi \approx \vartheta \\
+                        x: \varphi \id \chi \\
+                        z: \psi \id \vartheta
+                    \end{split}
+                }%
+                {x = z}
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.24\textwidth}
+            \begin{equation}
+                \tag{\texttt{F}}
+                \frac{
+                    \begin{split}
+                        w: \varphi \\
+                        v: \varphi
+                    \end{split}
+                }%
+                {w = v}
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.24\textwidth}
+            \begin{equation}
+                \tag{\texttt{sym}}
+                \frac{
+                    w=v
+                }%
+                {v = w}
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.24\textwidth}
+            \begin{equation}
+                \tag{\texttt{tran}}
+                \frac{
+                \begin{split}
+                    w=v\\
+                    v=u
+                \end{split}
+                }%
+                {w = u}
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.24\textwidth}
+            \begin{equation}
+                \tag{$\bot_1$}
+                \frac{
+                \begin{split}
+                    w=v\\
+                    w \not = v
+                \end{split}
+                }%
+                {\bot}
+            \end{equation}
+        \end{subfigure}
+        \begin{subfigure}{0.24\textwidth}
+            \begin{equation}
+                \tag{$\bot_2$}
+                \frac{
+                    w^+ = v^-
+                }%
+                {\bot}
+            \end{equation}
+        \end{subfigure}
+    \end{subfigure}
+    \caption{Deduction rules of the \TSCI system.}
+    \label{fig:rules1}
+\end{figure}
+
+\section{\TsSCI}
+
+\begin{thebibliography}{9}
+    \bibitem{suszko_bloom}
+    Stephen L. Bloom, Roman Suszko (1972) \emph{Investigations into the Sentential Calculus with Identity}, Notre Dame Journal of Formal Logic, vol. XIII, no 3. \url{https://doi.org/10.1305/ndjfl/1093890617}
+
+    \bibitem{michaels}
+    Aileen Michaels (1974) \emph{A uniform proof procedure for SCI tautologies}. Studia Logica 33, 299--310. \url{https://doi.org/10.1007/BF02123284}
+
+    \bibitem{wasilewska}
+    Anita Wasilewska (1976) \emph{A sequence formalization for SCI}. Studia Logica 35 (3):213--217. \url{https://doi.org/10.1007/bf02282483}
+
+    \bibitem{chlebowski}
+    Szymon Chlebowski (2018) \emph{Sequent Calculi for \SCI}. Stud Logica 106, 541--563, \url{https://doi.org/10.1007/s11225-017-9754-8}
+
+    \bibitem{jgp_2007}
+    Joanna Golinska-Pilarek (2007) \emph{Rasiowa-Sikorski proof system for the non-Fregean sentential logic \SCI}. Journal of Applied Non-Classical Logics 17 (4):509--517. \url{https://doi.org/10.3166/jancl.17.511-519}
+
+    \bibitem{jgp_book}
+    Ewa Orłowska, Joanna Golińska-Pilarek (2011) \emph{Dual Tableaux: Foundations, Methodology, Case Studies}, Springer, Series: Trends in Logic, Vol. 33. \url{https://doi.org/10.1007/s11225-013-9467-6}
+
+    \bibitem{jgp_2019}
+    Joanna Golińska-Pilarek, Magdalena Welle (2019) \emph{Deduction in Non-Fregean Propositional Logic \SCI}. Axioms. 2019; 8(4):115. \url{https://doi.org/10.3390/axioms8040115}
+
+    \bibitem{jgp_t_procedure}
+    Joanna Golińska-Pilarek, Taneli Huuskonen, Michal Zawidzki (2021) \emph{Tableau-based decision procedure for non-Fregean logic of sentential identity}, Automated Deduction -- CADE 28. \url{https://doi.org/10.1007/978-3-030-79876-5_3}
+
+    \bibitem{jgp_dt_procedure}
+    {
+        \color{red}
+        TODO Joanna Golińska-Pilarek, Taneli Huuskonen, Michal Zawidzki (TODO: year?) \emph{Deciding Non-Fregean Identities: Tableaux vs. Dual Tableaux}.
+    }
+
+\end{thebibliography}
+
 % ------------------------------------------------------------------
 
 % \begin{definition}[Complexity of a set of formulas]
@@ -764,7 +1067,7 @@ difficult to come up with the precise axioms to use.
 %         \end{subfigure}
 %         \begin{subfigure}{0.4\textwidth}
 %             \begin{equation}
-%                 \tag{$\not \eq_2$}
+%                 \tag{$\not \id_2$}
 %                 \frac{
 %                     \Phi \cup \{ \varphi \not \id \psi \} }%
 %                 { \Phi \cup \{ \alpha \id \varphi, \beta \id \psi, \alpha \not \id \beta \} }
@@ -772,7 +1075,7 @@ difficult to come up with the precise axioms to use.
 %         \end{subfigure}
 %         \begin{subfigure}{0.4\textwidth}
 %             \begin{equation}
-%                 \tag{$\eq_\lnot$}
+%                 \tag{$\id_\lnot$}
 %                 \frac{
 %                     \Phi \cup \{ p \id \lnot \psi  \} }%
 %                 { \Phi \cup \{ p \id \lnot \alpha, \alpha \id \psi \} }
@@ -780,7 +1083,7 @@ difficult to come up with the precise axioms to use.
 %         \end{subfigure}
 %         \begin{subfigure}{0.5\textwidth}
 %             \begin{equation}
-%                 \tag{$ \eq_\ra $}
+%                 \tag{$ \id_\ra $}
 %                 \frac{
 %                     \Phi \cup \{ p \id (\varphi \ra \psi) \} }%
 %                 { \Phi \cup \{ p \id (\alpha \ra \beta), \alpha \id \varphi, \beta \id \psi \} }
@@ -788,7 +1091,7 @@ difficult to come up with the precise axioms to use.
 %         \end{subfigure}
 %         \begin{subfigure}{0.4\textwidth}
 %             \begin{equation}
-%                 \tag{$ \eq_\ra^l $}
+%                 \tag{$ \id_\ra^l $}
 %                 \frac{
 %                     \Phi \cup \{ p \id (q \ra \psi) \} }%
 %                 { \Phi \cup \{ p \id (q \ra \alpha), \alpha \id \psi  \} }
@@ -796,7 +1099,7 @@ difficult to come up with the precise axioms to use.
 %         \end{subfigure}
 %         \begin{subfigure}{0.4\textwidth}
 %             \begin{equation}
-%                 \tag{$ \eq_\ra^r $}
+%                 \tag{$ \id_\ra^r $}
 %                 \frac{
 %                     \Phi \cup \{ p \id (\varphi \ra q) \} }%
 %                 { \Phi \cup \{ p \id (\alpha \ra q), \alpha \id \varphi  \} }
@@ -804,7 +1107,7 @@ difficult to come up with the precise axioms to use.
 %         \end{subfigure}
 %         \begin{subfigure}{0.4\textwidth}
 %             \begin{equation}
-%                 \tag{$ \eq_\id^l $}
+%                 \tag{$ \id_\id^l $}
 %                 \frac{
 %                     \Phi \cup \{ p \id (q \id \psi) \} }%
 %                 { \Phi \cup \{ p \id (q \id \alpha), \alpha \id \psi  \} }
@@ -812,7 +1115,7 @@ difficult to come up with the precise axioms to use.
 %         \end{subfigure}
 %         \begin{subfigure}{0.4\textwidth}
 %             \begin{equation}
-%                 \tag{$ \eq_\id^r$}
+%                 \tag{$ \id_\id^r$}
 %                 \frac{
 %                     \Phi \cup \{ p \id (\varphi \id q) \} }%
 %                 { \Phi \cup \{ p \id (\alpha \id q), \alpha \id \varphi \} }
@@ -820,7 +1123,7 @@ difficult to come up with the precise axioms to use.
 %         \end{subfigure}
 %         \begin{subfigure}{0.45\textwidth}
 %             \begin{equation}
-%                 \tag{$ \eq_\id $}
+%                 \tag{$ \id_\id $}
 %                 \frac{
 %                     \Phi \cup \{ p \id (\varphi \id \psi) \} }%
 %                 { \Phi \cup \{ p \id (\alpha \id \beta), \alpha \id \varphi, \beta \id \psi \} }
@@ -874,7 +1177,7 @@ difficult to come up with the precise axioms to use.
 %     \begin{subfigure}{\textwidth}
 %         \begin{subfigure}{0.48\textwidth}
 %             \begin{equation}
-%                 \tag{$ \eq_\top $}
+%                 \tag{$ \id_\top $}
 %                 \frac{
 %                     \Phi \cup \{ p \id q \} }%
 %                 { \Phi \cup \{ p, q, p\id q \} | \Phi \cup \{ \lnot p, \lnot q, p\id q \} }
@@ -882,21 +1185,21 @@ difficult to come up with the precise axioms to use.
 %         \end{subfigure}
 %         \begin{subfigure}{0.48\textwidth}
 %             \begin{equation}
-%                 \tag{$ \eq_\top^\lnot $}
+%                 \tag{$ \id_\top^\lnot $}
 %                 \frac{
 %                     \Phi \cup \{ p \id \lnot q \} }%
 %                 { \Phi \cup \{ p, \lnot q, p \id \lnot q \} | \Phi \cup \{ \lnot p, q, p\id \lnot q \} }
 %             \end{equation}
 %         \end{subfigure}
 %         \begin{equation}
-%             \tag{$ \eq_\top^\ra $}
+%             \tag{$ \id_\top^\ra $}
 %             \frac{
 %                 \Phi \cup \{ p \id (q \ra r) \} }%
 %             { \Phi \cup \{ p, \lnot q, \theta \} | \Phi \cup \{ p, r, \theta \} | \Phi \cup \{ \lnot p, q, \lnot r, \theta \}}
 %             \text{, where } \theta = (p \id (q \ra r))
 %         \end{equation}
 %         \begin{equation}
-%             \tag{$ \eq_\top^\id $}
+%             \tag{$ \id_\top^\id $}
 %             \frac{
 %                 \Phi \cup \{ p \id (q \id r) \} }%
 %             { \Phi \cup \Phi_1 |
@@ -919,7 +1222,7 @@ difficult to come up with the precise axioms to use.
 %             \end{aligned}
 %         \]
 %         \begin{equation}
-%             \tag{$\eq_\bot$}
+%             \tag{$\id_\bot$}
 %             \frac{
 %                 \Phi \cup \{ p \not \id q \} }%
 %             { \Phi \cup \{p,q,\theta\} |
@@ -1073,19 +1376,5 @@ difficult to come up with the precise axioms to use.
 % \subsection{Size of produced proof trees}
 % \subsection{Time complexity}
 % \subsection{Real time}
-
-\begin{thebibliography}{9}
-    \bibitem{suszko_bloom}
-    Stephen L. Bloom, Roman Suszko (1972) \emph{Investigations into the Sentential Calculus with Identity}, Notre Dame Journal of Formal Logic, vol. XIII, no 3.
-
-    % \bibitem{niebieska}
-    % Zdzisław Augustynek i Jacek Juliusz Jadacki (1993) \emph{Possible Ontologies}, \emph{Poznań Studies in the Philosophy of the Sciences and the Humanities}, tom 29, wyd. Rodopi.
-
-    % \bibitem{wazniak}
-    % \emph{Logika i teoria mnogości}, \url{https://wazniak.mimuw.edu.pl/index.php?title=Logika_i_teoria_mnogo%C5%9Bci}.
-
-    % \bibitem{gowers}
-    % William Timothy Gowers  \emph{How to use Zorn’s lemma}, \url{https://gowers.wordpress.com/2008/08/12/how-to-use-zorns-lemma/}
-\end{thebibliography}
 
 \end{document}
