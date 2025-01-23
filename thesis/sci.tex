@@ -191,7 +191,7 @@ be an axiom.
 \end{definition}
 
 \begin{definition}[A thesis of \SCI]
-    A formula $\varphi$ is \emph{a thesis of \SCI} if there exists a finite sequence of formulas $\varphi_1, ..., \varphi_n$ ($n \geq 1$), such that $\varphi = \varphi_n$, and for all $i \in \{1, ..., n\}$ the formula $\varphi_i$ is either an axiom of \SCI, or it is inferred from formulas $\varphi_j$, $\varphi_k$ ($j, k <i$) via the \emph{modus ponens} rule. If $\varphi$ is a thesis of \SCI we will denote it by $\vdash \varphi$, say that $\varphi$ is \emph{provable in \SCI} and call the sequence $\varphi_1, ..., \varphi_n$ the \emph{proof of $\varphi$}.
+    A \SCI-formula $\varphi$ is \emph{a thesis of \SCI} if there exists a finite sequence of formulas $\varphi_1, ..., \varphi_n$ ($n \geq 1$), such that $\varphi = \varphi_n$, and for all $i \in \{1, ..., n\}$ the formula $\varphi_i$ is either an axiom of \SCI, or it is inferred from formulas $\varphi_j$, $\varphi_k$ ($j, k <i$) via the \emph{modus ponens} rule. If $\varphi$ is a thesis of \SCI we will denote it by $\vdash \varphi$, say that $\varphi$ is \emph{provable in \SCI} and call the sequence $\varphi_1, ..., \varphi_n$ the \emph{proof of $\varphi$}.
     \label{thesis}
 \end{definition}
 %
@@ -200,6 +200,84 @@ be an axiom.
     If we have a proof of some formula $\varphi$ and take a variable $p$ appearing in this formula, we can easily obtain a proof of any formula $\varphi(p/\psi)$. To do it, we simply take the proof of $\varphi$ and replace $p$ with $\psi$ in every formula of the proof. We can do it with axioms, because the resulting formula is still an instance of the same given axiom and all the \emph{modus ponens} inferences are still correct.
 \end{remark}
 %
+\begin{definition}[Derivability in \SCI]
+    Given a set of \SCI-formulas $X$, a formula $\varphi$ is \emph{derivable from $X$} if there exists a finite sequence of formulas $\varphi_1, ..., \varphi_n$ ($n \geq 1$), such that $\varphi = \varphi_n$, and for all $i \in \{1, ..., n\}$ the formula $\varphi_i$ is either an axiom of \SCI, is an element of $X$, or it is inferred from formulas $\varphi_j$, $\varphi_k$ ($j, k <i$) via the \emph{modus ponens} rule. If $\varphi$ is derivable from $X$ we will denote it by $X \vdash \varphi$ and call the sequence $\varphi_1, ..., \varphi_n$ the \emph{proof of $\varphi$ from $X$}.
+\end{definition}
+%
+In terms of derivability we can see that a formula is a thesis of \SCI if and
+only if it is derivable from the emptyset.
+
+\begin{theorem}[Deduction theorem for \SCI]
+    For all $X \subseteq \FOR$ and $\varphi, \psi \in \FOR$: $X \cup \{\varphi\} \vdash \psi$ if and only if $X \vdash \varphi \ra \psi$.
+    \begin{proof}
+        First, let us prove the implication from right to left. Let us assume that $X \vdash \varphi \ra \psi$. Let $\varphi_1, ..., \varphi_n$ be a proof of $\varphi \ra \psi$ in $X$. Let us set $\varphi_{n+1} = \varphi$ and $\varphi_{n+2} = \psi$. Then $\varphi_{n+1} \in X \cup \{\varphi\}$ and $\varphi_{n+2}$ is derived from $\varphi_{n+1}$ and $\varphi_{n}$ via the \emph{modus ponens} rule, so the sequence $\varphi_1, ..., \varphi_n, \varphi_{n+1}, \varphi_{n+2}$ is a proof of $\psi$ in $X \cup \{\varphi\}$.
+
+        The proof in the other direction similarly involves modifying the proof, but is
+        slightly more complicated.
+
+        Let us assume that $X \cup \{\varphi\} \vdash \psi$ and let $\varphi_1, ...,
+            \varphi_n$ be a proof of $\psi$ in $X \cup \{\varphi\}$. We will describe a
+        procedure to modify it to be a proof of $\varphi \ra \psi$ in $X$.
+
+        If $\varphi = \psi$, we want to prove $\psi \ra \psi$, which is a \PC axiom.
+        Otherwise, let's start with an empty sequence $\Psi$ and consider in turn each
+        of $\varphi_i$ starting with $\varphi_1$. We will uphold an invariant such
+        that, if $\varphi_i \not = \varphi$, after considering $\varphi_i$, $\Psi$ will
+        be a proof of $\varphi_i$ or $\varphi \ra \varphi_i$.
+
+        \begin{itemize}
+            \item If $\varphi_i$ is an axiom of \SCI, or $\varphi_i \in X$, we append it to
+                  $\Psi$,
+            \item If $\varphi_i = \varphi$, we skip it,
+            \item Otherwise $\varphi_i$ was inferred by \emph{modus ponens} from some formulas
+                  $\alpha, \alpha \ra \varphi_i$, such that $\alpha$ and $\alpha \ra \varphi_i$
+                  were considered before.
+                  \begin{itemize}
+                      \item If $\alpha = \varphi$, we don't append anything to $\Psi$, as $\varphi \ra
+                                \varphi_i$ is already in it,
+                      \item If $\alpha \ra \varphi_i = \varphi$. From our invariant we know that within
+                            $\Psi$ there is a proof of $\alpha$ or $\varphi \ra \alpha$ in $\Psi$.
+                            \begin{itemize}
+                                \item If $\Psi$ contains a proof of $\alpha$, we append to $\Psi$ a \PC axiom $\alpha
+                                          \ra ((\alpha \ra \varphi_i) \ra \varphi_i)$, then from $\alpha$ and it by
+                                      \emph{modus ponens} we infer $(\alpha \ra \varphi_i) \ra \varphi_i$, which is
+                                      $\varphi \ra \varphi_i$,
+                                \item Otherwise, $\Psi$ contains a proof of $\varphi \ra \alpha = (\alpha \ra
+                                          \varphi_i) \ra \alpha$. We append to $\Psi$ a \PC axiom $((\alpha \ra
+                                          \varphi_i) \ra \alpha) \ra ( (\alpha \ra \varphi_i) \ra \varphi_i)$, then from
+                                      $(\alpha \ra \varphi_i) \ra \alpha$ and it by \emph{modus ponens} we infer
+                                      $(\alpha \ra \varphi_i) \ra \varphi_i$ which is $\varphi \ra \varphi_i$.
+                            \end{itemize}
+                      \item Otherwise we have a proof of $\alpha$ or $\varphi \ra \alpha$ in $\Psi$ and
+                            also a proof of $\alpha \ra \varphi_i$ or $\varphi \ra (\alpha \ra \varphi_i)$
+                            in $\Psi$. So, we have four cases to look at:
+                            \begin{itemize}
+                                \item We have a proof of $\alpha$ and $\alpha \ra \varphi_i$ in $\Psi$. Then we
+                                      simply infer a proof of $\varphi_i$.
+                                \item We have a proof of $\varphi \ra \alpha$ and $\alpha \ra \varphi_i$. Then we
+                                      append a \PC axiom $(\varphi \ra \alpha) \ra ((\alpha \ra \varphi_i) \ra
+                                          (\varphi \ra \varphi_i))$ to $\Psi$, then from it and $\varphi \ra \alpha$ we
+                                      infer $(\alpha \ra \varphi_i) \ra (\varphi \ra \varphi_i)$ and then from
+                                      $\alpha \ra \varphi_i$ we infer $\varphi \ra \varphi_i$.
+                                \item We have a proof of $\alpha$ and $\varphi \ra (\alpha \ra \varphi_i)$ in $\Psi$.
+                                      Then we append a \PC axiom $\alpha \ra ( (\varphi \ra (\alpha \ra \varphi_i))
+                                          \ra (\varphi \ra \varphi_i) )$ and then infer $(\varphi \ra (\alpha \ra
+                                          \varphi_i)) \ra (\varphi \ra \varphi_i)$ and then $\varphi \ra \varphi_i$.
+                                \item We have a proof of $\varphi \ra \alpha$ and $\varphi \ra (\alpha \ra
+                                          \varphi_i)$. Then we append a \PC axiom $(\varphi \ra \alpha) \ra( (\varphi \ra
+                                          (\alpha \ra \varphi_i))$ $ \ra (\varphi \ra \varphi_i) )$ and then infer
+                                      $(\varphi \ra (\alpha \ra \varphi_i)) \ra (\varphi \ra \varphi_i)$ and then
+                                      $\varphi \ra \varphi_i$.
+                            \end{itemize}
+                  \end{itemize}
+        \end{itemize}
+
+        It is easy to see that at each step we uphold our invariant so at the end we
+        arrive of a proof of $\varphi \ra \psi$ or just a proof of $\psi$. If we have a proof of $\psi$ we add a \PC axiom $\psi \ra (\varphi \ra \psi)$ and infer $\varphi \ra \psi$ to get a proof of $\varphi \ra \psi$.
+
+    \end{proof}
+\end{theorem}
+
 Let us now give some semantic definitions:
 
 \begin{definition}[\SCI-model]
@@ -732,7 +810,7 @@ TODO
 \subsection{\TSCI}
 
 \leqnomode
-\begin{figure}
+\begin{figure}[h]
     \begin{subfigure}{\textwidth}
         \centering
         \begin{subfigure}{0.3\textwidth}
@@ -903,10 +981,10 @@ TODO
             \begin{equation}
                 \tag{\texttt{tran}}
                 \frac{
-                \begin{split}
-                    w=v\\
-                    v=u
-                \end{split}
+                    \begin{split}
+                        w=v\\
+                        v=u
+                    \end{split}
                 }%
                 {w = u}
             \end{equation}
@@ -915,10 +993,10 @@ TODO
             \begin{equation}
                 \tag{$\bot_1$}
                 \frac{
-                \begin{split}
-                    w=v\\
-                    w \not = v
-                \end{split}
+                    \begin{split}
+                        w=v\\
+                        w \not = v
+                    \end{split}
                 }%
                 {\bot}
             \end{equation}
