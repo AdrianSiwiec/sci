@@ -219,61 +219,32 @@ only if it is derivable from the emptyset.
             \varphi_n$ be a proof of $\psi$ in $X \cup \{\varphi\}$. We will describe a
         procedure to modify it to be a proof of $\varphi \ra \psi$ in $X$.
 
-        If $\varphi = \psi$, we want to prove $\psi \ra \psi$, which is a \PC axiom.
-        Otherwise, let's start with an empty sequence $\Psi$ and consider in turn each
-        of $\varphi_i$ starting with $\varphi_1$. We will uphold an invariant such
-        that, if $\varphi_i \not = \varphi$, after considering $\varphi_i$, $\Psi$ will
-        be a proof of $\varphi_i$ or $\varphi \ra \varphi_i$.
+        We will construct a sequence of formulas $\Psi$ by considering each $\varphi_i$
+        in turn. We'll uphold an invariant such that after considering $\varphi_i$,
+        $\Psi$ will contain a proof of $\varphi \ra \varphi_i$.
 
         \begin{itemize}
             \item If $\varphi_i$ is an axiom of \SCI, or $\varphi_i \in X$, we append it to
-                  $\Psi$,
-            \item If $\varphi_i = \varphi$, we skip it,
+                  $\Psi$. Then we append to $\Psi$ a formula $\varphi_i \ra (\varphi \ra
+                      \varphi_i)$, which is an instance of a \PC axiom $\alpha \ra (\beta \ra
+                      \alpha)$ and by \emph{modus ponens} infer $\varphi \ra \varphi_i$.
+            \item If $\varphi_i = \varphi$, we add to $\Psi$ a formula $\varphi \ra \varphi$,
+                  which is an instance of a \PC axiom $\alpha \ra \alpha$,
             \item Otherwise $\varphi_i$ was inferred by \emph{modus ponens} from some formulas
-                  $\alpha, \alpha \ra \varphi_i$, such that $\alpha$ and $\alpha \ra \varphi_i$
-                  were considered before.
-                  \begin{itemize}
-                      \item If $\alpha = \varphi$, we don't append anything to $\Psi$, as $\varphi \ra
-                                \varphi_i$ is already in it,
-                      \item If $\alpha \ra \varphi_i = \varphi$. From our invariant we know that within
-                            $\Psi$ there is a proof of $\alpha$ or $\varphi \ra \alpha$ in $\Psi$.
-                            \begin{itemize}
-                                \item If $\Psi$ contains a proof of $\alpha$, we append to $\Psi$ a \PC axiom $\alpha
-                                          \ra ((\alpha \ra \varphi_i) \ra \varphi_i)$, then from $\alpha$ and it by
-                                      \emph{modus ponens} we infer $(\alpha \ra \varphi_i) \ra \varphi_i$, which is
-                                      $\varphi \ra \varphi_i$,
-                                \item Otherwise, $\Psi$ contains a proof of $\varphi \ra \alpha = (\alpha \ra
-                                          \varphi_i) \ra \alpha$. We append to $\Psi$ a \PC axiom $((\alpha \ra
-                                          \varphi_i) \ra \alpha) \ra ( (\alpha \ra \varphi_i) \ra \varphi_i)$, then from
-                                      $(\alpha \ra \varphi_i) \ra \alpha$ and it by \emph{modus ponens} we infer
-                                      $(\alpha \ra \varphi_i) \ra \varphi_i$ which is $\varphi \ra \varphi_i$.
-                            \end{itemize}
-                      \item Otherwise we have a proof of $\alpha$ or $\varphi \ra \alpha$ in $\Psi$ and
-                            also a proof of $\alpha \ra \varphi_i$ or $\varphi \ra (\alpha \ra \varphi_i)$
-                            in $\Psi$. So, we have four cases to look at:
-                            \begin{itemize}
-                                \item We have a proof of $\alpha$ and $\alpha \ra \varphi_i$ in $\Psi$. Then we
-                                      simply infer a proof of $\varphi_i$.
-                                \item We have a proof of $\varphi \ra \alpha$ and $\alpha \ra \varphi_i$. Then we
-                                      append a \PC axiom $(\varphi \ra \alpha) \ra ((\alpha \ra \varphi_i) \ra
-                                          (\varphi \ra \varphi_i))$ to $\Psi$, then from it and $\varphi \ra \alpha$ we
-                                      infer $(\alpha \ra \varphi_i) \ra (\varphi \ra \varphi_i)$ and then from
-                                      $\alpha \ra \varphi_i$ we infer $\varphi \ra \varphi_i$.
-                                \item We have a proof of $\alpha$ and $\varphi \ra (\alpha \ra \varphi_i)$ in $\Psi$.
-                                      Then we append a \PC axiom $\alpha \ra ( (\varphi \ra (\alpha \ra \varphi_i))
-                                          \ra (\varphi \ra \varphi_i) )$ and then infer $(\varphi \ra (\alpha \ra
-                                          \varphi_i)) \ra (\varphi \ra \varphi_i)$ and then $\varphi \ra \varphi_i$.
-                                \item We have a proof of $\varphi \ra \alpha$ and $\varphi \ra (\alpha \ra
-                                          \varphi_i)$. Then we append a \PC axiom $(\varphi \ra \alpha) \ra( (\varphi \ra
-                                          (\alpha \ra \varphi_i))$ $ \ra (\varphi \ra \varphi_i) )$ and then infer
-                                      $(\varphi \ra (\alpha \ra \varphi_i)) \ra (\varphi \ra \varphi_i)$ and then
-                                      $\varphi \ra \varphi_i$.
-                            \end{itemize}
-                  \end{itemize}
+                  $\vartheta, \vartheta \ra \varphi_i$, such that $\vartheta$ and $\vartheta \ra
+                      \varphi_i$ were considered before. By our invariant $\varphi \ra \vartheta$ and
+                  $\varphi \ra (\vartheta \ra \varphi_i)$ have their proofs in $\Psi$ already.
+
+                  We append to $\Psi$ a formula $(\varphi \ra \vartheta) \ra( (\varphi \ra
+                      (\vartheta \ra \varphi_i))$ $ \ra (\varphi \ra \varphi_i) )$, which is an
+                  instance of a \PC axiom $(\alpha \ra \beta) \ra ( (\alpha \ra (\beta \ra
+                      \gamma)) \ra (\alpha \ra \gamma) )$ and then by \emph{modus ponens} infer
+                  $(\varphi \ra (\vartheta \ra \varphi_i)) \ra (\varphi \ra \varphi_i)$ and then
+                  $\varphi \ra \varphi_i$.
         \end{itemize}
 
-        It is easy to see that at each step we uphold our invariant so at the end we
-        arrive of a proof of $\varphi \ra \psi$ or just a proof of $\psi$. If we have a proof of $\psi$ we add a \PC axiom $\psi \ra (\varphi \ra \psi)$ and infer $\varphi \ra \psi$ to get a proof of $\varphi \ra \psi$.
+        It is easy to see that at each step we uphold our invariant so at the end
+        $\Psi$ is a proof of $\varphi \ra \psi$.
 
     \end{proof}
 \end{theorem}
