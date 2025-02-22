@@ -86,6 +86,7 @@
 \newcommand{\TSCI}{$\mathsf{T_{SCI}}$\xspace}
 \newcommand{\DTSCI}{$\mathsf{DT_{SCI}}$\xspace}
 \newcommand{\TsSCI}{$\mathsf{T^*_{SCI}}$\xspace}
+\newcommand{\N}{\mathbb{N}}
 
 \makeatletter
 \newcommand{\leqnomode}{\tagsleft@true\let\veqno\@@leqno}
@@ -163,7 +164,7 @@ occurrences of its subformula $\psi$ substituted with $\vartheta$.
 \end{definition}
 $\V$ is a countable set. Let us take any full ordering of it and mark it as $<$. Let us then
 extend it by saying that for each $p \in \V$: $p < \lnot <\xspace (\ < \ )\xspace<\ \ra\ <\ \id$. Now,
-let us define an ordering of formulas $\prec$ to be a lexicographical ordering
+let us define an ordering of formulas $\prec$ by saying that if $s(\varphi) < s(\psi)$ then $\varphi \prec \psi$ and if $s(\varphi) = s(\psi)$ then $\varphi \prec \psi$ if it is earlier within the lexicographical ordering
 with $<$.
 
 If we consider formulas that contain only the negation and implication
@@ -207,7 +208,33 @@ be an axiom.
 In terms of derivability we can see that a formula is a thesis of \SCI if and
 only if it is derivable from the emptyset.
 
-\begin{theorem}[Deduction theorem for \SCI]
+\begin{remark} For every $\varphi \in \FOR$ and $X, Y \subseteq \FOR$, if $X \subseteq Y$ and $X \vdash \varphi$, then $Y \vdash \varphi$. This is because the proof of $\varphi$ from $X$ is also a proof of $\varphi$ from $Y$.
+\end{remark}
+
+\begin{remark} For every $\varphi, \psi \in \FOR$, $\{\varphi, \lnot \varphi\} \vdash \psi$.
+    \label{falsehood_proves_all}
+    \begin{proof} $\varphi \ra (\lnot \varphi \ra \psi)$ is an instance of a \PC axiom $\alpha \ra (\lnot \alpha \ra \beta)$, so a sequence $\varphi \ra (\lnot \varphi \ra \psi)$, $\lnot \varphi \ra \psi$, $\psi$ is a proof of $\psi$ in $\{\varphi, \lnot \varphi\}$.
+    \end{proof}
+\end{remark}
+
+\begin{remark}
+    \label{phi_not_phi_ra_psi}
+    For every $\varphi, \psi \in \FOR, X \subseteq \FOR$, we have that $X \vdash \psi$ if and only if $X \vdash \varphi \ra \psi$ and $X \vdash \lnot \varphi \ra \psi$.
+
+    \begin{proof}
+        Right to left. Let $\Psi$ be a proof of $\psi$ in $X$. By adding to it a formula $\psi \ra (\varphi \ra \psi)$, which is an instance of a \PC axiom $\alpha \ra (\beta \ra \alpha)$ we can infer $\varphi \ra \psi$ arriving at proof of $\varphi \ra \psi$ in $X$. In the same way we can arrive at the proof of $\lnot \varphi \ra \psi$ in $X$.
+
+        Left to right. We have proofs of $\varphi \ra \psi$ and $\lnot \varphi \ra
+            \psi$ in $X$. Let $\Psi$ be a sequence resulting from appending one after the
+        other. Let us append to it a formula $(\varphi \ra \psi) \ra ((\lnot \varphi
+            \ra \psi) \ra \psi)$, which is an instance of a \PC axiom $(\alpha \ra \beta)
+            \ra ((\lnot \alpha \ra \beta) \ra \beta)$. Then we by \emph{modus ponens} we
+        can infer $(\lnot \varphi \ra \psi) \ra \psi$ and then $\psi$ thus arriving at
+        the proof of $\psi$ in $X$.
+    \end{proof}
+\end{remark}
+
+\begin{remark}[Deduction theorem for \SCI]
     For all $X \subseteq \FOR$ and $\varphi, \psi \in \FOR$: $X \cup \{\varphi\} \vdash \psi$ if and only if $X \vdash \varphi \ra \psi$.
     \begin{proof}
         First, let us prove the implication from right to left. Let us assume that $X \vdash \varphi \ra \psi$. Let $\varphi_1, ..., \varphi_n$ be a proof of $\varphi \ra \psi$ in $X$. Let us set $\varphi_{n+1} = \varphi$ and $\varphi_{n+2} = \psi$. Then $\varphi_{n+1} \in X \cup \{\varphi\}$ and $\varphi_{n+2}$ is derived from $\varphi_{n+1}$ and $\varphi_{n}$ via the \emph{modus ponens} rule, so the sequence $\varphi_1, ..., \varphi_n, \varphi_{n+1}, \varphi_{n+2}$ is a proof of $\psi$ in $X \cup \{\varphi\}$.
@@ -243,11 +270,23 @@ only if it is derivable from the emptyset.
                   $\varphi \ra \varphi_i$.
         \end{itemize}
 
-        It is easy to see that at each step we uphold our invariant so at the end
-        $\Psi$ is a proof of $\varphi \ra \psi$.
+        It is easy to see that at each step we uphold our invariant and $\varphi$ is
+        not directly used in the proof so at the end $\Psi$ is a proof of $\varphi \ra
+            \psi$ in $X$.
 
     \end{proof}
-\end{theorem}
+\end{remark}
+
+{
+\color{red}
+
+\begin{remark}
+    For every $\varphi, \psi \in \FOR, X \subseteq \FOR$, such that $X \not \vdash \psi$, we have that $X \cup \{\varphi\} \not \vdash \psi$ if and only if $X \cup \{\lnot \varphi\} \vdash \psi$.
+
+    NOT TRUE. $X = \emptyset, \varphi = p, \psi = q$.
+
+\end{remark}
+}
 
 Let us now give some semantic definitions:
 
@@ -391,23 +430,9 @@ If an universe $U$ is finite, we'll call a given \SCI-model a \emph{finite
 \begin{proof}
     To show that every valid \SCI-formula is \SCI-provable is, by contraposition, to show that every non-\SCI-provable formula is non-\SCI-valid.
 
-    To do this, we will construct a \SCI-model and a valuation in which all, and
-    only, \SCI-provable formulas are satisfied. Then, it will be shown that for
-    every formula that is not \SCI-provable, this model and this valuation will be
-    a witness of its non-\SCI-validity, thus proving completeness of \SCI
-
-    {\color{red}Wydaje mi się, że pomieszałem coś w notatkach z tego dowodu. Tak jak to napisałem to chyba nie może działać.
-
-        Na wykładzie co prawda dla każdego niesprzecznego zbioru formuł $X$
-        konstruowaliśmy model, w którym były prawdziwe wszystkie formuły $X \vdash
-            \varphi$, ale dla samego dowodu pełności i tak stawialiśmy na koniec (chyba?)
-        $X = \emptyset$, wiec uprościłem.
-
-        Próbowałem to porównać z [Suszko, Bloom 1972], ale tam ten dowód jest bardzo
-        lakonicznie opisany.
-
-        A może bierze się niedowodliwą formułę i dla niej konkretnie buduje model (lub
-        wartościowanie), które ją inwaliduje?}
+    Let us take a non-\SCI-provable formula $\hat{\varphi}$. We will construct an
+    \SCI-model and a valuation in which $\hat{\varphi}$ is not true, thus showing
+    that it is not \SCI-valid.
 
     First, let us define a relation $R$ on \SCI-formulas: $$ \varphi R \psi \text{
             if and only if} \vdash \varphi \id \psi $$
@@ -419,10 +444,11 @@ If an universe $U$ is finite, we'll call a given \SCI-model a \emph{finite
         \item $R$ is symmetrical, that is for all $\varphi, \psi \in \FOR, \varphi R \psi$ if and only if $\psi R \varphi$.
 
               From \cref{ex_pqqp} below and \cref{remark_proof_varphi} we can prove that for
-              all $\varphi, \psi$, $\vdash (\varphi \id \psi) \ra (\psi \id \varphi)$. If
-              $\varphi R \psi$, then $\vdash \varphi \id \psi$, so by \emph{modus ponens} we
-              can infer $\vdash \psi \id \varphi$, so $\psi R \varphi$. In the same way we
-              can show that if $\psi R \varphi$ then $\varphi R \psi$, so $R$ is symmetrical.
+              all $\varphi, \psi \in \FOR$, $\vdash (\varphi \id \psi) \ra (\psi \id
+                  \varphi)$. If $\varphi R \psi$, then $\vdash \varphi \id \psi$, so by
+              \emph{modus ponens} we can infer $\vdash \psi \id \varphi$, so $\psi R
+                  \varphi$. In the same way we can show that if $\psi R \varphi$ then $\varphi R
+                  \psi$, so $R$ is symmetrical.
         \item $R$ is transitive, that is for all $\varphi, \psi, \vartheta \in \FOR$, if $\varphi R \psi$ and $\psi R \vartheta$ then $\varphi R \vartheta$.
 
               From \cref{ex_pqr} below and \cref{remark_proof_varphi}, we can prove that for
@@ -446,12 +472,18 @@ If an universe $U$ is finite, we'll call a given \SCI-model a \emph{finite
               easily proven from $(Ax5)$.
     \end{itemize}
     %
-    Now that we know that $R$ is a congruent equivalence relation, we can define a
-    structure: $\mathcal{M} = (U, D, \tilde{\lnot}, \tilde{\ra}, \tilde{\id})$,
-    such that:
+    Now that we know that $R$ is a congruent equivalence relation, let us define:
     \begin{itemize}
         \item $U = \{ |\varphi|_R : \varphi \in \FOR \}$ (by $|\varphi|_R$ we mean an equivalence class of $R$ of which $\varphi$ is a member),
-        \item $D = \{ |\varphi|_R : \varphi \in \FOR, \vdash \varphi\}$
+        \item Let $\varphi_1, \varphi_2, ...$ be all formulas of $\FOR$ in order of $\prec$.
+        \item $d_0$ = $\emptyset$
+        \item For $i \in \N_+$: $$ d_{i} = \begin{cases}
+                      d_{i-1} \cup \{\varphi_i\}, & \text{if } d_{i-1} \cup \{\varphi_i\} \not \vdash \hat{\varphi} \\
+                      d_{i-1},                    & \text{otherwise}                                                \\
+                  \end{cases}
+              $$
+        \item $d = \bigcup d_i$
+        \item $D = \{ |\varphi|_R : \varphi \in d\}$
         \item $\tilde{\lnot}$ is an unary function on equivalence classes of $R$, such that $\tilde{\lnot}|\varphi|_R \stackrel{def}{=} |\lnot \varphi|_R$
         \item $\tilde{\ra}$ is a binary function on equivalence classes of $R$, such that $|\varphi|_R \tilde{\ra} |\psi|_R \stackrel{def}{=} |\varphi \ra \psi|_R$
         \item $\tilde{\id}$ is a binary function on equivalence classes of $R$, such that $|\varphi|_R \tilde{\id} |\psi|_R \stackrel{def}{=} |\varphi \id \psi|_R$
@@ -469,30 +501,131 @@ If an universe $U$ is finite, we'll call a given \SCI-model a \emph{finite
               $\tilde{\id}$ are well defined functions.
     \end{itemize}
     %
+    Let us note some properties of $d$ and $D$:
+    \begin{itemize}
+        \item If $i < j$, then $d_i \subseteq d_j$.
+        \item $\varphi_i \in d$ if and only if $\varphi_i$ was added to $d_i$.
+        \item For all $i \in \N$, $d_i \not \vdash \hat{\varphi}$. Since $\hat{\varphi}$ is
+              not \SCI-provable, we know that $\emptyset = d_0 \not \vdash \hat{\varphi}$ and
+              each subsequent $d_i$ is extended by $\varphi_i$ only if $d_{i-1} \cup
+                  \{\varphi_i\} \not \vdash \hat{\varphi}$.
+        \item For all $\varphi, \psi$, if $\vdash \varphi \id \psi$, then $|\varphi|_R \in D$
+              if and only if $|\psi|_R \in D$.
+    \end{itemize}
+
     Now we will want to show that $\mathcal{M}$ is an \SCI-model. From the
     \cref{model} we want to show that:
     \begin{itemize}
         \item $U \not = \emptyset$ -- this is trivial, $|p|_R \in U$
         \item $\emptyset \not = D$ -- this is true, because for example $\vdash p \id p$, so $|p \id p|_R \in D$
-        \item $D \subsetneq U$ --  $D \subseteq U$ is trivial from the definition of $D$. $D \not = U$, because there are formulas which are not valid (e.g. $\lnot(p \id p)$), which from \cref{soundness} are not provable.
-        \item For all $a \in U: \tilde{\lnot} a \in D$ if and only if $a \not \in D$
+        \item $D \subsetneq U$ --  $D \subseteq U$ is trivial from the definition of $D$. $D \not = U$, because $\hat{\varphi} \not \in U$, because $\{\hat{\varphi}\} \vdash \hat{\varphi}$.
+        \item For all $a \in U: \tilde{\lnot} a \in D$ if and only if $a \not \in D$.
 
-              {\color{red} Czy to nie jest fałsz? Weźmy $a=|p\id q|$.
+              Let us take any $a \in U$. We know that there is a formula $\varphi \in \FOR$,
+              such that $a = |\varphi|_R$. Let us take any such $\varphi$. From the
+              definition of $\tilde{\lnot}$ we know that $\tilde{\lnot}|\varphi|_R = |\lnot
+                  \varphi|_R$.
 
-                      Chcemy pokazać: $\tilde{\lnot}|p \id q| \in D$ iff $|p \id q| \not \in D$.
+              We will show that $\lnot \varphi \in d$ if and only if $\varphi \not \in d$.
+              Let us assume that $\varphi = \varphi_i$ and $\lnot \varphi = \varphi_j$. Let's
+              assume for now that $i < j$.
 
-                      Prawa strona: Prawdziwa, bo $\not \vdash |p \id q|$
+              There are two cases:
+              \begin{itemize}
+                  \item $\varphi_i \in d_i$. We want to show that $\varphi_j$ was not added to $d_j$. From \cref{falsehood_proves_all} we know that $\{\varphi, \lnot \varphi\} \vdash \hat{\varphi}$ and so $d_{i-1} \cup \{\varphi_j\} \vdash \hat{\varphi}$. $d_{i-1} \subseteq d_{j-1}$ so $d_{j-1} \cup {\varphi_j} \vdash \hat{\varphi}$, so $\varphi_j \not \in d_j$.
+                  \item $\varphi_i \not \in d_i$. We want to show that $\varphi_j$ was added to $d_j$, that is that $d_{j-1} \cup \{\varphi_j\} \not \vdash \hat{\varphi}$.
 
-                      Lewa strona: $\tilde{\lnot}|p \id q| \xLeftrightarrow{\text{def.}
-                              \tilde{\lnot}}$ $|\lnot(p \id q)|$. Ale: $\not \vdash \lnot(p \id q)$, więc
-                      $|\lnot(p \id q)| \not \in D$, więc lewa nieprawdziwa.}
+                        Let us assume the opposite, that $d_{j-1} \cup \{\lnot \varphi\} \vdash
+                            \hat{\varphi}$. From the deduction theorem we have that $d_{j-1} \vdash \lnot
+                            \varphi \ra \hat{\varphi}$. Since $\varphi_i \not \in d_i$ we know that
+                        $d_{i-1} \cup \{\varphi\} \vdash \hat{\varphi}$. Because $d_{i-1} \subseteq
+                            d_{j-1}$ we have that $d_{j-1} \cup \{\varphi\} \vdash \hat{\varphi}$ and again
+                        from the deduction theorem $d_{j-1} \vdash \varphi \ra \hat{\varphi}$.
+
+                        Let us take the proof of $\lnot \varphi \ra \hat{\varphi}$ in $d_{j-1}$ and
+                        append to it the proof of $\varphi \ra \hat{\varphi}$ creating a sequence
+                        $\Psi$. Then let us append to $\Psi$ a formula $(\varphi \ra \hat{\varphi}) \ra
+                            ((\lnot \varphi \ra \hat{\varphi} ) \ra \hat \varphi)$, which is an instance of
+                        a \PC axiom $(\alpha \ra \beta) \ra ((\lnot \alpha \ra \beta) \ra \beta)$.
+                        Then, by \emph{modus ponens} we can infer $(\lnot \varphi \ra \hat{\varphi} )
+                            \ra \hat \varphi$ and then $\hat{\varphi}$ thus proving that $d_{j-1} \vdash
+                            \hat{\varphi}$. But this is a contradiction, because we know that $d_{j-1} \not
+                            \vdash \hat{\varphi}$. So our assumption that $d_{j-1} \cup \{\lnot \varphi\}
+                            \vdash \hat{\varphi}$ was false, so $\varphi_j \in d_j$.
+              \end{itemize}
+
+              We can see that if $i > j$ the proof will be analogous.
+
         \item For all $a, b \in U: a \tilde{\ra}b \in D$ if and only if $a \not \in D$ or $b
                   \in D$.
 
-              TODO.
+              Let us take any $a, b \in U$. We know that there exist $\varphi, \psi \in
+                  \FOR$, such that $|\varphi|_R = a, |\psi|_R = b$. From the definition of
+              $\tilde{\ra}$ we have that $|\varphi|_R \tilde{\ra} |\psi|_R = |\varphi \ra
+                  \psi|_R$. So, we want to show that $|\varphi \ra \psi|_R \in D$ if and only if
+              $|\varphi|_R \not \in D$ or $|\psi|_R \in D$, so to show that $\varphi \ra \psi
+                  \in d$ if and only if $\varphi \not \in d$ or $\psi \in d$. Let us assume that
+              $\varphi = \varphi_i$, $\psi = \varphi_j$ and $\varphi \ra \psi = \varphi_k$.
+              Because $s(\varphi) < s(\varphi \ra \psi)$ and $s(\psi) < s(\varphi \ra \psi)$
+              we know that $i < k$ and $j < k$ which will slightly simplify the proof. There
+              are three cases:
+              \begin{itemize}
+                  \item $\psi \in d$. We know that $d_{j-1} \cup \{\psi\} \not \vdash \hat{\varphi}$ and want to show that $d_{k-1} \cup \{\varphi \ra \psi\} \not \vdash \hat{\varphi}$.
+
+                        Let us assume the opposite, that $d_{k-1} \cup \{\varphi \ra \psi\} \vdash
+                            \hat{\varphi}$. By the deduction theorem we have that $d_{k-1} \vdash (\varphi
+                            \ra \psi) \ra \hat{\varphi}$. Let $\Psi$ be the proof of $(\varphi \ra \psi)
+                            \ra \hat{\varphi}$ in $d_{k-1}$. Let us append to $\Psi$ a formula $((\varphi
+                            \ra \psi) \ra \hat{\varphi}) \ra (\psi \ra \hat{\varphi})$. Then by modus
+                        ponens we can infer $\psi \ra \hat{\varphi}$, so we have a proof of $\psi \ra
+                            \hat{\varphi}$ in $d_{k-1}$. By the deduction theorem $d_{k-1} \cup \{\psi\}
+                            \vdash \hat{\varphi}$. But we know that $\psi \in d_{j-1}$ and because $d_{j-1}
+                            \subseteq d_{k-1}$, we know that $d_{k-1} \cup \{\psi\} = d_{k-1}$. So we have
+                        arrived at $d_{k-1} \vdash \hat{\varphi}$, which is a contradiction. So we know
+                        that $d_{k-1} \cup \{\varphi \ra \psi\} \not \vdash \hat{\varphi}$ so $\varphi
+                            \ra \psi \in d$.
+
+                  \item $\varphi \not \in d$. The case when $\psi \in d$ is described above, so let us assume that $\psi \not \in d$. We know that $d_{i-1} \cup \{\varphi\} \vdash \hat{\varphi}$ and $d_{j-1} \cup \{\psi\} \vdash \hat{\varphi}$, so by the deduction theorem we know that $d_{i-1} \vdash \varphi \ra \hat{\varphi}$ and $d_{j-1} \vdash \psi \ra \hat{\varphi}$, and because $i, j < k$ we know that $d_{k-1} \vdash \varphi \ra \hat{\varphi}$ and $d_{k-1} \vdash \psi \ra \hat{\varphi}$. We want to show that $\varphi \ra \psi \in d$, that is $d_{k-1} \cup \{\varphi \ra \psi\} \not \vdash \hat{\varphi}$.
+
+                        Let us assume the opposite, that $d_{k-1} \cup \{\varphi \ra \psi\} \vdash
+                            \hat{\varphi}$. By deduction theorem we have that $d_{k-1} \vdash (\varphi \ra
+                            \psi) \ra \hat{\varphi}$.
+
+                        Let $\Psi$ be a sequence we get by appending the proof of $\varphi \ra
+                            \hat{\varphi}$ in $d_{k-1}$ and the proof of $\psi \ra \hat{\varphi}$ in
+                        $d_{k-1}$ to the proof of $(\varphi \ra \psi) \ra \hat{\varphi}$ in $d_{k-1}$.
+                        Then, let us append to $\Psi$ the formula $((\varphi \ra \psi) \ra
+                            \hat{\varphi}) \ra ((\varphi \ra \hat{\varphi}) \ra ((\psi \ra \hat{\varphi})
+                            \ra \hat{\varphi}))$, which is an instance of a \PC axiom $((\alpha \ra \beta)
+                            \ra \gamma) \ra ( (\alpha \ra \gamma) \ra ((\beta \ra \gamma) \ra \gamma))$.
+                        Then by \emph{modus ponens} we can infer $(\varphi \ra \hat{\varphi}) \ra
+                            ((\psi \ra \hat{\varphi}) \ra \hat{\varphi})$, then we can infer $(\psi \ra
+                            \hat{\varphi}) \ra \hat{\varphi}$ and finally we can infer $\hat{\varphi}$ thus
+                        proving that $d_{k-1} \vdash \hat{\varphi}$ which is a contradiction. So we
+                        know that $d_{k-1} \cup \{\varphi \ra \psi\} \not \vdash \hat{\varphi}$ so
+                        $\varphi \ra \psi \in d$.
+                  \item $\varphi \in d, \psi \not \in d$. We want to show that $\varphi \ra \psi \not \in d$. As we have shown above, from $\varphi \in d$ we know that $\lnot \varphi \not \in d$. Let $\lnot \varphi = \varphi_l$. We know that $l < k$.
+
+                        So, we have that $d_{l-1} \cup \{\lnot \varphi\} \vdash \hat{\varphi}$,
+                        $d_{j-1} \cup \{\psi\} \vdash \hat{\varphi}$ and want to show that $d_{k-1}
+                            \cup \{\varphi \ra \psi\} \vdash \hat{\varphi}$. By the deduction theorem we
+                        have that $d_{l-1} \vdash \lnot \varphi \ra \hat{\varphi}$, $d_{j-1} \vdash
+                            \psi \ra \hat{\varphi}$ and want to show that $d_{k-1} \vdash (\varphi \ra
+                            \psi) \ra \hat{\varphi}$.
+
+                        Let $\Psi$ be a proof of $\lnot \varphi \ra \hat{\varphi}$ in $d_{l-1}$ with a
+                        proof of $\psi \ra \hat{\varphi}$ in $d_{j-1}$ appended to it. Then let us
+                        append to $\Psi$ a formula $(\lnot \varphi \ra \hat{\varphi}) \ra ((\psi \ra
+                            \hat{\varphi}) \ra ((\varphi \ra \psi)\ra \hat{\varphi}))$ which is an instance of a \PC theorem $(\lnot \alpha \ra \gamma) \ra ((\beta \ra \gamma) \ra ((\alpha \ra \beta) \ra \gamma))$. Them by \emph{modus ponens} we can infer $(\psi \ra
+                            \hat{\varphi}) \ra ((\varphi \ra \psi)\ra \hat{\varphi})$ and $(\varphi \ra \psi)\ra \hat{\varphi}$ arriving at the proof of $(\varphi \ra \psi) \ra \hat{\varphi}$ in $d_{k-1}$, thus showing that $\varphi \ra \psi \not \in d$.
+              \end{itemize}
         \item For all $a, b \in U: a \tilde{\id}b \in D$ if and only if $a = b$.
 
-              TODO.
+              Let us take any $a,b \in U$. We know that there exist $\varphi, \psi \in \FOR$ such that $|\varphi|_R = a, |\psi|_R = b$. From the definition of $\tilde{\id}$ we have that $|\varphi|_R \tilde{\id} |\psi|_R \in D$ if and only if $|\varphi \id \psi|_R \in D$, that is if and only if $\varphi \id \psi \in d$.
+
+              On the other hand, $a = b$ if and only if $|\varphi|_R = |\psi|_R$, which from the definition of $R$ means that $\vdash \varphi \id \psi$.
+
+              So, we want to show that $\varphi \id \psi \in d$ if and only if $\vdash \varphi \id \psi$.
     \end{itemize}
     %
     So, $\mathcal{M}$ is a \SCI-model. Now, let us define a valuation $V$ for all
