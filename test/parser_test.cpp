@@ -29,11 +29,11 @@ void TestParseOp() {
   
   pos = 1;
   assert(ParseOp("a|b", pos) == op_or);
-  assert(pos = 2);
+  assert(pos == 2);
 
   pos = 1;
   assert(ParseOp("a<>b", pos) == op_equiv);
-  assert(pos = 3);
+  assert(pos == 3);
 }
 
 void TestParser(string s, optional<Formula> f) {
