@@ -1,5 +1,6 @@
 #include "label_solver.h"
 #include "preprocessing.h"
+#include "stats.h"
 
 vector<LabelNode> ApplyRule(const LabelNode &n, LabelRule rule,
                             bool is_positive, int label) {
@@ -109,7 +110,8 @@ void LabelSolve(LabelNode &n) {
   }
 }
 
-LabelNode DoSolveLabel(vector<Formula> formulas, bool print) {
+LabelNode DoSolveLabel(vector<Formula> formulas, StatsAtom &statsAtom,
+                       bool print) {
   if (formulas.empty())
     return LabelNode();
 
@@ -119,7 +121,10 @@ LabelNode DoSolveLabel(vector<Formula> formulas, bool print) {
   for (const auto &f : formulas) {
     ln.root.CreateLabel(true, f);
   }
-  LabelSolve(ln);
+  {
+    DurationMeasurer dm(statsAtom.duration);
+    LabelSolve(ln);
+  }
   if (print) {
     PrintLabelNode(ln);
     cout << endl;
@@ -127,21 +132,27 @@ LabelNode DoSolveLabel(vector<Formula> formulas, bool print) {
   return ln;
 }
 
-LabelNode DoSolveLabel(string input_string, bool print) {
+LabelNode DoSolveLabel(string input_string, StatsAtom &statsAtom, bool print) {
   ClearVars();
   auto formulas = DoParseFormulas(input_string, print);
-  return DoSolveLabel(formulas, print);
+  return DoSolveLabel(formulas, statsAtom, print);
 }
 
 void TestInput(string input_string, bool print) {
   ClearVars();
-  auto proof_node = DoSolve(input_string, false);
-  auto label_node = DoSolveLabel(input_string, false);
+  Stats stats;
+
+  auto proof_node = DoSolve(input_string, stats.tStar, false);
+  auto label_node = DoSolveLabel(input_string, stats.label, false);
 
   if (print && proof_node.is_closed.value() != label_node.is_closed.value()) {
     PrintProofNode(proof_node);
     PrintLabelNode(label_node);
   }
+
+  cout << "tStar: " << stats.tStar.duration / 1ms << endl
+       << "label: " << stats.label.duration / 1ms << endl
+       << endl;
 
   assert(proof_node.is_closed.value() == label_node.is_closed.value());
 }
@@ -149,14 +160,16 @@ void TestInput(string input_string, bool print) {
 bool TestFormula(const Formula &f, bool print) {
   vector<Formula> vec{PostprocessFormula(f)};
 
-  auto proof_node = DoSolve(vec, false);
-  auto label_node = DoSolveLabel(vec, false);
+  Stats stats;
+
+  auto proof_node = DoSolve(vec, stats.tStar, false);
+  auto label_node = DoSolveLabel(vec, stats.label, false);
 
   if (print && proof_node.is_closed.value() != label_node.is_closed.value()) {
     PrintProofNode(proof_node);
     PrintLabelNode(label_node);
-    cout<<"a = "<<Formula("a").Var()<<endl;
-    cout<<"b = "<<Formula("b").Var()<<endl;
+    cout << "a = " << Formula("a").Var() << endl;
+    cout << "b = " << Formula("b").Var() << endl;
   }
 
   assert(proof_node.is_closed.value() == label_node.is_closed.value());

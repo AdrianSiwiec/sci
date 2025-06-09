@@ -4,6 +4,7 @@
 
 #include "commons.h"
 #include "rules.h"
+#include "stats.h"
 #include "structs.h"
 
 // If worked, returns non-empty.
@@ -26,5 +27,9 @@ void Solve(ProofNode &n, ProofNode previous = ProofNode(Set(vector<Formula>())),
 vector<Formula> DoParseFormulas(string input_string, bool print);
 
 // Solve with printing etc.
+ProofNode DoSolve(string s, StatsAtom &statsAtom = dummyStatsAtom,
+                  bool print = true);
 ProofNode DoSolve(string s, bool print = true);
+ProofNode DoSolve(vector<Formula> formulas,
+                  StatsAtom &statsAtom = dummyStatsAtom, bool print = true);
 ProofNode DoSolve(vector<Formula> formulas, bool print = true);

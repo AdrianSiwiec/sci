@@ -1,8 +1,10 @@
-#include "solver.h"
-#include "preprocessing.h"
 #include <chrono>
 #include <ctime>
 #include <set>
+
+#include "preprocessing.h"
+#include "solver.h"
+#include "stats.h"
 
 bool IsAx1(const Formula &f) {
   if (!f.IsOp(op_not))
@@ -245,7 +247,7 @@ vector<Formula> DoParseFormulas(string input_string, bool print) {
   return formulas;
 }
 
-ProofNode DoSolve(vector<Formula> formulas, bool print) {
+ProofNode DoSolve(vector<Formula> formulas, StatsAtom &statsAtom, bool print) {
   if (formulas.empty()) {
     return ProofNode(Set(vector<Formula>()));
   }
@@ -255,7 +257,10 @@ ProofNode DoSolve(vector<Formula> formulas, bool print) {
 
   Set s(formulas);
   ProofNode n(s);
-  Solve(n, ProofNode(Set(vector<Formula>())), {});
+  {
+    DurationMeasurer dm(statsAtom.duration);
+    Solve(n, ProofNode(Set(vector<Formula>())), {});
+  }
   if (print)
     PrintProofNode(n);
   if (print)
@@ -269,9 +274,15 @@ ProofNode DoSolve(vector<Formula> formulas, bool print) {
   }
   return n;
 }
-ProofNode DoSolve(string input_string, bool print) {
+ProofNode DoSolve(string input_string, StatsAtom &statsAtom, bool print) {
   ClearVars();
 
   auto formulas = DoParseFormulas(input_string, print);
-  return DoSolve(formulas, print);
+  return DoSolve(formulas, statsAtom, print);
+}
+ProofNode DoSolve(vector<Formula> formulas, bool print) {
+  return DoSolve(formulas, dummyStatsAtom, print);
+}
+ProofNode DoSolve(string s, bool print) {
+  return DoSolve(s, dummyStatsAtom, print);
 }
