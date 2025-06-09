@@ -129,6 +129,10 @@ LabelNode DoSolveLabel(vector<Formula> formulas, StatsAtom &statsAtom,
     PrintLabelNode(ln);
     cout << endl;
   }
+
+  statsAtom.treeSize = GetSize(ln);
+  statsAtom.treeDepth = GetDepth(ln);
+
   return ln;
 }
 
@@ -150,8 +154,12 @@ void TestInput(string input_string, bool print) {
     PrintLabelNode(label_node);
   }
 
-  cout << "tStar: " << stats.tStar.duration / 1ms << endl
-       << "label: " << stats.label.duration / 1ms << endl
+  cout << "tStar: " << stats.tStar.duration / 1ms
+       << "ms, size=" << stats.tStar.treeSize
+       << ", depth=" << stats.tStar.treeDepth << endl
+       << "label: " << stats.label.duration / 1ms
+       << "ms, size=" << stats.label.treeSize
+       << ", depth=" << stats.label.treeDepth << endl
        << endl;
 
   assert(proof_node.is_closed.value() == label_node.is_closed.value());

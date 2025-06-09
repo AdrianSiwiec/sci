@@ -266,6 +266,9 @@ ProofNode DoSolve(vector<Formula> formulas, StatsAtom &statsAtom, bool print) {
   if (print)
     cout << endl;
 
+  statsAtom.treeSize = GetSize(n);
+  statsAtom.treeDepth = GetDepth(n);
+
   if (print) {
     cout << "The total size of the (calculated) proof tree is: " << GetSize(n)
          << endl;

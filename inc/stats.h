@@ -11,6 +11,8 @@ typedef chrono::time_point<std::chrono::high_resolution_clock> TimePoint;
 
 struct StatsAtom {
   Duration duration;
+  int treeSize;
+  int treeDepth;
 };
 static StatsAtom dummyStatsAtom;
 

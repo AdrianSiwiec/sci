@@ -50,3 +50,5 @@ struct LabelNode {
 };
 
 void PrintLabelNode(LabelNode &n, string prefix = "");
+int GetSize(const LabelNode &n);
+int GetDepth(const LabelNode &n);

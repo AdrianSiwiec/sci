@@ -149,3 +149,18 @@ void PrintLabelNode(LabelNode &n, string prefix) {
     PrintLabelNode(n.subnodes[i], prefix + add_to_prefix);
   }
 }
+
+int GetSize(const LabelNode &n) {
+  int sum = 1;
+  for(const auto &ls: n.subnodes) {
+    sum += GetSize(ls);
+  }
+  return sum;
+}
+int GetDepth(const LabelNode &n) {
+  int maxi = 0;
+  for(const auto &ls: n.subnodes) {
+    maxi = max(maxi, GetDepth(ls));
+  }
+  return maxi + 1;
+}
