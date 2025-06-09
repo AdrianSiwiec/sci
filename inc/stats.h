@@ -3,6 +3,7 @@
 #include <chrono>
 
 #include "commons.h"
+#include "structs.h"
 
 using namespace std::literals;
 
