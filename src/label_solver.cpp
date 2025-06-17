@@ -110,7 +110,7 @@ void LabelSolve(LabelNode &n) {
   }
 }
 
-LabelNode DoSolveLabel(vector<Formula> formulas, StatsAtom &statsAtom,
+LabelNode DoSolveLabel(const vector<Formula> &formulas, StatsAtom &statsAtom,
                        bool print) {
   if (formulas.empty())
     return LabelNode();

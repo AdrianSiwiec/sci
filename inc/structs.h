@@ -64,6 +64,9 @@ Formula FId(const Formula &a, const Formula &b);
 optional<int> ParseVar(const string &s, int &pos);
 optional<Operator> ParseOp(const string &s, int &pos);
 
+int GetSize(const Formula &f);
+int GetDepth(const Formula &f);
+
 struct Set {
   Set(const vector<Formula> &formulas);
   Set(string input);

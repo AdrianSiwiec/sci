@@ -57,7 +57,7 @@ void Formula::Normalize() {
     else
       assert(this->subformulas.size() == 2);
   }
-  
+
   // if (is_var) {
   //   hash = GetHash(var + 10, {});
   // } else {
@@ -189,6 +189,25 @@ Formula FImpl(const Formula &a, const Formula &b) {
 }
 Formula FId(const Formula &a, const Formula &b) {
   return Formula(op_id, {a, b});
+}
+
+int GetSize(const Formula &f) {
+  if (f.IsVar())
+    return 1;
+  int result = 1;
+  for (const auto &sf : f.Subformulas()) {
+    result += GetSize(sf);
+  }
+  return result;
+}
+int GetDepth(const Formula &f) {
+  if (f.IsVar())
+    return 1;
+  int result = 0;
+  for (const auto &sf : f.Subformulas()) {
+    result = max(result, GetDepth(sf));
+  }
+  return result + 1;
 }
 
 Set::Set(const vector<Formula> &formulas) : formulas(formulas) {

@@ -32,6 +32,13 @@ public:
 };
 
 struct Stats {
+  Stats(Formula formula) : formula(formula) {}
+  Stats() : formula(0) {}
+
+  const Formula formula;
   StatsAtom tStar;
   StatsAtom label;
 };
+
+void PrintStatsHeader();
+void PrintStats(const Stats &stats);
