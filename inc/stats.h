@@ -36,6 +36,7 @@ struct Stats {
   Stats() : formula(0) {}
 
   const Formula formula;
+  bool isTautology;
   StatsAtom tStar;
   StatsAtom label;
 };

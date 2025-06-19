@@ -67,10 +67,18 @@ int main() {
     // Benchmark supports only one formula lines
     assert(formulas.size() == 1);
 
+    // Insert NOT -- because those algorithms check if it's closed not if it's
+    // tautology
+    // formulas[0] = FNot(formulas[0]);
+
     Stats stats(formulas[0]);
 
-    DoSolve(formulas, stats.tStar, false);
-    DoSolveLabel(formulas, stats.label, false);
+    auto node = DoSolve(formulas, stats.tStar, false);
+    auto labelNode = DoSolveLabel(formulas, stats.label, false);
+    assert(node.is_closed.has_value());
+    assert(labelNode.is_closed.has_value());
+    assert(node.is_closed.value() == labelNode.is_closed.value());
+    stats.isTautology = node.is_closed.value();
 
     PrintStats(stats);
 

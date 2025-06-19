@@ -4,6 +4,7 @@ void PrintStatsHeader() {
   cout << "formula,"
           "formulaSize,"
           "formulaDepth,"
+          "formulaIsTautology,"
           "timeTStarMs,"
           "timeLabelMs,"
           "sizeTreeTStar,"
@@ -17,6 +18,7 @@ void PrintStats(const Stats &stats) {
   cout << stats.formula << ","              //
        << GetSize(stats.formula) << ","     //
        << GetDepth(stats.formula) << ","    //
+       << stats.isTautology << ","          //
        << stats.tStar.duration / 1ms << "," //
        << stats.label.duration / 1ms << "," //
        << stats.tStar.treeSize << ","       //
