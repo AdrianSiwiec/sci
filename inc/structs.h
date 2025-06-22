@@ -1,5 +1,7 @@
 #pragma once
 
+#include <set>
+
 #include "commons.h"
 
 enum Operator {
@@ -66,6 +68,8 @@ optional<Operator> ParseOp(const string &s, int &pos);
 
 int GetSize(const Formula &f);
 int GetDepth(const Formula &f);
+std::set<int> GetVariables(const Formula &f);
+int GetVariableCount(const Formula &f);
 
 struct Set {
   Set(const vector<Formula> &formulas);

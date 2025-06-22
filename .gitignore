@@ -4,6 +4,7 @@ site/main.wasm
 discussion/*
 hilbert*
 benchmark_out/*
+benchmark_data/*
 .ipynb_checkpoints/*
 
 # Created by https://www.gitignore.io

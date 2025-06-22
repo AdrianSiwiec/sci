@@ -58,6 +58,10 @@ int main() {
   }
   cerr << "Read " << lines.size() << endl;
 
+  random_shuffle(lines.begin(), lines.end());
+
+  cerr << "Shuffled" << endl;
+
   PrintStatsHeader();
 
   TimePoint bStartTime = chrono::high_resolution_clock::now();

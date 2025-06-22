@@ -210,6 +210,21 @@ int GetDepth(const Formula &f) {
   return result + 1;
 }
 
+set<int> GetVariables(const Formula &f) {
+  if (f.IsVar()) {
+    return {f.Var()};
+  }
+  if (f.IsOp(Operator::op_not)) {
+    return GetVariables(f.Subformula());
+  }
+  set<int> ret1 = GetVariables(f.Subformula(0));
+  set<int> ret2 = GetVariables(f.Subformula(1));
+  ret1.insert(ret2.begin(), ret2.end());
+  return ret1;
+}
+
+int GetVariableCount(const Formula &f) { return GetVariables(f).size(); }
+
 Set::Set(const vector<Formula> &formulas) : formulas(formulas) {
   this->Normalize();
 }

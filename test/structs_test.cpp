@@ -32,10 +32,17 @@ void FormulaOperatorTest() {
            Formula(op_impl, {Formula(0), Formula(0)})));
   assert(Formula(op_impl, {Formula(0), Formula(1)}) >
          Formula(op_impl, {Formula(0), Formula(0)}));
-//   assert(Formula(op_impl, {Formula(1), Formula(0)}) >
-//          Formula(op_impl, {Formula(0), Formula(9)}));
-//   assert(Formula(op_id, {Formula(0), Formula(0)}) >
-//          Formula(op_impl, {Formula(0), Formula(0)}));
+  //   assert(Formula(op_impl, {Formula(1), Formula(0)}) >
+  //          Formula(op_impl, {Formula(0), Formula(9)}));
+  //   assert(Formula(op_id, {Formula(0), Formula(0)}) >
+  //          Formula(op_impl, {Formula(0), Formula(0)}));
+}
+
+void GetVariableCountTest() {
+  assert(GetVariableCount(Formula("p->q")) == 2);
+  assert(GetVariableCount(Formula("p->p")) == 1);
+  assert(GetVariableCount(Formula("q->q")) == 1);
+  ClearVars();
 }
 
 void SetTest() {
@@ -76,5 +83,6 @@ void SetTest() {
 int main() {
   FormulaTest();
   FormulaOperatorTest();
+  GetVariableCountTest();
   SetTest();
 }

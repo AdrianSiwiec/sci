@@ -24,6 +24,7 @@ RUNTIMEFILES=$(patsubst %.cpp, $(OBJDIR)/%.e, $(wildcard $(SRCDIR)/*.cpp))
 unitTest: $(UNITTESTFILES)
 main: $(UNITTESTFILES)
 benchmark: $(UNITTESTFILES)
+formulaGenerator: $(UNITTESTFILES)
 infiTest: $(UNITTESTFILES)
 
 $(OBJDIR)/%.o: %.cpp
@@ -52,9 +53,6 @@ clean:
 
 main:
 	./obj/test/main.e
-
-benchmark:
-	./obj/test/benchmark.e <benchmark_data/hilbert_out_backup_found.formulas >benchmark_out/out.csv
 
 infiTest:
 	./obj/test/infiTest.e
