@@ -69,6 +69,14 @@
 \newtheorem{remark}{Remark}[section]
 \AfterEndEnvironment{remark}{\noindent\ignorespaces}
 
+\theoremstyle{definition}
+\newtheorem{fact}{Fact}[section]
+\AfterEndEnvironment{fact}{\noindent\ignorespaces}
+
+\theoremstyle{definition}
+\newtheorem{proposition}{Proposition}[section]
+\AfterEndEnvironment{proposition}{\noindent\ignorespaces}
+
 \newcommand*{\Ts}{T^*}
 \newcommand*{\id}{\equiv}
 \newcommand*{\ra}{\rightarrow}
@@ -108,7 +116,7 @@ Test: ążźćłóęń
 \subsection{Basic notions}
 
 \begin{definition}[Vocabulary of \SCI]
-    The vocabulary of \SCI consists of symbols from the following pairwise disjoint sets:
+    The \emph{vocabulary of \SCI} consists of symbols from the following pairwise disjoint sets:
     \begin{itemize}
         \item $\V = \{p, q, r, ...\}$ -- a countable infinite set of propositional variables,
         \item $\{\lnot, \ra, \id \}$  -- the set consisting of the unary operator of negation ($\lnot$) and binary operators of implication ($\ra$) and identity ($\id$),
@@ -116,28 +124,29 @@ Test: ążźćłóęń
     \end{itemize}
 \end{definition}
 \begin{definition}[Formulas of \SCI]
-    The set of formulas of \SCI is defined with the following grammar:
+    The set $\FOR$ of \emph{formulas of \SCI} is defined with the following grammar:
     $$
         \FOR \ni \varphi ::= p  \; | \;  \lnot \varphi \; | \; (\varphi \ra \varphi) \; | \; (\varphi \id \varphi)
     $$ where $p \in \V$ is a propositional variable.
 \end{definition}
-The propositional variables will also be called atomic formulas.
+The propositional variables will also be called \emph{atomic formulas}.
 
-From now on whenever we write $p, q, r, ... $ we will mean the atomic formulas.
-We will omit brackets when it will lead to no misunderstanding. We will write
-$\varphi \not \id \psi$ as a shorthand for $\lnot(\varphi \id \psi)$.
+From now on, whenever we write $p, q, r, ... $ we will mean the atomic
+formulas. We will omit brackets when it will lead to no misunderstanding. We
+will write $\varphi \not \id \psi$ as a shorthand for $\lnot(\varphi \id
+    \psi)$.
 
-The set of identities $\ID$ is a set of formulas $\varphi \id \psi$ where
-$\varphi, \psi \in \FOR$. Formulas $\varphi \id \varphi$ are the trivial
-identities.
+The set of \emph{identities} $\ID$ is the smallest set consisting of formulas
+$\varphi \id \psi$, where $\varphi, \psi \in \FOR$. Formulas $\varphi \id
+    \varphi$ are referred to as the \emph{trivial identities}.
 
 \begin{definition}[Subformulas]
-    For a formula $\varphi \in \FOR$ let us define the set of subformulas of $\varphi$ as:
+    Let $\varphi \in \FOR$. The set of \emph{subformulas of $\varphi$} is defined as follows:
     $$
         \SUB(\varphi) = \begin{cases}
             \{p\},                                            & \text{if } \varphi = p \in \V,                                                   \\
             \{\varphi\} \cup \SUB(\psi),                      & \text{if } \varphi = \lnot \psi,                                                 \\
-            \{\varphi\} \cup \SUB(\psi) \cup \SUB(\vartheta), & \text{if } \varphi = \psi \ra \vartheta, \text{or } \varphi = \psi \id \vartheta \\
+            \{\varphi\} \cup \SUB(\psi) \cup \SUB(\vartheta), & \text{if } \varphi = \psi \ra \vartheta \text{ or } \varphi = \psi \id \vartheta \\
         \end{cases}
     $$
 \end{definition}
@@ -145,7 +154,7 @@ By $\varphi(\psi / \vartheta)$ we will denote the formula $\varphi$ with all
 occurrences of its subformula $\psi$ substituted with $\vartheta$.
 
 \begin{definition}[Simple formulas]
-    The formula $\varphi$ is called a simple formula if it has one of the following form:
+    The formula $\varphi$ is called a \emph{simple formula} if it has one of the following form:
     $$
         p,\ \lnot p,\ p \id q,\ p \not \id q,\ p \id \lnot q,\ p \id (q \ra r),\ p \id (q \id r)
     $$
@@ -153,30 +162,30 @@ occurrences of its subformula $\psi$ substituted with $\vartheta$.
 \end{definition}
 
 \begin{definition}[Size of a formula]
-    Given a formula $\varphi$, let us define its size $s(\varphi)$:
+    Given a formula $\varphi$, its \emph{size}, denoted by $s(\varphi)$, is defined as:
     $$
         s(\varphi) = \begin{cases}
             1,                          & \text{if } \varphi = p,                                                                      \\
             s(\psi) + 1,                & \text{if } \varphi = \lnot \psi,                                                             \\
-            s(\psi) + s(\vartheta) + 1, & \text{if } \varphi = \psi \equiv \vartheta,\text{ or } \varphi = \psi \rightarrow \vartheta.
+            s(\psi) + s(\vartheta) + 1, & \text{if } \varphi = \psi \equiv \vartheta \text{ or } \varphi = \psi \rightarrow \vartheta.
         \end{cases}
     $$
 \end{definition}
-$\V$ is a countable set. Let us take any full ordering of it and mark it as $<$. Let us then
-extend it by saying that for each $p \in \V$: $p < \lnot <\xspace (\ < \ )\xspace<\ \ra\ <\ \id$. Now,
-let us define an ordering of formulas $\prec$ by saying that if $s(\varphi) < s(\psi)$ then $\varphi \prec \psi$ and if $s(\varphi) = s(\psi)$ then $\varphi \prec \psi$ if it is earlier within the lexicographical ordering
-with $<$.
-
+$\V$ is a countable set. Let $<$ be a well orering on $\V$ and let us extend it to $\FOR$ by putting: $p < \lnot \varphi < \varphi \ra \psi < \varphi \id \psi$, for every $p \in \V$ and for all $\varphi, \psi \in \FOR$. Now,
+let us define an ordering $\prec$ on the set of all \SCI-formulas as follows:
+$$
+    \varphi \prec \psi \text{ if and only if } s(\varphi) < s(\psi) \text{ or both } s(\varphi) = s(\psi) \text{ and }\varphi < \psi.
+$$
 If we consider formulas that contain only the negation and implication
 operators, they form the classical Propositional Calculus. For simplicity, in
-\SCI we'll consider every tautology of the classical Propositional Calculus to
-be an axiom.
+\SCI we will consider every tautology of the classical Propositional Calculus
+to be an axiom.
 
 \begin{definition}[Axiomatization of \SCI]
     \label{axiomatization}
-    \SCI is axiomatized with the following axioms:
+    \SCI is \emph{axiomatized} with the following axiom schemas:
     \begin{itemize}
-        \item Any tautology of the classical Propositional Calculus
+        \item All formulas valid in the Classical Propositional Calculus,
         \item ($Ax1$) $\varphi \id \varphi$,
         \item ($Ax2$) $(\varphi \id \psi) \ra (\varphi \ra \psi)$,
         \item ($Ax3$) $(\varphi \id \psi) \ra (\lnot \varphi \id \lnot \psi)$,
@@ -191,9 +200,9 @@ be an axiom.
     $$
 \end{definition}
 
-\begin{definition}[A thesis of \SCI]
-    A \SCI-formula $\varphi$ is \emph{a thesis of \SCI} if there exists a finite sequence of formulas $\Psi = \varphi_1, ..., \varphi_n$ ($n \geq 1$), such that $\varphi = \varphi_n$, and for all $i \in \{1, ..., n\}$ the formula $\varphi_i$ is either an axiom of \SCI, or it is inferred from formulas $\varphi_j$, $\varphi_k$ ($j, k <i$) via the \emph{modus ponens} rule. If $\varphi$ is a thesis of \SCI we will denote it by $\vdash \varphi$, say that $\varphi$ is \emph{provable in \SCI} and call the sequence $\Psi$ the \emph{proof of $\varphi$}.
-    \label{thesis}
+\begin{definition}[A theorem of \SCI]
+    A \SCI-formula $\varphi$ is \emph{a theorem of \SCI} if and only if there exists a finite sequence of formulas $\Psi = \varphi_1, ..., \varphi_n$ ($n \geq 1$), such that $\varphi = \varphi_n$ and for all $i \in \{1, ..., n\}$ the formula $\varphi_i$ is either an axiom of \SCI, or it is inferred from formulas $\varphi_j$, $\varphi_k$ ($j, k <i$) via the \emph{modus ponens} rule. If $\varphi$ is a theorem of \SCI, we will denote it by $\vdash \varphi$. If $\varphi$ is a theorem of \SCI, then we will also say that $\varphi$ is \emph{provable in \SCI} (or \emph{\SCI-provable}). The sequence $\Psi$ will be referred to as an \emph{\SCI-proof of $\varphi$}.
+    \label{theorem}
 \end{definition}
 %
 \begin{remark}
@@ -202,37 +211,64 @@ be an axiom.
 \end{remark}
 %
 \begin{definition}[Derivability in \SCI]
-    Given a set of \SCI-formulas $X$, a formula $\varphi$ is \emph{derivable from $X$} if there exists a finite sequence of formulas $\Psi = \varphi_1, ..., \varphi_n$ ($n \geq 1$), such that $\varphi = \varphi_n$, and for all $i \in \{1, ..., n\}$ the formula $\varphi_i$ is either an axiom of \SCI, is an element of $X$, or it is inferred from formulas $\varphi_j$, $\varphi_k$ ($j, k <i$) via the \emph{modus ponens} rule. If $\varphi$ is derivable from $X$ we will denote it by $X \vdash \varphi$ and call the sequence $\Psi$ the \emph{proof of $\varphi$ from $X$}.
+    Given a set of $X$ of \SCI-formulas, a formula $\varphi$ is \emph{derivable from $X$} if and only if there exists a finite sequence of formulas $\Psi = \varphi_1, ..., \varphi_n$ ($n \geq 1$) such that $\varphi = \varphi_n$ and for each $i \in \{1, ..., n\}$ the formula $\varphi_i$ is either an axiom of \SCI or it is an element of $X$ or it is inferred from formulas $\varphi_j$, $\varphi_k$ ($j, k <i$) via the \emph{modus ponens} rule. If $\varphi$ is derivable from $X$, we will denote it by $X \vdash \varphi$ and call the sequence $\Psi$ the \emph{proof of $\varphi$ from $X$}.
 \end{definition}
 %
-In terms of derivability we can see that a formula is a thesis of \SCI if and
+In terms of derivability we can see that a formula is a theorem of \SCI if and
 only if it is derivable from the empty set.
 
-\begin{remark} For every $\varphi \in \FOR$ and $X, Y \subseteq \FOR$, if $X \subseteq Y$ and $X \vdash \varphi$, then $Y \vdash \varphi$. This is because the proof of $\varphi$ from $X$ is also a proof of $\varphi$ from $Y$.
-\end{remark}
+\begin{fact} It is easy to see that, for every $\varphi \in \FOR$ and all $X, Y \subseteq \FOR$, if $X \subseteq Y$ and $X \vdash \varphi$, then $Y \vdash \varphi$.
+\end{fact}
+%
+This is because the proof of $\varphi$ from $X$ is also a proof of $\varphi$
+from $Y$.
 
-\begin{remark} For every $\varphi, \psi \in \FOR$, $\{\varphi, \lnot \varphi\} \vdash \psi$.
+\begin{proposition} For all $\varphi, \psi \in \FOR$, $\{\varphi, \lnot \varphi\} \vdash \psi$.
     \label{falsehood_proves_all}
-    \begin{proof} $\varphi \ra (\lnot \varphi \ra \psi)$ is an instance of a \PC tautology $\alpha \ra (\lnot \alpha \ra \beta)$, so a sequence $\varphi \ra (\lnot \varphi \ra \psi)$, $\lnot \varphi \ra \psi$, $\psi$ is a proof of $\psi$ in $\{\varphi, \lnot \varphi\}$.
+    \begin{proof} $\varphi \ra (\lnot \varphi \ra \psi)$ is an instance of a \PC-tautology $\alpha \ra (\lnot \alpha \ra \beta)$, so a sequence $\varphi \ra (\lnot \varphi \ra \psi)$, $\lnot \varphi \ra \psi$, $\psi$ is a proof of $\psi$ in $\{\varphi, \lnot \varphi\}$.
     \end{proof}
-\end{remark}
+\end{proposition}
 
-\begin{remark}
+\begin{proposition}
     \label{phi_not_phi_ra_psi}
-    For every $\varphi, \psi \in \FOR, X \subseteq \FOR$, we have that $X \vdash \psi$ if and only if $X \vdash \varphi \ra \psi$ and $X \vdash \lnot \varphi \ra \psi$.
+    For all $\varphi, \psi \in \FOR, X \subseteq \FOR$, it holds that $X \vdash \psi$ if and only if both $X \vdash \varphi \ra \psi$ and $X \vdash \lnot \varphi \ra \psi$.
 
     \begin{proof}
-        Left to right. Let $\Psi$ be a proof of $\psi$ in $X$. By adding to it a formula $\psi \ra (\varphi \ra \psi)$, which is an instance of a \PC tautology $\alpha \ra (\beta \ra \alpha)$ we can infer $\varphi \ra \psi$ arriving at proof of $\varphi \ra \psi$ in $X$. In the same way we can arrive at the proof of $\lnot \varphi \ra \psi$ in $X$.
+        Assume $X \vdash \psi$. Let $\Psi$ be a proof of $\psi$ from $X$. Adding to $\Psi$ a \PC-valid formula $\psi \ra (\varphi \ra \psi)$, which is an instance of a \PC-tautology $\alpha \ra (\beta \ra \alpha)$ we can infer $\varphi \ra \psi$ arriving at a proof of $\varphi \ra \psi$ in $X$. In a similar way, we can obtain a proof proof of $\lnot \varphi \ra \psi$ in $X$.
 
-        Right to left. We have proofs of $\varphi \ra \psi$ and $\lnot \varphi \ra
-            \psi$ in $X$. Let $\Psi$ be a sequence resulting from appending one after the
-        other. Let us append to it a formula $(\varphi \ra \psi) \ra ((\lnot \varphi
-            \ra \psi) \ra \psi)$, which is an instance of a \PC tautology $(\alpha \ra \beta)
-            \ra ((\lnot \alpha \ra \beta) \ra \beta)$. Then we by \emph{modus ponens} we
-        can infer $(\lnot \varphi \ra \psi) \ra \psi$ and then $\psi$ thus arriving at
-        the proof of $\psi$ in $X$.
+        Now, let us assume that $X \vdash \varphi \ra \psi$ and $X \vdash \lnot \varphi
+            \ra \psi$. Let $\Psi_1$ and $\Psi_2$ be a proof of $\varphi \ra \psi$ and $\lnot \varphi \ra \psi$ from $X$, respectively. Then, the following sequence is a proof of $\psi$ from $X$:
+            $
+            \left( \begin{array}{l} 
+                \ldots \\
+                1. \varphi \rightarrow \psi
+            \end{array} 
+            \right)\ \Psi_1
+            $
+\\
+            $
+            \left( \begin{array}{l} 
+                \ldots \\
+                2. \lnot \varphi \rightarrow \psi
+            \end{array} 
+            \right)\ \Psi_2
+            $
+%
+            \begin{enumerate}
+            \item[3.] $(\varphi \ra \psi) \ra ((\lnot \varphi \ra \psi) \ra \psi)$ \hfill \PC-valid formula
+            \item[4.] $(\lnot \varphi \ra \psi) \ra \psi$ \hfill $\MP(1,3)$
+            \item[5.] $\psi$ \hfill $\MP(2,4)$
+            \end{enumerate}
+            Hence, $X \vdash \psi$.
+            
+        %     Let $\Psi$ be a sequence resulting from appending one after the
+        % other. Let us append to it a formula $(\varphi \ra \psi) \ra ((\lnot \varphi
+        %     \ra \psi) \ra \psi)$, which is an instance of a \PC tautology $(\alpha \ra
+        %     \beta) \ra ((\lnot \alpha \ra \beta) \ra \beta)$. Then we by \emph{modus
+        %     ponens} we can infer $(\lnot \varphi \ra \psi) \ra \psi$ and then $\psi$ thus
+        % arriving at the proof of $\psi$ in $X$.
     \end{proof}
-\end{remark}
+\end{proposition}
 
 \begin{remark}[Deduction theorem for \SCI]
     For all $X \subseteq \FOR$ and $\varphi, \psi \in \FOR$: $X \cup \{\varphi\} \vdash \psi$ if and only if $X \vdash \varphi \ra \psi$.
@@ -396,17 +432,17 @@ If an universe $U$ is finite, we'll call a given \SCI-model a \emph{finite
               \end{itemize}
     \end{itemize}
 
-    To show (b), let us take any valid formulas $\varphi$ and $\varphi \ra \psi$ and
-    any \SCI model and valuation $\mathcal{M}, V$. From validity of $\varphi \ra
-        \psi$, we know that $V(\varphi \ra \psi) \in D$. From \cref{valuation} we have
-    that $D \ni V(\varphi \ra \psi) = V(\varphi) \tilde{\ra} V(\psi)$. From
+    To show (b), let us take any valid formulas $\varphi$ and $\varphi \ra \psi$
+    and any \SCI model and valuation $\mathcal{M}, V$. From validity of $\varphi
+        \ra \psi$, we know that $V(\varphi \ra \psi) \in D$. From \cref{valuation} we
+    have that $D \ni V(\varphi \ra \psi) = V(\varphi) \tilde{\ra} V(\psi)$. From
     \cref{model}, since we know that $V(\varphi) \tilde{\ra} V(\psi)$ we know that
     $V(\varphi) \not \in D$, or $V(\psi) \in D$. But we have that $\varphi$ is
     valid, so $V(\varphi) \in D$, so it must be that $V(\psi) \in D$, so
     $\mathcal{M}, V \models \psi$. The same holds for any other \SCI model and
     valuation, so $\models \psi$, which is what we wanted to show.
 
-    Now, looking at \cref{thesis}, for a given provable $\varphi$, let us take its
+    Now, looking at \cref{theorem}, for a given provable $\varphi$, let us take its
     proof $\varphi_1, ..., \varphi_n = \varphi$. Every subsequent formula in this
     proof is either an \SCI axiom and thus, by (a), valid, or is inferred by the
     \emph{modus ponens} rule from valid formulas and thus, by (b), valid. So,
@@ -483,7 +519,8 @@ If an universe $U$ is finite, we'll call a given \SCI-model a \emph{finite
     that is:
     \begin{itemize}[]
         \item For all $\varphi, \psi \in \FOR$, if $\varphi R \psi$, then $\lnot \varphi R
-                  \lnot \psi$. This is trivially true from axiom $(Ax3)$ and \cref{d_has_theorems}.
+                  \lnot \psi$. This is trivially true from axiom $(Ax3)$ and
+              \cref{d_has_theorems}.
         \item For all $\varphi, \psi, \vartheta, \chi \in \FOR$, if $\varphi R \psi$ and
               $\vartheta R \chi$, then $\varphi \ra \vartheta R \psi \ra \chi$. This is
               easily proven from $(Ax4)$ and \cref{d_has_theorems}.
@@ -554,7 +591,8 @@ If an universe $U$ is finite, we'll call a given \SCI-model a \emph{finite
                             \vdash \hat{\varphi}$ was false, so $\varphi_j \in d_j$.
               \end{itemize}
 
-              We can see that if $i > j$ the proof will be analogous. {\color{red} Na pewno? Może rozpisać dla pewności?}
+              We can see that if $i > j$ the proof will be analogous. {\color{red} Na pewno?
+                      Może rozpisać dla pewności?}
 
         \item For all $a, b \in U: a \tilde{\ra}b \in D$ if and only if $a \not \in D$ or $b
                   \in D$.
@@ -596,14 +634,14 @@ If an universe $U$ is finite, we'll call a given \SCI-model a \emph{finite
                         $d_{k-1}$ to the proof of $(\varphi \ra \psi) \ra \hat{\varphi}$ in $d_{k-1}$.
                         Then, let us append to $\Psi$ the formula $((\varphi \ra \psi) \ra
                             \hat{\varphi}) \ra ((\varphi \ra \hat{\varphi}) \ra ((\psi \ra \hat{\varphi})
-                            \ra \hat{\varphi}))$, which is an instance of a \PC tautology $((\alpha \ra \beta)
-                            \ra \gamma) \ra ( (\alpha \ra \gamma) \ra ((\beta \ra \gamma) \ra \gamma))$.
-                        Then by \emph{modus ponens} we can infer $(\varphi \ra \hat{\varphi}) \ra
-                            ((\psi \ra \hat{\varphi}) \ra \hat{\varphi})$, then we can infer $(\psi \ra
-                            \hat{\varphi}) \ra \hat{\varphi}$ and finally we can infer $\hat{\varphi}$ thus
-                        proving that $d_{k-1} \vdash \hat{\varphi}$ which is a contradiction. So we
-                        know that $d_{k-1} \cup \{\varphi \ra \psi\} \not \vdash \hat{\varphi}$ so
-                        $\varphi \ra \psi \in d$.
+                            \ra \hat{\varphi}))$, which is an instance of a \PC tautology $((\alpha \ra
+                            \beta) \ra \gamma) \ra ( (\alpha \ra \gamma) \ra ((\beta \ra \gamma) \ra
+                            \gamma))$. Then by \emph{modus ponens} we can infer $(\varphi \ra
+                            \hat{\varphi}) \ra ((\psi \ra \hat{\varphi}) \ra \hat{\varphi})$, then we can
+                        infer $(\psi \ra \hat{\varphi}) \ra \hat{\varphi}$ and finally we can infer
+                        $\hat{\varphi}$ thus proving that $d_{k-1} \vdash \hat{\varphi}$ which is a
+                        contradiction. So we know that $d_{k-1} \cup \{\varphi \ra \psi\} \not \vdash
+                            \hat{\varphi}$ so $\varphi \ra \psi \in d$.
                   \item $\varphi \in d, \psi \not \in d$. We want to show that $\varphi \ra \psi \not \in d$. As we have shown above, from $\varphi \in d$ we know that $\lnot \varphi \not \in d$. Let $\lnot \varphi = \varphi_l$. We know that $l < k$.
 
                         So, we have that $d_{l-1} \cup \{\lnot \varphi\} \vdash \hat{\varphi}$,
@@ -733,16 +771,17 @@ following:
               cases:
               \begin{enumerate}
                   \item[1°] $V(\lnot \psi) \in U'$ and $V(\psi) \in U'$. From the definition of $V'$ we have that $V'(\lnot \psi) = V(\lnot \psi)$ and $V'(\psi) = V(\psi)$. So we want to show that $V(\lnot \psi) = \tilde{\lnot}'V(\psi)$, but from the definition of $\tilde{\lnot}'$, since $V(\psi) \in U'$, we know that $\tilde{\lnot}'V(\psi) = \tilde{\lnot}V(\psi)$, so we want to show that $V(\lnot \psi) = \tilde{\lnot}V(\psi)$, which is the case, because $\mathcal{M}$ is a model.
-                  {\color{red}
+                      {\color{red}
                   \item [2°] $V(\lnot \psi) \in U'$ and $V(\psi) \not \in U'$.
-                  \begin{enumerate}
-                    \item[2.1°] $V(\psi) \in D$. 
-                    
-                    Then from the definition of $V'$ we have that $V'(\psi) = 1$ so $\tilde{\lnot}'V'(\psi) = 0$.
-                    
-                    On the other hand: $V'(\lnot \psi) = V(\lnot \psi) \not = 0$
-                  \end{enumerate}
-                  }
+                        \begin{enumerate}
+                            \item[2.1°] $V(\psi) \in D$.
+
+                                Then from the definition of $V'$ we have that $V'(\psi) = 1$ so
+                                $\tilde{\lnot}'V'(\psi) = 0$.
+
+                                On the other hand: $V'(\lnot \psi) = V(\lnot \psi) \not = 0$
+                        \end{enumerate}
+                        }
                   \item[2°] $V(\lnot \psi) \not \in U'$ and $V(\lnot \psi) \in D$. From the definition of $V'$, $V'(\lnot \psi) = 1$. Since $V(\lnot \psi) \in D$ and $V$ is a valuation, we know that $V(\psi) \not \in D$, so $V'(\psi) \not \in D'$. So, from the definition of $\tilde{\lnot}'$ we have that $\tilde{\lnot}'V'(\psi) = 1$.
                   \item[3°] $V(\lnot \psi) \not \in U'$ and $V(\lnot \psi) \not \in D$. Analogously to 2°.
               \end{enumerate}
@@ -764,7 +803,7 @@ following:
         \item For all $\psi, \vartheta \in \FOR$, $V'(\psi \ra \vartheta) = V'(\psi)
                   \tilde{\ra}' V'(\vartheta)$ -- there are cases:
               \begin{enumerate}
-                \item[1°] aa
+                  \item[1°] aa
               \end{enumerate}
         \item ... TODO
     \end{itemize}
@@ -809,17 +848,17 @@ following:
 The axiomatization of \SCI we presented in \cref{axiomatization} is an example
 of a Hilbert-style deductive system. Such systems consist of a set of axioms
 and inference rules (often \emph{modus ponens} is the only inference rule) that
-can be used to deduce theses, as explained in \cref{thesis}.
+can be used to deduce theses, as explained in \cref{theorem}.
 
 Hilbert-style systems are historically first and most fundamental deductive
-systems. For every thesis of such systems, there is a sequence of formulas all
-the way back to the axioms, from which a resulting thesis is inferred. But
+systems. For every theorem of such systems, there is a sequence of formulas all
+the way back to the axioms, from which a resulting theorem is inferred. But
 trying to prove some specific formula can be very challenging as it requires
 creative usages of the axioms so that the given formula is inferred at the end.
 Those proof systems give no clue how to do that.
 
 The same is true for the deduction system presented in
-\cref{axiomatization,thesis}. From \cref{decidability} we know that \SCI is
+\cref{axiomatization,theorem}. From \cref{decidability} we know that \SCI is
 decidable, but the Hilbert-style deductive system gives no procedure to
 determine whether a given formula is a tautology. From \cref{decidability} we
 know there is a finite procedure to do that, but we are still missing a
