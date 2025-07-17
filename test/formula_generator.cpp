@@ -10,8 +10,9 @@
 // 4: (optional) mode
 //    - 0 = any (default)
 //    - 1 = closed only
+//    - 2 = tautologies only
 
-enum Mode { any = 0, closed_only = 1 };
+enum Mode { any = 0, closed_only = 1, tautologies_only };
 
 int main(int argc, char *argv[]) {
   if (argc < 4) {
@@ -21,7 +22,8 @@ int main(int argc, char *argv[]) {
             " 3: number of variables of formulas \n"
             " 4: (optional) mode \n"
             "    - 0 = any (default)\n"
-            "    - 1 = closed only\n";
+            "    - 1 = closed only\n"
+            "    - 2 = tautologies only\n";
     return 0;
   }
 
@@ -39,7 +41,7 @@ int main(int argc, char *argv[]) {
   Mode mode = Mode::any;
   if (argc >= 4) {
     int arg4 = strtol(argv[4], &p, 10);
-    assert(arg4 == 0 || arg4 == 1);
+    assert(arg4 == 0 || arg4 == 1 || arg4 == 2);
     mode = static_cast<Mode>(arg4);
   }
 
@@ -48,6 +50,12 @@ int main(int argc, char *argv[]) {
 
     if (mode == Mode::closed_only) {
       auto node = DoSolveLabel({f});
+      if (!(node.is_closed.has_value() && node.is_closed.value())) {
+        i--;
+        continue;
+      }
+    } else if (mode == Mode::tautologies_only) {
+      auto node = DoSolveLabel({FNot(f)});
       if (!(node.is_closed.has_value() && node.is_closed.value())) {
         i--;
         continue;
